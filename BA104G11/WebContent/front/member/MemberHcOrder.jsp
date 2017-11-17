@@ -192,7 +192,7 @@
                                                             </tr>
                                                         </thead>
                                                         <tbody>
-                                                        <c:forEach var="detail" item="${hcDetailSvc.getAllByOrderNo(hcOrder.orderNo)}">
+                                                        <c:forEach var="detail" items="${hcDetailSvc.getAllByOrderNo(hcOrder.orderNo)}">
                                                             <tr>
                                                                 <td>detail.</td>
                                                                 <td>detail</td>
