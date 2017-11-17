@@ -3,14 +3,14 @@
 <%@ page import="com.hcworkshifts.model.*" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <% MemberService memSvc = new MemberService();
-   MemberVO memVO = (MemberVO)memSvc.getOneMEMBER("MEM0002");
+   MemberVO memVO = (MemberVO)memSvc.getOneMemByNo("MEM0002");
    session.setAttribute("memVO",memVO);
 %>
 <jsp:useBean id="crdSvc" scope="page" class="com.thecared.model.ThecaredService"/>
 <jsp:useBean id="empPhSvc" scope="page" class="com.employee_photo.model.EmpPhotosService"/>
 
 
-<% String memNo = memVO.getMem_no();
+<% String memNo = memVO.getMemNo();
 request.setCharacterEncoding("UTF-8");
 	
 %>

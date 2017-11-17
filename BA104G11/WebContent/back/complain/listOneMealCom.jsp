@@ -7,7 +7,6 @@
 
 <%-- <jsp:useBean id="listOneCarCom" scope="request" type="java.util.Set<CarComplainVO>" /> --%>
 
-
 <html>
 <head>
 <title>查詢單一送餐申訴</title>
