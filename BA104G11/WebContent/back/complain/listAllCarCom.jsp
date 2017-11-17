@@ -5,6 +5,7 @@
 <%@ page import="com.carcomplain.model.*"%>
 <%@ page import="com.employee.model.*"%>
 <%-- 此頁練習採用 EL 的寫法取值 --%>
+<%-- 此頁練習採用 EL 的寫法取值 --%>
 
 <!-- 假取得 emp_no -->
 <% 
