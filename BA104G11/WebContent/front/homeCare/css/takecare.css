@@ -1,0 +1,220 @@
+
+/*
+ 	記得如果要套這裡的要在<head> </head> 裡置入css
+ 	<link href="css/takecare.css" rel="stylesheet"> 
+*/
+
+
+/*
+
+* 最主要顏色：
+  * 橘色：#e6aa64   rgb(230, 170, 100)
+  * 黃色：#faf5e1   rgb(250, 245, 225)
+  * 紅色：#d75a37   rgb(215, 90, 55)
+
+* 字體顏色
+  * 咖啡色：#beb9a5 rgb(190, 185, 165)
+  * 紅色：#d75a37   rgb(215, 90, 55)
+*/
+
+
+/* margin & padding */
+
+html, body {
+    width: 100%;
+    height: 100%;
+}
+
+body {
+    font-family: 'Source Sans Pro', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+}
+
+
+
+
+/* navbar */
+
+.navbar-default .navbar-nav>li>a {
+    color: white;
+    font-size: 1.1em;
+}
+
+.navbar-default{
+	color: #FEAD82;
+    background-color: rgba(254, 173, 130 .5);
+}
+
+
+.bg-temb{
+	border:0.8px solid;
+	z-index: 30;
+} 
+
+.bg-color {
+	background-color: #aaa ;
+}
+
+.height100{
+	height: 90px;
+}
+
+.padding-15{
+	padding-left:-15px;
+	padding-right: -15px;
+}
+
+.padding-30px{
+	padding-bottom:30px;
+}
+
+
+.margin-auto {
+	margin: 0 auto;
+	margin-top: -20px;
+	margin-bottom: 30px;
+}
+.margin-auto1 {
+	margin:0px auto;
+	margin-top: 80px;
+}
+.margin-auto2{
+	margin-top: 40px;
+	margin-left: 240px;
+}
+
+
+/* color */
+
+.bg-orange{
+
+	background-color: #FE8E52;
+	color: white;
+}
+
+.bg-orange-nav {
+    color: #FE8E52;
+    background-color: rgba(254, 142, 82, 5);
+}
+
+.bg-yellow{
+	background-color: #faf0cd;
+}
+
+
+/* text */
+.text-brown{
+	color: #9c8c6b;
+}
+.text-white{
+	color: white;
+}
+
+.text-red{
+	color: #E3471B;
+}
+
+.border3{
+	border: 1px solid red;
+}
+
+.text-center{
+	text-align: center;
+	margin-left: 70px;
+}
+
+.text-top{
+	margin-top: 30px;
+	margin-bottom: 50px;
+}
+
+.width-text{
+	width: 900px;
+	margin: auto;
+}
+
+/* img */
+
+.img-100{
+	margin: 30px;
+	height: 150px;
+	width: 150px;
+
+}
+.img-30{
+	height: 50px;
+	width: 50px;
+
+	padding-left: -20px;
+	padding-right: -20px;
+	margin-top: 10px;
+	margin-bottom: 30px;
+}
+.img-50{
+	height: 600px;
+	margin-top: 10px;
+	margin-bottom:7px;
+/*	width: 100px;*/
+}
+
+
+.img1001{
+	width: : 100%;
+}
+
+.lowww{
+	z-index: -555;
+	margin: auto;
+}
+
+.hight1{
+	z-index: 20;
+}
+
+/* font */
+
+.font-b{
+	color: #beb9a5;
+}
+
+.font-size-2{
+	font-size: 2em;
+}
+
+
+/* footer */
+
+.div-size30{
+	height: 40px;
+	vertical-align:middle;
+}
+
+.padding-footer-h1 {
+    padding-bottom: 20px;
+    padding-top: 10px;
+    font-size: 2.1em;
+}
+.padding-footer-h2 {
+    padding-bottom: 10px;
+    padding-top: 5px;
+    font-size: 1.25em;
+}
+
+/* Footer */
+
+footer {
+    padding: 15px;
+    margin-top: 50px;
+    color:white;
+    background-color: #aaa;
+}
+
+#to-top {
+    font-size: 1em;
+    position: fixed;
+    right: 5px;
+    bottom: 5px;
+    display: none;
+    padding: 15px 20px;
+}
+
+

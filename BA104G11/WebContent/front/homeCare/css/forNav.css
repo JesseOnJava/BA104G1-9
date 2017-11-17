@@ -1,0 +1,30 @@
+@charset "UTF-8";
+/**
+ * 
+ * @authors Your Name (you@example.org)
+ * @date    2017-10-20 21:21:14
+ * @version $Id$
+ */
+
+
+/* navbar */
+
+.navbar-text {
+    font-size: 7.5em;
+/*    font-weight: 650;*/
+text-alight
+    margin: 0;
+    padding: 0px;
+}
+
+.navbar-color{
+	color:#f00;
+}
+
+
+
+/* footer */
+.footer{
+
+	color:#A0C341;
+}
