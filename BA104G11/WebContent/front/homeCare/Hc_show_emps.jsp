@@ -9,7 +9,7 @@
 <% response.setDateHeader("Expires",0); %>
 
 <% MemberService memSvc = new MemberService();
-   MemberVO memVO = (MemberVO)memSvc.getOneMEMBER("MEM0002");
+   MemberVO memVO = (MemberVO)memSvc.getOneMemByNo("MEM0002");
    session.setAttribute("memVO",memVO);
 %>
 
