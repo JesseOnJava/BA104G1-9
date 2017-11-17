@@ -192,13 +192,13 @@
                                                             </tr>
                                                         </thead>
                                                         <tbody>
-                                                        <c:forEach var="detail" item="${hcDetailSvc.getAllByOrderNo(hcOrder.orderNo)}">
+                                                        <c:forEach var="detail" items="${hcDetailSvc.getAllByOrderNo(hcOrder.orderNo)}">
                                                             <tr>
-                                                                <td>detail.</td>
-                                                                <td>detail</td>
-                                                                <td>detail</td>
-                                                                <td>detail</td>
-                                                                <td>detail</td>
+                                                                <td>${detail.orderDetailNo}</td>
+                                                                <td>${detail.serviceDate}</td>
+                                                                <td>${detail.serviceTime}</td>
+                                                                <td>${detail.empNo}</td>
+                                                                <td>${detail.orderDetailStataus}</td>
                                                             </tr>
                         								</c:forEach>
                                                         </tbody>

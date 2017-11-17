@@ -395,6 +395,9 @@ System.out.println("come in");
 		
 	}
 
+	
+	
+	
 	private void sendRegisterMail(String empEmail, String empName, String empPwd) {
 		String to = empEmail;
 		String subject = "密碼通知";
