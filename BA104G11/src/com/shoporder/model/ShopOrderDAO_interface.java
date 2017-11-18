@@ -4,33 +4,31 @@ import java.util.List;
 
 public interface ShopOrderDAO_interface {
 
-	//ï¿½ï¿½ï¿½oï¿½qï¿½ï¿½sï¿½ï¿½ï¿½Ìªï¿½ï¿½Ò¦ï¿½ï¿½Ó«~
+	//¨ú±o­q³æ½s¸¹¸Ìªº©Ò¦³°Ó«~
 	public List<ShopOrderVO> getAllByOrderNo(String orderno);
-	//ï¿½ï¿½ï¿½oï¿½qï¿½Ê¸Ó°Ó«~ï¿½sï¿½ï¿½ï¿½ï¿½ï¿½Ò¦ï¿½ï¿½Hï¿½ï¿½ï¿½ï¿½
+	//¨ú±o­qÁÊ¸Ó°Ó«~½s¸¹ªº©Ò¦³¤H©ú²Ó
 	public List<ShopOrderVO> getOneByItemNo(Integer pk);
-	//ï¿½ï¿½ï¿½oï¿½Ó­qï¿½ï¿½sï¿½ï¿½ï¿½ï¿½ï¿½Ò¦ï¿½ï¿½Ó«~
+	//¨ú±o¸Ó­q³æ½s¸¹ªº©Ò¦³°Ó«~
 	public List<ShopOrderVO> getPriceByOrderNo(String orderno);
-	//ï¿½ï¿½ï¿½oï¿½Ó­qï¿½ï¿½sï¿½ï¿½ï¿½ï¿½ï¿½Pï¿½Pï¿½ï¿½ï¿½Ó«~
+	//¨ú±o¸Ó­q³æ½s¸¹¦³«P¾Pªº°Ó«~
 	public List<ShopOrderVO> getPriceByOrderNoIfHave(String orderno);
-	//ï¿½ï¿½ï¿½oï¿½Ó·|ï¿½ï¿½ï¿½ï¿½ï¿½Ê¶Rï¿½ï¿½ï¿½Ó«~
+	//¨ú±o¸Ó·|­û©ÒÁÊ¶Rªº°Ó«~
 	public List<ShopOrderVO> getAllByMenNO(String menno);
-	//ï¿½ï¿½ï¿½oï¿½Ò¦ï¿½ï¿½ï¿½ï¿½qï¿½ï¿½&ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½|ï¿½ï¿½
+	//¨ú±o©Ò¦³ªº­q³æ&¹ïÀ³ªº·|­û
 	public List<ShopOrderVO> getAllOrder();
-	//ï¿½sï¿½Wï¿½Ó«~ï¿½Î©ï¿½ï¿½ï¿½
+	//·s¼W°Ó«~¤Î©ú²Ó
 	public void addShopOrder(ShopOrderVO shoporderVO);
-	//ï¿½Êªï¿½ï¿½ï¿½ï¿½Ó«~ï¿½å¦¸ï¿½sï¿½W
+	//ÁÊª«¨®°Ó«~§å¦¸·s¼W
 	public void addShopCartOrder(List<ShopOrderVO> shoporderVO);
-	//ï¿½ï¿½sï¿½qï¿½ï¿½
+	//§ó·s­q³æ
 	public List<ShopOrderVO> updateShopOrder(List<ShopOrderVO> shoporderVO,Integer finalTotal);
-	//ï¿½ï¿½ITEMNO&ORDERIDï¿½Rï¿½ï¿½
+	//¥ÎITEMNO&ORDERID§R°£
 	public void delete(String orderno,String memno);
-	//ï¿½^ï¿½ï¿½ï¿½|ï¿½ï¿½ï¿½ï¿½ï¿½xï¿½ï¿½ï¿½Iï¿½ï¿½
+	//¦^³ø·|­ûªºÀx­ÈÂI¼Æ
 	public Integer returnPoint(String memno);
-	//ï¿½ï¿½ï¿½ï¿½ï¿½|ï¿½ï¿½ï¿½Iï¿½ï¿½
+	//¦©°£·|­ûÂI¼Æ
 	public Integer returnAfterShoppingPoint(Integer total,String memno);
-	//ï¿½Rï¿½ï¿½ï¿½qï¿½ï¿½ï¿½ï¿½ï¿½Ù·|ï¿½ï¿½ï¿½Iï¿½ï¿½  //ï¿½^ï¿½Ç³Ñ¾lï¿½Iï¿½ï¿½
+	//§R°£­q³æ«áªðÁÙ·|­ûÂI¼Æ  //¦^¶Ç³Ñ¾lÂI¼Æ
 	public Integer returnPointback(String Orderno);
-	
-	public ShopOrderVO findByPrimaryKey(String orderno);
 	
 }

@@ -66,7 +66,7 @@ public class MealOrderDAO implements MealOrderDAO_interface{
 				pstmt = con.prepareStatement(INSERT_MEAL_DETAIL);
 				pstmt.setString(1,mealOrderDetailVO.getMoNo());
 				pstmt.setDate(2,mealOrderDetailVO.getDeliverDate());
-				pstmt.setString(3, mealOrderDetailVO.getDeliverTime());
+				pstmt.setString(3, mealOrderDetailVO.getMealTime());
 				pstmt.setInt(4, mealOrderDetailVO.getSmNo());
 				pstmt.setInt(5, mealOrderDetailVO.getOrderQty());
 				pstmt.executeUpdate();

@@ -25,6 +25,9 @@ public interface ProDAO_interface {
 	public List<ProVO> getAllPro();
 	//你好，我是查詢所有促銷商品
 	public List<ProVO> getAllProShop();
+	//你好，我是查詢單一促銷商品
+	public ProVO getOneProShop(Integer itemno);
+	
 	
 	
 }

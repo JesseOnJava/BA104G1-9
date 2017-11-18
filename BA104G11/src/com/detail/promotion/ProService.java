@@ -74,6 +74,10 @@ public class ProService {
 	public List<ProVO> getAllProShop() {
 		return dao.getAllProShop();
 	}
+	//你好，我是用商品編號拿當前促銷
+	public ProVO getOneProShop(Integer itemno) {
+		return dao.getOneProShop(itemno);
+	}
 	
 }
 

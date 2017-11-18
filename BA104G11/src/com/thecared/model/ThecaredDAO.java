@@ -2,18 +2,33 @@
 package com.thecared.model;
 
 import java.util.*;
+
+import javax.naming.Context;
+import javax.naming.NamingException;
+import javax.sql.DataSource;
+
 import java.sql.*;
 import java.sql.Date;
 
 public class ThecaredDAO implements ThecaredDAO_interface {
-	String driver = "oracle.jdbc.driver.OracleDriver";
-	String url = "jdbc:oracle:thin:@localhost:1521:XE";
-	String userid = "BA104G1";
-	String passwd = "123456";
+//	String driver = "oracle.jdbc.driver.OracleDriver";
+//	String url = "jdbc:oracle:thin:@localhost:1521:XE";
+//	String userid = "BA104G1";
+//	String passwd = "123456";
 	
 	
 	//---------------前端------------------
 	//設定：可增
+	private static DataSource ds = null;
+	static {
+		try {
+			Context ctx = new javax.naming.InitialContext();
+			ds = (DataSource) ctx.lookup("java:comp/env/jdbc/BA104G1DB");
+		} catch (NamingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 	private static final String INSERTSTMT =
 		"INSERT INTO THECARED ("
 		    + "CARED_NO, "
@@ -46,7 +61,7 @@ public class ThecaredDAO implements ThecaredDAO_interface {
 		+ "WHERE CARED_NO =?";
 	 
 	//設定：可查
-	private static final String GET_ONESTMT = "SELECT * FROM THECARED WHERE cared_Name = ?";
+	private static final String GET_ONESTMT = "SELECT * FROM THECARED WHERE cared_No = ?";
 		
 
 	private static final String GETALL_MEM = "SELECT * FROM THECARED WHERE MEM_NO = ?";
@@ -66,8 +81,8 @@ public class ThecaredDAO implements ThecaredDAO_interface {
 
 		try {
 					
-			Class.forName(driver);
-			con = DriverManager.getConnection(url, userid, passwd);
+			
+			con = ds.getConnection();
 			pstmt = con.prepareStatement(INSERTSTMT);
 		
 			pstmt.setString(1, thecaredVO.getMemNo());
@@ -85,11 +100,7 @@ public class ThecaredDAO implements ThecaredDAO_interface {
 			System.out.println("新增ＯＫ"+i);
 
 			// Handle any driver errors
-		} catch (ClassNotFoundException e) {
-			throw new RuntimeException("Couldn't load database driver. "
-					+ e.getMessage());
-			// Handle any SQL errors
-		} catch (SQLException se) {
+		}  catch (SQLException se) {
 			throw new RuntimeException("A database error occured. "
 					+ se.getMessage());
 			// Clean up JDBC resources
@@ -120,8 +131,7 @@ public class ThecaredDAO implements ThecaredDAO_interface {
 
 		try {
 				
-			Class.forName(driver);
-			con = DriverManager.getConnection(url, userid, passwd);
+			con = ds.getConnection();
 			pstmt = con.prepareStatement(UPDATE);
 
 			pstmt.setString(1, thecaredVO.getCaredName());
@@ -137,10 +147,6 @@ public class ThecaredDAO implements ThecaredDAO_interface {
 			System.out.println("修改ＯＫ"+i);
 
 			// Handle any driver errors
-		} catch (ClassNotFoundException e) {
-			throw new RuntimeException("Couldn't load database driver. "
-					+ e.getMessage());
-			// Handle any SQL errors
 		} catch (SQLException se) {
 			throw new RuntimeException("A database error occured. "
 					+ se.getMessage());
@@ -172,8 +178,7 @@ public class ThecaredDAO implements ThecaredDAO_interface {
 
 		try {
 
-			Class.forName(driver);
-			con = DriverManager.getConnection(url, userid, passwd);
+			con = ds.getConnection();
 			pstmt = con.prepareStatement(DELETE);
 
 			pstmt.setString(1, caredNo);
@@ -181,10 +186,6 @@ public class ThecaredDAO implements ThecaredDAO_interface {
 			pstmt.executeUpdate();
 
 			// Handle any driver errors
-		} catch (ClassNotFoundException e) {
-			throw new RuntimeException("Couldn't load database driver. "
-					+ e.getMessage());
-			// Handle any SQL errors
 		} catch (SQLException se) {
 			throw new RuntimeException("A database error occured. "
 					+ se.getMessage());
@@ -218,8 +219,7 @@ public class ThecaredDAO implements ThecaredDAO_interface {
 
 		try {
 
-			Class.forName(driver);
-			con = DriverManager.getConnection(url, userid, passwd);
+			con = ds.getConnection();
 			pstmt = con.prepareStatement(GET_ONESTMT);
 			pstmt.setString(1, caredNo);
 			rs = pstmt.executeQuery();
@@ -238,14 +238,11 @@ public class ThecaredDAO implements ThecaredDAO_interface {
 				thecaredVO.setConStatus(rs.getString("CON_STATUS"));
 				thecaredVO.setBioStatus(rs.getString("BIO_STATUS"));
 				thecaredVO.setModifyTime(rs.getDate("MODIFY_TIME"));
+				System.out.println("get");
 							
 			}
 
 			// Handle any driver errors
-		} catch (ClassNotFoundException e) {
-			throw new RuntimeException("Couldn't load database driver. "
-					+ e.getMessage());
-			// Handle any SQL errors
 		} catch (SQLException se) {
 			throw new RuntimeException("A database error occured. "
 					+ se.getMessage());
@@ -285,8 +282,7 @@ public class ThecaredDAO implements ThecaredDAO_interface {
 
 		try {
 
-			Class.forName(driver);
-			con = DriverManager.getConnection(url, userid, passwd);
+			con = ds.getConnection();
 			pstmt = con.prepareStatement(GETALL_MEM);
 			pstmt.setString(1, MemNo);
 			rs = pstmt.executeQuery();
@@ -312,10 +308,6 @@ public class ThecaredDAO implements ThecaredDAO_interface {
 			}
 
 			// Handle any driver errors
-		} catch (ClassNotFoundException e) {
-			throw new RuntimeException("Couldn't load database driver. "
-					+ e.getMessage());
-			// Handle any SQL errors
 		} catch (SQLException se) {
 			throw new RuntimeException("A database error occured. "
 					+ se.getMessage());
@@ -357,8 +349,7 @@ public class ThecaredDAO implements ThecaredDAO_interface {
 
 		try {
 
-			Class.forName(driver);
-			con = DriverManager.getConnection(url, userid, passwd);
+			con = ds.getConnection();
 			pstmt = con.prepareStatement(GETALLSTMT);
 			rs = pstmt.executeQuery();
 			
@@ -382,11 +373,7 @@ public class ThecaredDAO implements ThecaredDAO_interface {
 			}
 
 			// Handle any driver errors
-		} catch (ClassNotFoundException e) {
-			throw new RuntimeException("Couldn't load database driver. "
-					+ e.getMessage());
-			// Handle any SQL errors
-		} catch (SQLException se) {
+		}  catch (SQLException se) {
 			throw new RuntimeException("A database error occured. "
 					+ se.getMessage());
 			// Clean up JDBC resources

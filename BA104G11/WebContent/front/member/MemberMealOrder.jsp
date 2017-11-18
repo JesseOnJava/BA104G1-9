@@ -2,9 +2,10 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ page import="java.util.*"%>
 <%@ page import="com.member.model.*"%>
-<%
-	
-%>
+
+
+<jsp:useBean id="MealOrderSvc"  class="com.mealorder.model.MealOrderService" />
+<jsp:useBean id="hcDetailSvc" class="com.hcorder.modal.HcOrderDetailService"/>
 <!DOCTYPE html>
 <html lang="">
 
@@ -124,24 +125,20 @@
 						<li class="active">訂單管理</li>
 					</ol>
 					<ul class="nav nav-tabs" id="navList">
-						<li data-name="loginLogTab"
-							class=${status.equals( "getAll") ? "active" : "" }><a
-							href="<%=request.getContextPath()%>/member/member.do?action=queryStatus&status=getAll">
+						<li data-name="loginLogTab" class="active"><a
+							href="<%=request.getContextPath()%>/front/member/MemberHcOrder.jsp">
 								<i class="fa fa-user"></i>長照訂單
 						</a></li>
-						<li data-name="receiveLogTab"
-							class=${status.equals( "verification") ? "active" : "" }><a
-							href="<%=request.getContextPath()%>/member/member.do?action=queryStatus&status=verification">
+						<li data-name="receiveLogTab"}><a
+							href="<%=request.getContextPath()%>/front/member/MemberCarOrder.jsp">
 								<i class="fa fa-briefcase"></i>派車訂單
 						</a></li>
-						<li data-name="socketInputTab"
-							class=${status.equals( "unverified") ? "active" : "" }><a
-							href="<%=request.getContextPath()%>/member/member.do?action=queryStatus&status=unverified">
+						<li data-name="socketInputTab"><a
+							href="<%=request.getContextPath()%>/front/member/MemberMealOrder.jsp">
 								<i class="fa fa-briefcase"></i>派餐訂單
 						</a></li>
-						<li data-name="socketOutputTab"
-							class=${status.equals( "suspension") ? "active" : "" }><a
-							href="<%=request.getContextPath()%>/member/member.do?action=queryStatus&status=suspension">
+						<li data-name="socketOutputTab"><a
+							href="<%=request.getContextPath()%>/front/member/MemberHcOrder.jsp">
 								<i class="fa fa-briefcase"></i>儲值紀錄
 						</a></li>
 					</ul>
@@ -149,7 +146,15 @@
 					<table class="table table-hover">
 						<thead>
 							<tr>
-								<th>表格標題</th>
+								<th class="text-center">
+									<div class="col-xs-12 col-sm-2">訂單編號</div>
+									<div class="col-xs-12 col-sm-2">訂購日期</div>
+									<div class="col-xs-12 col-sm-2">訂購人姓名</div>
+									<div class="col-xs-12 col-sm-2">訂購人電話</div>
+									<div class="col-xs-12 col-sm-2">訂購人地址</div>
+									<div class="col-xs-12 col-sm-2">訂單狀態</div>
+
+								</th>
 							</tr>
 						</thead>
 						<tbody>
@@ -162,58 +167,60 @@
 								<td>
 
 
-									 <div class="panel-group" id="accordion2" role="tablist" aria-multiselectable="true">
-                                        <!-- 區塊1 -->
-                                        <div class="panel panel-default">
-                                            <div class="panel-heading" role="tab" id="panel1">
-                                                <h4 class="panel-title text-center">
-                                                        <div class="row">
-                                                            <div class="col-xs-12 col-sm-2"> 
-                                                                 <a href="#aaa" data-parent="#accordion2" data-toggle="collapse" role="button" aria-expanded="true" aria-controls="aaa">
-                                                                    送餐訂單編號
-                                                                                            </a>
-                                                            </div>
-                                                            <div class="col-xs-12 col-sm-2">訂購日期</div>
-                                                            <div class="col-xs-12 col-sm-2">訂購人姓名</div>
-                                                            <div class="col-xs-12 col-sm-2">訂購人電話</div>
-                                                            <div class="col-xs-12 col-sm-2">訂購人地址</div>
-                                                            <div class="col-xs-12 col-sm-2">訂單狀態</div>
-                                                        </div>
-                                                 </h4>
-                                            </div>
-                                            <div id="aaa" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="panel1">
-                                                <div class="panel-body">
-                                                    <table class="table table-hover">
-                                                        <thead>
-                                                            <tr>
-                                                                <th>明細編號</th>
-                                                                <th>送達日期</th>
-                                                                <th>送達時段</th>
-                                                                <th>訂購餐點</th>
-                                                                <th>訂購數量</th>
-                                                            </tr>
-                                                        </thead>
-                                                        <tbody>
-                                                            <tr>
-                                                                <td>資料</td>
-                                                                <td>資料</td>
-                                                                <td>資料</td>
-                                                                <td>資料</td>
-                                                                <td>資料</td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td>資料</td>
-                                                                <td>資料</td>
-                                                                <td>資料</td>
-                                                                <td>資料</td>
-                                                                <td>資料</td>
-                                                            </tr>
-                                                        </tbody>
-                                                    </table>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
+									<div class="panel-group" id="accordion2" role="tablist"
+										aria-multiselectable="true">
+										<!-- 區塊1 -->
+										<div class="panel panel-default">
+											<div class="panel-heading" role="tab" id="panel1">
+												<h4 class="panel-title text-center">
+													<div class="row">
+														<div class="col-xs-12 col-sm-2">
+															<a href="#aaa" data-parent="#accordion2"
+																data-toggle="collapse" role="button"
+																aria-expanded="true" aria-controls="aaa"></a>
+														</div>
+														<div class="col-xs-12 col-sm-2">訂購日期</div>
+														<div class="col-xs-12 col-sm-2">訂購人姓名</div>
+														<div class="col-xs-12 col-sm-2">訂購人電話</div>
+														<div class="col-xs-12 col-sm-2">訂購人地址</div>
+														<div class="col-xs-12 col-sm-2">訂單狀態</div>
+													</div>
+												</h4>
+											</div>
+											<div id="aaa" class="panel-collapse collapse in"
+												role="tabpanel" aria-labelledby="panel1">
+												<div class="panel-body">
+													<table class="table table-hover">
+														<thead>
+															<tr>
+																<th>明細編號</th>
+																<th>送達日期</th>
+																<th>送達時段</th>
+																<th>訂購餐點</th>
+																<th>訂購數量</th>
+															</tr>
+														</thead>
+														<tbody>
+															<tr>
+																<td>資料</td>
+																<td>資料</td>
+																<td>資料</td>
+																<td>資料</td>
+																<td>資料</td>
+															</tr>
+															<tr>
+																<td>資料</td>
+																<td>資料</td>
+																<td>資料</td>
+																<td>資料</td>
+																<td>資料</td>
+															</tr>
+														</tbody>
+													</table>
+												</div>
+											</div>
+										</div>
+									</div>
 
 
 								</td>

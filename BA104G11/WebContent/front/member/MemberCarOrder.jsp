@@ -124,27 +124,19 @@
 						<li class="active">訂單管理</li>
 					</ol>
 					<ul class="nav nav-tabs" id="navList">
-						<li data-name="loginLogTab"
-							class=${status.equals( "getAll") ? "active" : "" }><a
-							href="<%=request.getContextPath()%>/member/member.do?action=queryStatus&status=getAll">
-								<i class="fa fa-user"></i>長照訂單
-						</a></li>
-						<li data-name="receiveLogTab"
-							class=${status.equals( "verification") ? "active" : "" }><a
-							href="<%=request.getContextPath()%>/member/member.do?action=queryStatus&status=verification">
-								<i class="fa fa-briefcase"></i>派車訂單
-						</a></li>
-						<li data-name="socketInputTab"
-							class=${status.equals( "unverified") ? "active" : "" }><a
-							href="<%=request.getContextPath()%>/member/member.do?action=queryStatus&status=unverified">
-								<i class="fa fa-briefcase"></i>派餐訂單
-						</a></li>
-						<li data-name="socketOutputTab"
-							class=${status.equals( "suspension") ? "active" : "" }><a
-							href="<%=request.getContextPath()%>/member/member.do?action=queryStatus&status=suspension">
-								<i class="fa fa-briefcase"></i>儲值紀錄
-						</a></li>
-					</ul>
+                        <li data-name="loginLogTab" class="active"><a href="<%=request.getContextPath()%>/front/member/MemberHcOrder.jsp">
+                                        <i class="fa fa-user"></i>長照訂單
+                                </a></li>
+                        <li data-name="receiveLogTab"}><a href="<%=request.getContextPath()%>/front/member/MemberCarOrder.jsp">
+                                        <i class="fa fa-briefcase"></i>派車訂單
+                                </a></li>
+                        <li data-name="socketInputTab"><a href="<%=request.getContextPath()%>/front/member/MemberMealOrder.jsp">
+                                        <i class="fa fa-briefcase"></i>派餐訂單
+                                </a></li>
+                        <li data-name="socketOutputTab"><a href="<%=request.getContextPath()%>/front/member/MemberHcOrder.jsp">
+                                        <i class="fa fa-briefcase"></i>儲值紀錄
+                                </a></li>
+                    </ul>
 
 					<table class="table table-hover">
 						<thead>

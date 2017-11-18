@@ -54,8 +54,5 @@ public class ShopOrderService {
 	public List<ShopOrderVO> getPriceByOrderNo(String orderno){
 		return dao.getPriceByOrderNo(orderno);
 	}
-	public ShopOrderVO getOneShopCom(String orderno){
-		return dao.findByPrimaryKey(orderno);
-	}
 	
 }

@@ -2,7 +2,6 @@ package com.shoporder.model;
 
 import java.sql.Connection;
 import java.sql.Date;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
@@ -17,7 +16,6 @@ import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.sql.DataSource;
 
-import com.order.model.OrderVO;
 import com.shop.model.ShopVO;
 
 public class ShopOrderDAO implements ShopOrderDAO_interface {
@@ -39,71 +37,15 @@ public class ShopOrderDAO implements ShopOrderDAO_interface {
 	private static final String ADD_ORDERDETAIL = "INSERT INTO ORDERDETAIL (ORDERNO,ITEMNO,ORDERCOUNT) VALUES(?,?,?)";
 	private static final String UPDATE_EXIST_ORDERDETAIL = "UPDATE  ORDERDETAIL SET  ORDERCOUNT=700 WHERE ORDERNO='20171027-000001' AND ITEMNO=4;";
 
-	
-	// 訂單單號單一查詢
-	private static final String GET_ONE_STMT_COM = 
-				"SELECT ORDERNO, MEM_NO, ORDER_DATE, FROM Shoporder WHERE ORDERNO=?";
-
-	
-	
 	private static DataSource ds = null;
 	static {
 		try {
 			Context ctx = new InitialContext();
-			ds = (DataSource) ctx.lookup("java:comp/env/jdbc/Takecare");
+			ds = (DataSource) ctx.lookup("java:comp/env/jdbc/TestDB");
 		} catch (NamingException e) {
 			e.printStackTrace();
 		}
 	}
-	
-	
-	@Override
-	public ShopOrderVO findByPrimaryKey(String orderno) {
-		ShopOrderVO shopOrderVO = null;
-		
-		Connection con = null;
-		PreparedStatement pstmt = null;
-		ResultSet rs = null;
-		try {
-			pstmt = con.prepareStatement(GET_ONE_STMT_COM);
-			
-			pstmt.setString(1, orderno);
-			rs = pstmt.executeQuery();
-			
-			
-			while(rs.next()){
-				shopOrderVO = new ShopOrderVO();
-				shopOrderVO.setOrderno(rs.getString("orderno"));
-				shopOrderVO.setMemberno(rs.getString("memberno"));
-				shopOrderVO.setOrder_date(rs.getDate("order_date"));
-				shopOrderVO.setOrder_state(rs.getString("order_state"));
-			}
-			
-		} catch (SQLException se) {
-			throw new RuntimeException("A database error occured. "
-					+ se.getMessage());
-		
-		// Clean up JDBC resources
-		} finally {
-			if(pstmt !=null){
-				try{
-					pstmt.close();
-				} catch (SQLException se){
-					se.printStackTrace(System.err);
-				}
-			}
-			
-			if(con != null){
-				try {
-					con.close();
-				} catch (Exception e){
-					e.printStackTrace(System.err);
-				}
-			}
-		}
-		return shopOrderVO;
-	}
-	
 
 	@Override
 	public List<ShopOrderVO> getAllByOrderNo(String orderno) {
@@ -359,6 +301,7 @@ public class ShopOrderDAO implements ShopOrderDAO_interface {
 				do {
 					for (int i = 1; i <= columnCount; i++) {
 						key = rs.getString(i);
+						System.out.println("�ۼW�D��� = " + key + "(自增主鍵)");
 					}
 				} while (rs.next());
 			} else {
@@ -434,6 +377,7 @@ public class ShopOrderDAO implements ShopOrderDAO_interface {
 				do {
 					for (int i = 1; i <= columnCount; i++) {
 						key = rs.getString(i);
+						System.out.println("�ۼW�D��� = " + key + "(自增主鍵)");
 					}
 				} while (rs.next());
 			} else {

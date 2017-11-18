@@ -74,6 +74,8 @@ public class MemberService {
 	public List<MemberVO> getAll() {
 		return dao.getAll();
 	}
-			
+	public void updatePoint(Integer point, String memNo){	
+		dao.update_point(point, memNo);
+	}
 	
 }

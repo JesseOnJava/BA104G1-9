@@ -3,8 +3,10 @@
 <%@ page import="java.util.*"%>
 <%@ page import="com.member.model.*"%>
 
-<jsp:useBean id="hcOrderSvc" scope="page" class="com.hcorder.modal.HcOrderMasterService" />
+<jsp:useBean id="hcOrderSvc"  class="com.hcorder.modal.HcOrderMasterService" />
 <jsp:useBean id="hcDetailSvc" class="com.hcorder.modal.HcOrderDetailService"/>
+<jsp:useBean id="empSvc" class="com.employee.model.EmployeeService"/>
+<jsp:useBean id="theCaredSvc" class="com.thecared.model.ThecaredService"/>
 <!DOCTYPE html>
 <html lang="">
 
@@ -119,16 +121,16 @@
                         <li class="active">訂單管理</li>
                     </ol>
                     <ul class="nav nav-tabs" id="navList">
-                        <li data-name="loginLogTab" class=${status.equals( "getAll") ? "active" : "" }><a href="<%=request.getContextPath()%>/member/member.do?action=queryStatus&status=getAll">
+                        <li data-name="loginLogTab" class="active"><a href="<%=request.getContextPath()%>/front/member/MemberHcOrder.jsp">
                                         <i class="fa fa-user"></i>長照訂單
                                 </a></li>
-                        <li data-name="receiveLogTab" class=${status.equals( "verification") ? "active" : "" }><a href="<%=request.getContextPath()%>/member/member.do?action=queryStatus&status=verification">
+                        <li data-name="receiveLogTab"}><a href="<%=request.getContextPath()%>/front/member/MemberCarOrder.jsp">
                                         <i class="fa fa-briefcase"></i>派車訂單
                                 </a></li>
-                        <li data-name="socketInputTab" class=${status.equals( "unverified") ? "active" : "" }><a href="<%=request.getContextPath()%>/member/member.do?action=queryStatus&status=unverified">
+                        <li data-name="socketInputTab"><a href="<%=request.getContextPath()%>/front/member/MemberMealOrder.jsp">
                                         <i class="fa fa-briefcase"></i>派餐訂單
                                 </a></li>
-                        <li data-name="socketOutputTab" class=${status.equals( "suspension") ? "active" : "" }><a href="<%=request.getContextPath()%>/member/member.do?action=queryStatus&status=suspension">
+                        <li data-name="socketOutputTab"><a href="<%=request.getContextPath()%>/front/member/MemberHcOrder.jsp">
                                         <i class="fa fa-briefcase"></i>儲值紀錄
                                 </a></li>
                     </ul>
@@ -160,26 +162,26 @@
                                 
                                    <div class="panel-group" id="accordion2" role="tablist" aria-multiselectable="true">
                                 
-                                    <c:forEach var="hcOrder" items="${hcOrderSvc.getByMemNo(memberVO.memNo)}">
+                                    <c:forEach var="hcOrder" items="${hcOrderSvc.getByMemNo(memberVO.memNo)}" varStatus="s" >
                                   
                                         <div class="panel panel-default">
-                                            <div class="panel-heading" role="tab" id="panel1">
+                                            <div class="panel-heading" role="tab" id="panel${s.index}">
                                                 <h4 class="panel-title text-center">
                                                         <div class="row">
                                                             <div class="col-xs-12 col-sm-3"> 
-                                                                 <a href="#aaa" data-parent="#accordion2" data-toggle="collapse" role="button" aria-expanded="true" aria-controls="aaa">
+                                                                 <a href="#aaa${s.index}" data-parent="#accordion2" data-toggle="collapse" role="button" aria-expanded="true" aria-controls="aaa">
                                                                    	 ${hcOrder.orderNo}
                                                                  </a>
                                                             </div>
                                                             <div class="col-xs-12 col-sm-3">${hcOrder.orderDate}</div>
-                                                            <div class="col-xs-12 col-sm-3">${hcOrder.caredNo}</div>
+                                                            <div class="col-xs-12 col-sm-3">${theCaredSvc.getOneTHECARED(hcOrder.caredNo).caredName}</div>
                                                             <div class="col-xs-12 col-sm-3">${hcOrder.orderStatus}</div>
                                                         </div>
                                                  </h4>
                                             </div>
                                             
                                             
-                                            <div id="aaa" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="panel1">
+                                            <div id="aaa${s.index}" class="panel-collapse collapse" role="tabpanel" aria-labelledby="panel${s.index}">
                                                 <div class="panel-body">
                                                     <table class="table table-hover">
                                                         <thead>
@@ -193,11 +195,12 @@
                                                         </thead>
                                                         <tbody>
                                                         <c:forEach var="detail" items="${hcDetailSvc.getAllByOrderNo(hcOrder.orderNo)}">
+                                                        
                                                             <tr>
                                                                 <td>${detail.orderDetailNo}</td>
                                                                 <td>${detail.serviceDate}</td>
                                                                 <td>${detail.serviceTime}</td>
-                                                                <td>${detail.empNo}</td>
+                                                                <td>${empSvc.findByPrimaryKey(detail.empNo).empName}</td>
                                                                 <td>${detail.orderDetailStataus}</td>
                                                             </tr>
                         								</c:forEach>

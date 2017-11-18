@@ -9,7 +9,7 @@ public class MealOrderDetailVO implements Serializable{
 	private String moDetailNo;
 	private String moNo;
 	private Date deliverDate;
-	private String deliverTime;
+	private String mealTime;
 	private Integer smNo;
 	private Integer orderQty;
 	
@@ -23,7 +23,7 @@ public class MealOrderDetailVO implements Serializable{
 		this.moDetailNo = moDetailNo;
 		this.moNo = moNo;
 		this.deliverDate = deliverDate;
-		this.deliverTime = deliverTime;
+		this.mealTime = deliverTime;
 		this.smNo = smNo;
 		this.orderQty = orderQty;
 	}
@@ -52,16 +52,17 @@ public class MealOrderDetailVO implements Serializable{
 		this.deliverDate = deliverDate;
 	}
 
-	public String getDeliverTime() {
-		return deliverTime;
-	}
-
-	public void setDeliverTime(String deliverTime) {
-		this.deliverTime = deliverTime;
-	}
 
 	public Integer getSmNo() {
 		return smNo;
+	}
+
+	public String getMealTime() {
+		return mealTime;
+	}
+
+	public void setMealTime(String mealTime) {
+		this.mealTime = mealTime;
 	}
 
 	public void setSmNo(Integer smNo) {

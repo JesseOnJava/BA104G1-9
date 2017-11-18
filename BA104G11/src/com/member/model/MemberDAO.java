@@ -18,16 +18,16 @@ public class MemberDAO implements MemberDAO_interface{
 	
 	private static DataSource ds = null;
 	
-	
 	private static final String INSERT_STMT = "INSERT INTO MEMBER(MEM_NO,MEM_NAME,MEM_PHONE,MEM_GENDER,MEM_EMAIL,ADDRESS,POINT,MEM_ID,MEM_PWD,MEM_SRATUS,CHK_IP,MEM_LOGINTIME)"
 			+ "VALUES(to_char('MEM'||LPAD(to_char(SEQ_MEMBER.NEXTVAL),4,'0')),?,?,?,?,?,?,?,?,?,?,?)";
 	private static final String GET_ALL_STMT = "SELECT * FROM MEMBER";
 	private static final String GET_ONE_STMT = "SELECT * FROM MEMBER WHERE MEM_NO=?";
-	
 	private static final String GET_ONE_BYMEMID = "SELECT * FROM MEMBER WHERE MEM_ID=?";
 	private static final String DELETE = "DELETE FROM MEMBER WHERE MEM_NO = ?";
 	private static final String UPDATE = "UPDATE MEMBER SET MEM_NAME=? ,MEM_PHONE=?,MEM_GENDER=?,MEM_EMAIL=?,ADDRESS=?,POINT=?,MEM_ID=?,MEM_PWD=?,MEM_SRATUS=?,CHK_IP=?,MEM_LOGINTIME=? WHERE MEM_NO=?";
 	private static final String GET="SELECT * FROM MEMBER WHERE MEM_SRATUS = ? ";
+	private static final String UPDATE_POINT = "UPDATE MEMBER SET POINT=? WHERE MEM_NO=?";
+	
 	static {
 		try {
 			Context ctx = new javax.naming.InitialContext();
@@ -352,6 +352,41 @@ public class MemberDAO implements MemberDAO_interface{
 			}
 		}
 		return memList;
+	}
+
+	@Override
+	public void update_point(Integer point, String memNo) {
+		Connection con = null;
+		PreparedStatement pstmt = null;
+
+		try {
+			con = ds.getConnection();
+			pstmt = con.prepareStatement(UPDATE_POINT);
+
+			pstmt.setInt(1, point);
+			pstmt.setString(2, memNo);
+
+			pstmt.executeUpdate();
+		} catch (SQLException se) {
+			throw new RuntimeException("A database error occured. " + se.getMessage());
+			// Clean up JDBC resources
+		} finally {
+			if (pstmt != null) {
+				try {
+					pstmt.close();
+				} catch (SQLException se) {
+					se.printStackTrace(System.err);
+				}
+			}
+			if (con != null) {
+				try {
+					con.close();
+				} catch (Exception e) {
+					e.printStackTrace(System.err);
+				}
+			}
+		}
+		
 	}
 
 }

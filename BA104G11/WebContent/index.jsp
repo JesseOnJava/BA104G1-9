@@ -127,24 +127,27 @@
 						data-toggle="dropdown" href="#" id="themes">會員專區 <span
 							class="caret"></span></a>
 						<ul class="dropdown-menu" aria-labelledby="themes">
-							<li><a href="#">會員資料管理</a></li>
-							<li><a href="#">我的錢包</a></li>
-							<li><a href="#">訂單管理</a></li>
-							<li><a href="#">我的最愛</a></li>
-						</ul></li>
+							<li><a
+								href="<%=request.getContextPath()%>/front/member/MemberInfo.jsp">會員資料管理</a></li>
+							<li><a
+								href="<%=request.getContextPath()%>/front/member/MemberHcOrder.jsp">訂單管理</a></li>
+						</ul>
+					</li>
 					<!-- 會員專區 ================================================== -->
 					<c:if test="${memberVO!=null}">
 						<li>${memberVO.memName}你好</li>
 					</c:if>
 					<!-- 登入 / 註冊 ================================================== -->
-					
+
 					<c:choose>
 						<c:when test="${isLogin!=true}">
-							<li><a href="<%=request.getContextPath() %>/front/Login.jsp">登入 / 註冊</a></li>
-  						</c:when>
+							<li><a href="<%=request.getContextPath()%>/front/Login.jsp">登入
+									/ 註冊</a></li>
+						</c:when>
 						<c:when test="${isLogin==true}">
-							<li><a href="<%=request.getContextPath() %>/member/member.do?action=logout">登出</a></li>
-  						</c:when>
+							<li><a
+								href="<%=request.getContextPath()%>/member/member.do?action=logout">登出</a></li>
+						</c:when>
 					</c:choose>
 				</ul>
 

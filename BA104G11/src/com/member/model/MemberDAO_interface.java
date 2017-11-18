@@ -12,4 +12,5 @@ public interface MemberDAO_interface {
 	public MemberVO findByMemId(String memId);
 	public List<MemberVO> getStatus(String memSratus);
 	public List<MemberVO> getAll();
+	public void update_point(Integer point, String memNo);
 }
