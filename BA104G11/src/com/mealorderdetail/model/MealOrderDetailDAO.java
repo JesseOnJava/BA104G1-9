@@ -44,7 +44,7 @@ public class MealOrderDetailDAO implements MealOrderDetailDAO_interface {
 				mealOrderDetailVO.setMoDetailNo(rs.getString("MO_DETAIL_NO"));
 				mealOrderDetailVO.setMoNo(rs.getString("MO_NO"));
 				mealOrderDetailVO.setDeliveryDate(rs.getDate("DELIVER_DATE"));
-				mealOrderDetailVO.setMealTime(rs.getString("MEALTIME"));
+				mealOrderDetailVO.setMealTime(rs.getString("DELIVER_TIME"));
 				mealOrderDetailVO.setSmNo(rs.getInt("SM_NO"));
 				mealOrderDetailVO.setOrderQty(rs.getInt("ORDER_QTY"));
 				list.add(mealOrderDetailVO);
