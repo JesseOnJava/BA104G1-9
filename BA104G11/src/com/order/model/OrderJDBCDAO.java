@@ -8,21 +8,37 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.naming.Context;
+import javax.naming.NamingException;
+import javax.sql.DataSource;
+
 public class OrderJDBCDAO implements OrderDAO_interface{
 	
-	String driver = "oracle.jdbc.driver.OracleDriver";
-	String userid = "ba104g1";
-	String passwd = "ba104g1";
-	
-//	// ************** AWS **************
-	String url = "jdbc:oracle:thin:@13.229.86.22:1521:XE";
+//	String driver = "oracle.jdbc.driver.OracleDriver";
+//	String userid = "ba104g1";
+//	String passwd = "ba104g1";
+//	
+////	// ************** AWS **************
+//	String url = "jdbc:oracle:thin:@13.229.86.22:1521:XE";
 	// ************** BA104 **************
 //	String url = "jdbc:oracle:thin:@10.120.25.6:1521:XE";
 //	// ************* Localhost **********
 //	String url = "jdbc:oracle:thin:@localhost:1521:XE";
+	private static DataSource ds = null;
+	
+	static {
+		try {
+			Context ctx = new javax.naming.InitialContext();
+			ds = (DataSource) ctx.lookup("java:comp/env/jdbc/BA104G1DB");
+		} catch ( NamingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 	
 	
-
+	
+	
 	// 查全部訂單
 	private static final String GET_ALL_STMT =
 			"SELECT ORDER_NO, MEM_NO, ORDER_DATE, ORDER_STATUS FROM CAR_ORDER ORDER BY ORDER_NO";
@@ -30,10 +46,59 @@ public class OrderJDBCDAO implements OrderDAO_interface{
 	// 訂單單號單一查詢
 	private static final String GET_ONE_STMT = 
 			"SELECT ORDER_NO, MEM_NO, ORDER_DATE, ORDER_STATUS FROM CAR_ORDER WHERE ORDER_NO=?";
+	
 
+	//*******************************************************	
 	
+	private static final String GET_BY_MEM_NO = "SELECT * FROM ORDER";
+	@Override
+	public List<OrderVO> getByMemNo(String memNo) {
+		List<OrderVO> list = new ArrayList<OrderVO>();
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		
+		try{
+			
+			con = ds.getConnection();
+			pstmt = con.prepareStatement(GET_ALL_STMT);
+			
+			rs = pstmt.executeQuery();
+			
+			while(rs.next()){
+				OrderVO orderVO = new OrderVO();
+				orderVO.setOrder_no(rs.getString("order_no"));
+				orderVO.setMem_no(rs.getString("mem_no"));
+				orderVO.setOrder_date(rs.getDate("order_date"));
+				orderVO.setOrder_status(rs.getString("order_status"));
+				list.add(orderVO);
+			}
+			} catch (SQLException se) {
+				throw new RuntimeException("A database error occured. "
+						+ se.getMessage());
+			
+			// Clean up JDBC resources
+			} finally {
+				if(pstmt !=null){
+					try{
+						pstmt.close();
+					} catch (SQLException se){
+						se.printStackTrace(System.err);
+					}
+				}
+				
+				if(con != null){
+					try {
+						con.close();
+					} catch (Exception e){
+						e.printStackTrace(System.err);
+					}
+				}
+			}
+			return list;
+	}
 	
-	
+//*******************************************************	
 	@Override
 	public OrderVO findByPrimaryKey(String order_no) {
 		OrderVO orderVO = null;
@@ -42,8 +107,7 @@ public class OrderJDBCDAO implements OrderDAO_interface{
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
 		try {
-			Class.forName(driver);
-			con = DriverManager.getConnection(url, userid, passwd);
+			con = ds.getConnection();
 			pstmt = con.prepareStatement(GET_ONE_STMT);
 			
 			pstmt.setString(1, order_no);
@@ -58,11 +122,6 @@ public class OrderJDBCDAO implements OrderDAO_interface{
 				orderVO.setOrder_status(rs.getString("order_status"));
 			}
 			
-		} catch (ClassNotFoundException e) {
-			throw new RuntimeException("Couldn't load database driver. "
-					+ e.getMessage());
-		
-		// Handle any SQL errors
 		} catch (SQLException se) {
 			throw new RuntimeException("A database error occured. "
 					+ se.getMessage());
@@ -98,9 +157,8 @@ public class OrderJDBCDAO implements OrderDAO_interface{
 		ResultSet rs = null;
 		
 		try{
-			
-			Class.forName(driver);
-			con = DriverManager.getConnection(url, userid, passwd);
+
+			con = ds.getConnection();
 			pstmt = con.prepareStatement(GET_ALL_STMT);
 			rs = pstmt.executeQuery();
 			
@@ -112,12 +170,7 @@ public class OrderJDBCDAO implements OrderDAO_interface{
 				orderVO.setOrder_status(rs.getString("order_status"));
 				list.add(orderVO);
 			}
-			} catch (ClassNotFoundException e) {
-				throw new RuntimeException("Couldn't load database driver. "
-						+ e.getMessage());
-			
-			// Handle any SQL errors
-			} catch (SQLException se) {
+			}catch (SQLException se) {
 				throw new RuntimeException("A database error occured. "
 						+ se.getMessage());
 			
@@ -165,4 +218,6 @@ public class OrderJDBCDAO implements OrderDAO_interface{
 				System.out.println("status :" + orderVO.getOrder_status());
 			}
 		}
+
+		
 	}

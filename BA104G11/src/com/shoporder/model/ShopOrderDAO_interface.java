@@ -3,32 +3,38 @@ package com.shoporder.model;
 import java.util.List;
 
 public interface ShopOrderDAO_interface {
-
-	//¨ú±o­q³æ½s¸¹¸Ìªº©Ò¦³°Ó«~
+	
+	//*************************************************
+	public List<ShopOrderVO> getMemNo(String memNo);
+	public List<OrderDetailVO> getOrderNo(String orderNo);
+	//*************************************************
+	
+	
+	//ï¿½ï¿½ï¿½oï¿½qï¿½ï¿½sï¿½ï¿½ï¿½Ìªï¿½ï¿½Ò¦ï¿½ï¿½Ó«~
 	public List<ShopOrderVO> getAllByOrderNo(String orderno);
-	//¨ú±o­qÁÊ¸Ó°Ó«~½s¸¹ªº©Ò¦³¤H©ú²Ó
+	//ï¿½ï¿½ï¿½oï¿½qï¿½Ê¸Ó°Ó«~ï¿½sï¿½ï¿½ï¿½ï¿½ï¿½Ò¦ï¿½ï¿½Hï¿½ï¿½ï¿½ï¿½
 	public List<ShopOrderVO> getOneByItemNo(Integer pk);
-	//¨ú±o¸Ó­q³æ½s¸¹ªº©Ò¦³°Ó«~
+	//ï¿½ï¿½ï¿½oï¿½Ó­qï¿½ï¿½sï¿½ï¿½ï¿½ï¿½ï¿½Ò¦ï¿½ï¿½Ó«~
 	public List<ShopOrderVO> getPriceByOrderNo(String orderno);
-	//¨ú±o¸Ó­q³æ½s¸¹¦³«P¾Pªº°Ó«~
+	//ï¿½ï¿½ï¿½oï¿½Ó­qï¿½ï¿½sï¿½ï¿½ï¿½ï¿½ï¿½Pï¿½Pï¿½ï¿½ï¿½Ó«~
 	public List<ShopOrderVO> getPriceByOrderNoIfHave(String orderno);
-	//¨ú±o¸Ó·|­û©ÒÁÊ¶Rªº°Ó«~
+	//ï¿½ï¿½ï¿½oï¿½Ó·|ï¿½ï¿½ï¿½ï¿½ï¿½Ê¶Rï¿½ï¿½ï¿½Ó«~
 	public List<ShopOrderVO> getAllByMenNO(String menno);
-	//¨ú±o©Ò¦³ªº­q³æ&¹ïÀ³ªº·|­û
+	//ï¿½ï¿½ï¿½oï¿½Ò¦ï¿½ï¿½ï¿½ï¿½qï¿½ï¿½&ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½|ï¿½ï¿½
 	public List<ShopOrderVO> getAllOrder();
-	//·s¼W°Ó«~¤Î©ú²Ó
+	//ï¿½sï¿½Wï¿½Ó«~ï¿½Î©ï¿½ï¿½ï¿½
 	public void addShopOrder(ShopOrderVO shoporderVO);
-	//ÁÊª«¨®°Ó«~§å¦¸·s¼W
+	//ï¿½Êªï¿½ï¿½ï¿½ï¿½Ó«~ï¿½å¦¸ï¿½sï¿½W
 	public void addShopCartOrder(List<ShopOrderVO> shoporderVO);
-	//§ó·s­q³æ
+	//ï¿½ï¿½sï¿½qï¿½ï¿½
 	public List<ShopOrderVO> updateShopOrder(List<ShopOrderVO> shoporderVO,Integer finalTotal);
-	//¥ÎITEMNO&ORDERID§R°£
+	//ï¿½ï¿½ITEMNO&ORDERIDï¿½Rï¿½ï¿½
 	public void delete(String orderno,String memno);
-	//¦^³ø·|­ûªºÀx­ÈÂI¼Æ
+	//ï¿½^ï¿½ï¿½ï¿½|ï¿½ï¿½ï¿½ï¿½ï¿½xï¿½ï¿½ï¿½Iï¿½ï¿½
 	public Integer returnPoint(String memno);
-	//¦©°£·|­ûÂI¼Æ
+	//ï¿½ï¿½ï¿½ï¿½ï¿½|ï¿½ï¿½ï¿½Iï¿½ï¿½
 	public Integer returnAfterShoppingPoint(Integer total,String memno);
-	//§R°£­q³æ«áªðÁÙ·|­ûÂI¼Æ  //¦^¶Ç³Ñ¾lÂI¼Æ
+	//ï¿½Rï¿½ï¿½ï¿½qï¿½ï¿½ï¿½ï¿½ï¿½Ù·|ï¿½ï¿½ï¿½Iï¿½ï¿½  //ï¿½^ï¿½Ç³Ñ¾lï¿½Iï¿½ï¿½
 	public Integer returnPointback(String Orderno);
 	
 }

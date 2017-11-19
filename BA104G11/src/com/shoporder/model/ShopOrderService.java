@@ -10,6 +10,15 @@ public class ShopOrderService {
 		dao=new ShopOrderDAO();
 	}
 	
+	//******************************************
+	public List<ShopOrderVO> getMemNo(String memNo){
+		return dao.getMemNo(memNo);
+	}
+	//******************************************
+	
+	
+	
+	
 	public List<ShopOrderVO> getAllByOrderNo(String orderno){
 		return dao.getAllByOrderNo(orderno);
 	}

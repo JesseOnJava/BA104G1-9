@@ -6,6 +6,7 @@ import java.util.List;
 public interface OrderDAO_interface {
 	public OrderVO findByPrimaryKey(String order_no);
 	public List<OrderVO> getAll();
-	
-
+	//*************************************
+	public List<OrderVO> getByMemNo(String memNo);
+	//*************************************
 }

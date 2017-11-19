@@ -41,12 +41,85 @@ public class ShopOrderDAO implements ShopOrderDAO_interface {
 	static {
 		try {
 			Context ctx = new InitialContext();
-			ds = (DataSource) ctx.lookup("java:comp/env/jdbc/TestDB");
+			ds = (DataSource) ctx.lookup("java:comp/env/jdbc/BA104G1DB");
 		} catch (NamingException e) {
 			e.printStackTrace();
 		}
 	}
+	//********************************************************
+	private static final String GETMEMNO = "SELECT * FROM SHOPORDER WHERE MEM_NO=?";
+	private static final String GETORDERNO = "SELECT * FROM ORDERDETAIL WHERE ORDERNO=?";
+	
+	public List<ShopOrderVO> getMemNo(String memNo){
+		List<ShopOrderVO> list = new ArrayList<ShopOrderVO>();
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
 
+		try {
+			con = ds.getConnection();
+			pstmt = con.prepareStatement(GETMEMNO);
+			
+			pstmt.setString(1, memNo);
+			rs = pstmt.executeQuery();
+			while (rs.next()) {
+				ShopOrderVO shoporderVO = new ShopOrderVO();
+				shoporderVO.setOrderno(rs.getString("orderno"));
+				shoporderVO.setCustomer_address(rs.getString("customer_address"));
+				shoporderVO.setCustomer_name(rs.getString("customer_name"));
+				shoporderVO.setCustomer_phone(rs.getString("customer_phone"));
+				shoporderVO.setMemberno(rs.getString("MEM_NO"));
+				shoporderVO.setOrder_date(rs.getDate("order_date"));
+				list.add(shoporderVO);
+			}
+
+		} catch (SQLException e) {
+			System.out.println(e);
+
+		}finally {
+			
+			if (con != null) {
+				try {
+					con.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		return list;
+	}
+	public List<OrderDetailVO> getOrderNo(String orderNo){
+		return null;
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	@Override
 	public List<ShopOrderVO> getAllByOrderNo(String orderno) {
 		List<ShopOrderVO> list = new ArrayList<ShopOrderVO>();

@@ -552,8 +552,8 @@ public class HcOrderJDBCDAO implements HcOrderMasterDAO_interface {
 				order.setOrderStatus(rs.getString("ORDER_STATUS"));
 				order.setCaredNo(rs.getString("CARED_NO"));
 				orderList.add(order);
-				System.out.println(order.getOrderNo()+order.getOrderNo().getClass());
 			}
+			
 			
 		} catch (SQLException e){ 
 			e.printStackTrace();

@@ -19,4 +19,10 @@ public class OrderService {
 	public List<OrderVO> getAll(){
 		return dao.getAll();
 	}
+	
+	//*************************************
+	public List<OrderVO> getByMemNo(String memNo){
+		return dao.getByMemNo(memNo);
+	}
+	//*************************************
 }
