@@ -13,9 +13,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import com.balance.model.BalanceService;
+import com.balance.model.BalanceVO;
 import com.employee.model.EmployeeService;
 import com.employee.model.EmployeeVO;
 import com.member.model.*;
+import com.thecared.model.ThecaredService;
+import com.thecared.model.ThecaredVO;
 import com.tool.MailService;
 
 //  /member/member.do
@@ -489,6 +493,180 @@ public class MemberServlet extends HttpServlet {
 			successView.forward(req, res);
 		}
 		// ======================================================================================================================
+		if("cared_update".equals(action)){
+			String memNo = req.getParameter("memNo");
+			String caredName = req.getParameter("caredName");
+			String caredNo = req.getParameter("caredNo");
+			String caredGender = req.getParameter("caredGender");
+			String kinship=req.getParameter("kinship");
+			String caredWeight=req.getParameter("caredWeight");
+			String caredAddress = req.getParameter("caredAddress");
+			String caredPhone = req.getParameter("caredPhone");
+			String conStatus = req.getParameter("conStatus");
+			String bioStatus = req.getParameter("bioStatus");
+			
+			ThecaredVO thecaredVO= new ThecaredVO();
+			thecaredVO.setCaredNo(caredNo);
+			thecaredVO.setCaredName(caredName);
+			thecaredVO.setCaredWeight(Integer.valueOf(caredWeight));
+			thecaredVO.setCaredAddress(caredAddress);
+			thecaredVO.setCaredPhone(caredPhone);
+			thecaredVO.setConStatus(conStatus);
+			thecaredVO.setBioStatus(bioStatus);
+			
+			ThecaredService caredSvc = new ThecaredService();
+			thecaredVO =caredSvc.updateTHECARED(thecaredVO);
+			req.setAttribute("thecaredVO", thecaredVO); 
+			req.setAttribute(caredNo, caredNo);
+			
+			RequestDispatcher successView = req.getRequestDispatcher("/front/member/CaredList.jsp");
+			successView.forward(req, res);
+			}
+	
+	//======================================================================================================================
+		if("cared_insert".equals(action)){	
+			String memNo = req.getParameter("memNo");
+			String caredName = req.getParameter("caredName");
+			String caredGender = req.getParameter("caredGender");
+			String kinship = req.getParameter("kinship");
+			String caredWeight = req.getParameter("caredWeight");
+			String caredHeight = req.getParameter("caredHeight");
+			String caredAddress = req.getParameter("caredAddress");
+			String caredPhone = req.getParameter("caredPhone");
+			String conStatus = req.getParameter("conStatus");
+			String bioStatus = req.getParameter("bioStatus");
+			Timestamp modifyTime = new Timestamp(System.currentTimeMillis());
+			
+			
+			ThecaredVO thecaredVO= new ThecaredVO();
+			thecaredVO.setMemNo(memNo);
+			thecaredVO.setCaredName(caredName);
+			thecaredVO.setCaredGender(caredGender);
+			thecaredVO.setKinship(kinship);
+			thecaredVO.setCaredHeight(Integer.valueOf(caredHeight));
+			thecaredVO.setCaredWeight(Integer.valueOf(caredWeight));
+			thecaredVO.setCaredAddress(caredAddress);
+			thecaredVO.setCaredPhone(caredPhone);
+			thecaredVO.setConStatus(conStatus);
+			thecaredVO.setBioStatus(bioStatus);
+			
+			ThecaredService caredSvc = new ThecaredService();
+			thecaredVO =caredSvc.addTHECARED(thecaredVO);
+			RequestDispatcher successView = req.getRequestDispatcher("/front/member/CaredList.jsp");
+			successView.forward(req, res);
+		}
+//======================================================================================================================
+	
+		if("balance_insert".equals(action)){	
+			String topupNo = req.getParameter("topupNo");
+			String memNo = req.getParameter("memNo");
+			String topupValue = req.getParameter("topupValue");
+			String topupWay = req.getParameter("topupWay");
+			String status = req.getParameter("status");
+			
+			BalanceVO balanceVO= new BalanceVO();
+			balanceVO.setMemNo(memNo);
+			balanceVO.setTopupValue(Integer.valueOf(topupValue));
+			balanceVO.setTopupWay(topupWay);
+
+			BalanceService balanceSvc = new BalanceService();
+			balanceVO =balanceSvc.addTopup(balanceVO);
+			RequestDispatcher successView = req.getRequestDispatcher("/front/member/MyWallet.jsp");
+			successView.forward(req, res);
+			
+
+		}
+		
+		//-------------------------------------------------------------------------------
+		if ("queryBalanceList".equals(action)) {
+			String empDep = req.getParameter("empDep");
+			System.out.println(empDep);
+			
+			String param = null;
+			String url = "/back/member/listAllBalance.jsp";
+			BalanceService balanceSvc = new BalanceService();
+			List<BalanceVO> list = new ArrayList<>();
+
+			if (!list.isEmpty()) {
+				req.setAttribute("list", list);
+				req.setAttribute("empDep", param);
+				RequestDispatcher dis = req.getRequestDispatcher(url);
+				dis.forward(req, res);
+			}
+		}
+		//-------------------------------------------------------------------
+		
+		if ("queryBalanceByMemNo".equals(action)) {
+
+			String url = "/back/member/listOneBalance.jsp";			
+			String memNo = req.getParameter("memNo");
+		
+			BalanceService balanceSvc = new BalanceService();
+			List<BalanceVO> list = balanceSvc.getAllByMemNo2(memNo.toUpperCase());
+ 
+			req.setAttribute("memNo", memNo); 
+			req.setAttribute("list", list);
+			System.out.println("set_balanceVO="+list);
+
+			RequestDispatcher successView = req.getRequestDispatcher(url);
+			successView.forward(req, res);
+				
+		}
+		//-------------------------------------------------------------------
+
+		if ("changeBalanceStatus".equals(action)) {
+			
+			System.out.println("123");
+			String status = req.getParameter("status");
+			String topupNo = req.getParameter("topupNo");
+
+			BalanceService balanceSvc = new BalanceService();
+			balanceSvc.updateStatus(status,topupNo);
+			System.out.println("後台成功修改會員狀態");
+			RequestDispatcher successView = req.getRequestDispatcher("/back/member/listAllBalance.jsp");
+			successView.forward(req, res);
+
+		}
+		
+		if("memVerity".equals(action)){
+			System.out.println("action"+action);
+
+			String memNo = req.getParameter("memNo");
+			MemberService memSvc = new MemberService();;
+			MemberVO memVO = memSvc.findByPrimaryKey(memNo);
+			String memCodeOutput = sendRegisterMail(memVO.getMemEmail(),memVO.getMemName());//程式送出認證碼了
+			req.getSession().setAttribute("memCodeOutput", memCodeOutput);
+
+			
+			RequestDispatcher successView = req.getRequestDispatcher("/front/member/MemberVerify.jsp");
+			successView.forward(req, res);
+			
+		}
+		if("confirmCode".equals(action)){
+			String memNo = req.getParameter("memNo");
+
+			String memCodeOutput= (String)req.getSession().getAttribute("memCodeOutput");
+			String memCodeInput= req.getParameter("memCodeInput");
+		System.out.println(memCodeOutput);
+		System.out.println(memCodeInput);
+			
+			String ok="已驗證";
+			String fail="請重新驗證";
+			
+			MemberService memSvc = new MemberService();;
+			MemberVO memberVO = memSvc.findByPrimaryKey(memNo);
+			if(memCodeInput.equals(memCodeOutput)){
+				memberVO.setMemSratus(ok);
+			}else{
+				memberVO.setMemSratus(fail);
+			}
+
+			memSvc.updateMember(memberVO);
+			System.out.println("Input驗證碼"+memCodeInput);
+			req.setAttribute("memberVO", memberVO);
+			RequestDispatcher successView = req.getRequestDispatcher("/front/member/MemberInfo.jsp");
+			successView.forward(req, res);
+		}
 	}
 	
 	
@@ -498,6 +676,40 @@ public class MemberServlet extends HttpServlet {
 		String messageText = "Hello! " + Name + " 請謹記此密碼: " + Pwd + "\n" + " (已經啟用)";
 		MailService mailService = new MailService();
 		mailService.sendMail(to, subject, messageText);
+	}
+	private String sendRegisterMail(String memEmail, String memName) {
+		String to = memEmail;
+		String memCode= getMemCode();
+		String subject = "有我罩你-會員認證信";
+		System.out.println("驗證碼"+memCode);
+		System.out.println("mail:"+memEmail);
+		
+
+		
+		String messageText = 
+				"尊敬的會員" + memName +  "您好：\n\n" + "感謝申請會員驗證！" 
+				+ "\n 請至驗證網頁輸入下方驗證碼 http://localhost:8081/BA104G1/front/member/MemberVerify.jsp"
+				+ "\n【" + memCode  +"】(共4碼)，此驗證碼只在10分鐘內有效，失效時請重新申請。"; 
+		
+		MailService mailService = new MailService();
+		mailService.sendMail(to, subject, messageText);
+		return memCode;
+	}
+	
+	private String getMemCode() {
+		StringBuffer sb = new StringBuffer();
+		int[] A = new int[4];
+		for (int i = 0; i < 4; i++) {
+			if (i < 1) { // 前 1 放數字
+				A[i] = (int) ((Math.random() * 10) + 48);
+			} else if (i < 3) { // 中間 2 位放大寫英文
+				A[i] = (int) (((Math.random() * 26) + 65));
+			} else { // 後 1 位放小寫英文
+				A[i] = ((int) ((Math.random() * 26) + 97));
+			}
+			sb.append((char) A[i]);
+		}
+		return sb.toString();
 	}
 }
 

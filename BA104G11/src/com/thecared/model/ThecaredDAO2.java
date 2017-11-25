@@ -7,7 +7,7 @@ import java.sql.Date;
 
 public class ThecaredDAO2 implements ThecaredDAO_interface {
 	String driver = "oracle.jdbc.driver.OracleDriver";
-	String url = "jdbc:oracle:thin:@localhost:1521:XE";
+	String url = "jdbc:oracle:thin:@13.124.90.221:1521:XE";
 	String userid = "BA104G1DB";
 	String passwd = "BA104G1DB";
 	
