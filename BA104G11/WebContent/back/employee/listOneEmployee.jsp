@@ -274,12 +274,15 @@ h4 {
 										<div class="btn-group">
 											<a href='#modal-id' data-toggle="modal"
 												class="btn btn-warning" role="button">修改</a>
-												<a href='<%=request.getContextPath()%>/employee/employee.do?action=forgetPwd&empNo=${empVO.empNo}' id="forgetPwd" data-toggle="modal"
-												class="btn btn-danger" role="button">忘記密碼?</a>
+												<a href='<%=request.getContextPath()%>/employee/employee.do?action=forgetPwd&empNo=${empVO.empNo}' 
+												id="forgetPwd" data-toggle="modal"
+												class="btn btn-danger" role="button" onclick="showMessage()"
+												>忘記密碼?</a>
 										</div>
 									</div>
 								</fieldset>
 							</form>
+							<div id="sentPassword"></div>
 							<!--------------------------------------------------------------------------------註冊FORM------------------------------------------------------------------------------------------------------->
 
 						</div>
@@ -443,6 +446,9 @@ h4 {
 		reader.addEventListener("load", function() {
 			$id(imgId).src = reader.result;
 		}, false);
+	}
+	function showMessage(){
+		document.getElementById("sentPassword").innerHTML='密碼已發送至註冊信箱，請前往信箱查收密碼';
 	}
 </script>
 <%@ include file="/back/production/BA104G1_footer.jsp"%>

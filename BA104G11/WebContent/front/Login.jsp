@@ -45,65 +45,75 @@
 					<form action="<%= request.getContextPath()%>/member/member.do" method="post">
 						<input type="hidden" name="action" value="login">
 						<div class="input-container">
-							<input type="text" id="Username" name="memId" /> <label
+							<input type="text" id="Username" name="memId" value="" /> <label
 								for="Username">會員帳號</label>
 							<div class="bar"></div>
 						</div>
 						<div class="input-container">
-							<input type="password" id="Password" name="memPwd" /> <label
-								for="Password">會員密碼</label>
+							<input type="password" id="Password" name="memPwd"  value=""/> 
+							<label for="Password">會員密碼</label>
 							<div class="bar"></div>
 						</div>
+						
 						<div class="button-container">
-							<button>
+							<button type="submit" value="Submit">
 								<span>Go</span>
 							</button>
+							<button type="reset" value="Reset">
+								<span>Reset</span>
+							</button>
+						
 						</div>
-						<div class="col-xs-12 col-sm-6"><div class="btn"><span>demo1</span></div></div>
-					
+	
 						<div class="footer">
 							<a href="<%=request.getContextPath()%>/front/member/MemberRegister.jsp">註冊</a>
 						</div>
 					</form>
 					
 				</div>
-				<div class="card alt">
-					<div class="toggle"><a href="<%=request.getContextPath()%>/front/member/MemberRegister.jsp"></a></div>
-					<h1 class="title">
-						Register
-						<div class="close"></div>
-					</h1>
-					<form>
-						<div class="input-container">
-							<input type="text" id="Username" required="required" /> <label
-								for="Username">Username</label>
-							<div class="bar"></div>
-						</div>
-						<div class="input-container">
-							<input type="password" id="Password" required="required" /> <label
-								for="Password">Password</label>
-							<div class="bar"></div>
-						</div>
-						<div class="input-container">
-							<input type="password" id="Repeat Password" required="required" />
-							<label for="Repeat Password">Repeat Password</label>
-							<div class="bar"></div>
-						</div>
-						<div class="button-container">
-							<button>
-								<span>Next</span>
-							</button>
-						</div>
-						
-					</form>
-				</div>
+
+						<button onclick="myFunction1()">
+							<div class="col-xs-12 col-sm-6">
+								<div class="btn"><span >MEM0001</span>
+								</div>
+							</div>
+						</button>
+						<button onclick="myFunction2()">
+							<div class="col-xs-12 col-sm-6">
+								<div class="btn"><span >MEM0002</span>
+								</div>
+							</div>
+						</button>
+						<button onclick="myFunction3()">
+							<div class="col-xs-12 col-sm-6">
+								<div class="btn"><span >MEM0003</span>
+								</div>
+							</div>
+						</button>
+
 			</div>
-			<!-- Portfolio-->
-			<a id="portfolio" href="http://pkshopy.com/farooqshad/"
-				title="View my portfolio!"><i class="fa fa-link"></i></a>
+
 		</div>
 	</div>
-
+	
+	<script type="text/JavaScript">
+		function myFunction1() {
+		    document.getElementById("Username").value = "mem01";
+		    document.getElementById("Password").value = "pw0000";
+		}
+	</script>
+	<script type="text/JavaScript">
+		function myFunction2() {
+		    document.getElementById("Username").value = "mem02";
+		    document.getElementById("Password").value = "pw0000";
+		}
+	</script>
+	<script type="text/JavaScript">
+		function myFunction3() {
+		    document.getElementById("Username").value = "mem03";
+		    document.getElementById("Password").value = "pw0000";
+		}
+	</script>
 
 </body>
 </html>

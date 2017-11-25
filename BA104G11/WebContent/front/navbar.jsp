@@ -133,10 +133,9 @@
 						data-toggle="dropdown" href="#" id="themes">會員專區 <span
 							class="caret"></span></a>
 						<ul class="dropdown-menu" aria-labelledby="themes">
-							<li><a
-								href="<%=request.getContextPath()%>/front/member/MemberInfo.jsp">會員資料管理</a></li>
-							<li><a
-								href="<%=request.getContextPath()%>/front/member/MemberHcOrder.jsp">訂單管理</a></li>
+							<li><a href="<%=request.getContextPath()%>/front/member/MemberInfo.jsp">會員資料管理</a></li>
+							<li><a href="<%=request.getContextPath()%>/front/member/MyWallet.jsp">我的錢包</a></li>
+							<li><a href="<%=request.getContextPath()%>/front/member/MemberHcOrder.jsp">訂單管理</a></li>
 						</ul>
 					</li>
 					<!-- 會員專區 ================================================== -->
