@@ -5,23 +5,14 @@
 
 <%@ include file="/front/navbar.jsp"%>
 
-<link rel="stylesheet"
-	href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
-
-
-
+ <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+ 
+ 
+ 
 <head>
 </head>
 <body>
 	<div class="container-fluid">
-	<div class="row">
-		<div class="col-sm-12">
-			<ol class="breadcrumb">
-				<li><a href="#">首頁</a></li>
-				<li>登入/註冊</li>
-				<li class="active">註冊會員</li>
-			</ol>
-		</div>
 		<div class="col-xs-12 col-sm-8 col-sm-offset-2">
 			<form class="well form-horizontal"
 				action="<%=request.getContextPath()%>/member/member.do?action=insert"
@@ -43,7 +34,7 @@
 							<div class="input-group">
 								<span class="input-group-addon"><i
 									class="glyphicon glyphicon-user"></i></span> <input name="memName"
-									placeholder="Name" class="form-control" type="text">
+									placeholder="Name" class="form-control" type="text" id="Username" value="">
 							</div>
 						</div>
 					</div>
@@ -53,7 +44,7 @@
 							<div class="input-group">
 								<span class="input-group-addon"><i
 									class="glyphicon glyphicon-edit"></i></span> <input name="memId"
-									placeholder="account" class="form-control" type="text">
+									placeholder="account" class="form-control" type="text" id="Userid" value="">
 							</div>
 						</div>
 					</div>
@@ -63,7 +54,7 @@
 							<div class="input-group">
 								<span class="input-group-addon"><i
 									class="glyphicon glyphicon-edit"></i></span> <input name="memPwd"
-									placeholder="password" class="form-control" type="password">
+									placeholder="password" class="form-control" type="password" id="Userpassword1" value="">
 							</div>
 						</div>
 					</div>
@@ -73,8 +64,7 @@
 							<div class="input-group">
 								<span class="input-group-addon"><i
 									class="glyphicon glyphicon-edit"></i></span> <input name="memPWD"
-									placeholder="enter passwork again" class="form-control"
-									type="password">
+									placeholder="enter passwork again" class="form-control" type="password" id="Userpassword2" value="">
 							</div>
 						</div>
 					</div>
@@ -82,12 +72,13 @@
 						<label class="col-md-3 control-label">會員性別</label>
 						<div class="col-md-6  selectContainer">
 							<div class="buying-selling-group" id="buying-selling-group"
-								data-toggle="buttons">
+								data-toggle="buttons" id="Usergender" value="">
 								<label class="col-sm-offset-1 btn btn-default buying-selling">
 									<input type="radio" name="memGender" id="option1"
 									autocomplete="off" value="M"> <span class="radio-dot"></span>
 									<span class="buying-selling-word">男</span>
-								</label> <label class="btn btn-default buying-selling "> <input
+								</label> 
+								<label class="btn btn-default buying-selling "> <input
 									type="radio" name="memGender" id="option2" autocomplete="off"
 									value="F"> <span class="radio-dot"></span> <span
 									class="buying-selling-word">女</span>
@@ -101,8 +92,8 @@
 							<div class="input-group">
 								<span class="input-group-addon"><i
 									class="glyphicon glyphicon-earphone"></i></span> <input
-									name="memPhone" placeholder="+886" class="form-control"
-									type="text">
+									name="memPhone" placeholder="0912345678" class="form-control"
+									type="text" id="Userphone" value="">
 							</div>
 						</div>
 					</div>
@@ -113,7 +104,7 @@
 								<span class="input-group-addon"><i
 									class="glyphicon glyphicon-envelope"></i></span> <input
 									name="memEmail" placeholder="E-Mail Address"
-									class="form-control" type="email">
+									class="form-control" type="email" id="Useremail" value="">
 							</div>
 						</div>
 					</div>
@@ -123,49 +114,53 @@
 						<div class="col-md-6 inputGroupContainer">
 							<div class="input-group">
 								<span class="input-group-addon"><i
-									class="glyphicon glyphicon-home"></i></span> <input name="address"
-									placeholder="Address" class="form-control" type="text">
+									class="glyphicon glyphicon-home"></i></span> <input
+									name="address" placeholder="Address"
+									class="form-control" type="text" id="Useraddress" value="">
 							</div>
 						</div>
 					</div>
-					<div class="form-group">
-						<label class="col-md-3 control-label">信用卡號</label>
-						<div class="col-md-6 inputGroupContainer">
-							<div class="input-group col-sm-12">
-								<input name="creditcard" placeholder="card" class="form-control"
-									type="text">
-							</div>
 
-						</div>
-					</div>
-					<!-- ------------------------------------------------神奇小按鈕----------------------------------------------------------------------- -->
-					<div class="form-group">
-						<label class="col-sm-1"></label>
-						<div class="col-sm-1">
-							<span class="btn btn-default" />
-						</div>
-					</div>
-					<!-- ----------------------------------------------------------------------------------------------------------------------- -->
-					<!-- Button -->
+<!-- Button -->
 					<div class="form-group">
 						<label class="col-md-4 col-sm-4 col-sm-offset-1 control-label"></label>
 						<div class="col-md-4">
-							<button type="submit" class="btn btn-warning">
+							<button type="submit" class="btn btn-warning" onclick="showMessage()">
 								SUBMIT <span class="glyphicon glyphicon-send"></span>
 							</button>
 						</div>
 					</div>
 				</fieldset>
 			</form>
+			
+			
 		</div>
-	</div>
-	
+		
+		
 
-	<%@ include file="/front/footerbar.jsp"%>
-	<script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
-	<script
-		src="<%=request.getContextPath()%>/front/js/navbar/bootstrap.min.js"></script>
-	<script
-		src="<%=request.getContextPath()%>/front/js/navbar/usebootstrap.js"></script>
+	
+	</div>		
+	<div id="sentMessage">
+	</div>		
+	<script type="text/JavaScript">
+		function myFunction1() {
+		    document.getElementById("Username").value = "張懸";
+		    document.getElementById("Userid").value = "green";
+		    document.getElementById("Userpassword1").value = "0000";
+		    document.getElementById("Userpassword2").value = "0000";
+		    document.getElementById("Userphone").value = "0987000123";
+		    document.getElementById("Useremail").value = "seekastyle@gmail.com";
+		    document.getElementById("Useraddress").value = "桃園市中壢區中大路300號";
+		}
+		function showMessage(){
+			document.getElementById("sentMessage").innerHTML='資料傳送中...請稍待';
+		}
+		
+	</script>
+
+<%@ include file="/front/footerbar.jsp"%>
+<script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
+<script src="<%=request.getContextPath()%>/front/js/navbar/bootstrap.min.js"></script>
+<script src="<%=request.getContextPath()%>/front/js/navbar/usebootstrap.js"></script>
 </body>
 </html>
