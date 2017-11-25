@@ -54,55 +54,74 @@
 							<div class="bar"></div>
 						</div>
 						<div class="button-container">
-							<button>
+							<button type="submit" value="Submit">
 								<span>Go</span>
 							</button>
+							<button type="reset" value="Reset">
+								<span>Reset</span>
+							</button>
 						</div>
-						<div class="col-xs-12 col-sm-6"><div class="btn"><span>demo1</span></div></div>
-					
 						<div class="footer">
 							<a href="#">Forgot your password?</a>
 						</div>
+					
+
 					</form>
 					
 				</div>
-				<div class="card alt">
-					<div class="toggle"></div>
-					<h1 class="title">
-						Register
-						<div class="close"></div>
-					</h1>
-					<form>
-						<div class="input-container">
-							<input type="text" id="Username" required="required" /> <label
-								for="Username">Username</label>
-							<div class="bar"></div>
-						</div>
-						<div class="input-container">
-							<input type="password" id="Password" required="required" /> <label
-								for="Password">Password</label>
-							<div class="bar"></div>
-						</div>
-						<div class="input-container">
-							<input type="password" id="Repeat Password" required="required" />
-							<label for="Repeat Password">Repeat Password</label>
-							<div class="bar"></div>
-						</div>
-						<div class="button-container">
-							<button>
-								<span>Next</span>
-							</button>
-						</div>
-						
-					</form>
-				</div>
+	
 			</div>
-			<!-- Portfolio-->
-			<a id="portfolio" href="http://pkshopy.com/farooqshad/"
-				title="View my portfolio!"><i class="fa fa-link"></i></a>
+			
+						<button onclick="myFunction1()">
+							<div class="col-xs-12 col-sm-6">
+								<div class="btn"><span >管理部</span>
+								</div>
+							</div>
+						</button>
+						<button onclick="myFunction2()">
+							<div class="col-xs-12 col-sm-6">
+								<div class="btn"><span >長照部</span>
+								</div>
+							</div>
+						</button>
+						<button onclick="myFunction3()">
+							<div class="col-xs-12 col-sm-6">
+								<div class="btn"><span >派車部</span>
+								</div>
+							</div>
+						</button>
+						<button onclick="myFunction4()">
+							<div class="col-xs-12 col-sm-6">
+								<div class="btn"><span >新人</span>
+								</div>
+							</div>
+						</button>
+
 		</div>
 	</div>
-
+	<script type="text/JavaScript">
+		function myFunction1() {
+		    document.getElementById("Username").value = "admin00";
+		    document.getElementById("Password").value = "pw0000";
+		}
+	</script>
+	<script type="text/JavaScript">
+		function myFunction2() {
+		    document.getElementById("Username").value = "a002";
+		    document.getElementById("Password").value = "pw0000";
+		}
+	</script>
+	<script type="text/JavaScript">
+		function myFunction3() {
+		    document.getElementById("Username").value = "b001";
+		    document.getElementById("Password").value = "pw0000";
+		}
+	</script>
+	<script type="text/JavaScript">
+		function myFunction4() {
+		    document.getElementById("Username").value = "ming.w";
+		}
+	</script>
 
 </body>
 </html>
