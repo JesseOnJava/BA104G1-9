@@ -25,8 +25,6 @@ public class MemberDAO implements MemberDAO_interface{
 	private static final String GET_ONE_BYMEMID = "SELECT * FROM MEMBER WHERE MEM_ID=?";
 	private static final String DELETE = "DELETE FROM MEMBER WHERE MEM_NO = ?";
 	private static final String UPDATE = "UPDATE MEMBER SET MEM_NAME=? ,MEM_PHONE=?,MEM_GENDER=?,MEM_EMAIL=?,ADDRESS=?,POINT=?,MEM_ID=?,MEM_PWD=?,MEM_SRATUS=?,CHK_IP=?,MEM_LOGINTIME=? WHERE MEM_NO=?";
-	private static final String UPDATE_STATUS = "UPDATE MEMBER SET MEM_SRATUS=?  WHERE MEM_NO=?";
-
 	private static final String GET="SELECT * FROM MEMBER WHERE MEM_SRATUS = ? ";
 	private static final String UPDATE_POINT = "UPDATE MEMBER SET POINT=? WHERE MEM_NO=?";
 	
@@ -41,8 +39,8 @@ public class MemberDAO implements MemberDAO_interface{
 	}
 
 	public static void main(String[] args) {
-		MemberDAO dao = new MemberDAO();
-
+//		MemberDAO memberDAO = new MemberDAO();
+//		MemberVO memberVO = new MemberVO();
 		
 //		memberVO.setMemNo("MEM0005");
 //		memberVO.setMemName("������");
@@ -64,13 +62,8 @@ public class MemberDAO implements MemberDAO_interface{
 //		memberDAO.update(memberVO);
 		
 		/*�d�߳浧�|�����*/
-
-		
-		MemberVO memberVO3 = dao.findByMemId("mem01");
-		System.out.print(memberVO3.getMemId() + ",");
-		System.out.print(memberVO3.getMemName() + ",");
-		System.out.print(memberVO3.getMemPhone() );
-		System.out.println("---------------------");
+//		memberVO = memDAO.findByPrimaryKey("MEM0005");
+//		System.out.println(memberVO);
 		
 		/*�d�ߥ����|�����*/
 //		List<MemberVO> memberList  = memberDAO.getAll();
@@ -189,6 +182,8 @@ public class MemberDAO implements MemberDAO_interface{
 				memberVO.setChkIp(rs.getString("CHK_IP"));
 				memberVO.setMemLoginTime(rs.getTimestamp("MEM_LOGINTIME"));
 			}
+			System.out.println("memVO findByPrimaryKey success");
+			return memberVO;
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}finally{
@@ -300,6 +295,7 @@ public class MemberDAO implements MemberDAO_interface{
 				memberVO.setChkIp(rs.getString("CHK_IP"));
 				memberVO.setMemLoginTime(rs.getTimestamp("MEM_LOGINTIME"));
 			}
+			System.out.println("memVO findByMemId success");
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}finally{
@@ -357,41 +353,7 @@ public class MemberDAO implements MemberDAO_interface{
 		}
 		return memList;
 	}
-	@Override
-	public void update_status(String memSratus) {
-		Connection con = null;
-		PreparedStatement pstmt = null;
 
-		MemberVO memberVO = null;
-
-		try {
-			con = ds.getConnection();
-			pstmt = con.prepareStatement(UPDATE_POINT);
-
-			pstmt.setString(1, memSratus);
-
-			pstmt.executeUpdate();
-		} catch (SQLException se) {
-			throw new RuntimeException("A database error occured. " + se.getMessage());
-			// Clean up JDBC resources
-		} finally {
-			if (pstmt != null) {
-				try {
-					pstmt.close();
-				} catch (SQLException se) {
-					se.printStackTrace(System.err);
-				}
-			}
-			if (con != null) {
-				try {
-					con.close();
-				} catch (Exception e) {
-					e.printStackTrace(System.err);
-				}
-			}
-		}
-		
-	}
 	@Override
 	public void update_point(Integer point, String memNo) {
 		Connection con = null;
