@@ -1,4 +1,4 @@
-package jdbc.util.CompositeQuery;
+package jdbc.util.CompositeQuery; 
 
 //*  1. 萬用複合查詢-可由客戶端隨意增減任何想查詢的欄位
 //*  2. 為了避免影響效能:
