@@ -24,6 +24,7 @@ public class WebSocketChatServer {
 	private static final Gson gson = new Gson();
 	
 	private void sendNotify(String userName){
+		//通知
 		String userType = userName.substring(0, 3);
 		System.out.println(userType);
 		List<EmpServiceDetailVO> list = null;
@@ -76,6 +77,7 @@ System.out.println("正在線上的對象:"+empServiceDetailVO.getEmpNo());
 		sessionsMap.put(userName, userSession);
 		
 		sendNotify(userName);
+		
 		System.out.println("Session id:"+userSession.getId()+"  UserName:"+userName+"已經連線");
 	}
 	
