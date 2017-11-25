@@ -56,7 +56,7 @@ public class DBGifReaderForDish extends HttpServlet {
 	public void init() throws ServletException {
 		try {
 			Context ctx = new InitialContext();
-			DataSource ds = (DataSource) ctx.lookup("java:comp/env/jdbc/TestDB3");
+			DataSource ds = (DataSource) ctx.lookup("java:comp/env/jdbc/BA104G1DB");
 			con = ds.getConnection();
 		} catch (NamingException e) {
 			e.printStackTrace();

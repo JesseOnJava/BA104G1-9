@@ -39,7 +39,7 @@ public class DishServlet extends HttpServlet {
 			/***************************
 			 * 3.修改完成,準備轉交(Send the Success view)
 			 *************/
-			String url = "back/dish/listAllDish2.jsp";
+			String url = "back/dish/listAllDish.jsp";
 			RequestDispatcher successView = req.getRequestDispatcher(url);
 			successView.forward(req, res);
 		}
@@ -76,7 +76,7 @@ public class DishServlet extends HttpServlet {
 				/*************************** 其他可能的錯誤處理 **********************************/
 			} catch (Exception e) {
 				errorMsgs.add("刪除資料失敗:" + e.getMessage());
-				RequestDispatcher failureView = req.getRequestDispatcher("/back/dish/listAllDish2.jsp");
+				RequestDispatcher failureView = req.getRequestDispatcher("/back/dish/listAllDish.jsp");
 				failureView.forward(req, res);
 			}
 		}
@@ -134,7 +134,7 @@ public class DishServlet extends HttpServlet {
 				// Send the use back to the form, if there were errors
 				if (!errorMsgs.isEmpty()) {
 					req.setAttribute("dishVO", dishVO); // 含有輸入格式錯誤的dishVO物件,也存入req
-					RequestDispatcher failureView = req.getRequestDispatcher("/back/dish/addDish2.jsp");
+					RequestDispatcher failureView = req.getRequestDispatcher("/back/dish/addDish.jsp");
 					failureView.forward(req, res);
 					return;
 				}
@@ -146,12 +146,12 @@ public class DishServlet extends HttpServlet {
 				/*****************************
 				 * 3.新增完成,準備轉交(Send the Success view)
 				 ***********/
-				String url = "/back/dish/listAllDish2.jsp";
+				String url = "/back/dish/listAllDish.jsp";
 				RequestDispatcher successView = req.getRequestDispatcher(url); // 新增成功後轉交listAllDish.jsp
 				successView.forward(req, res);
 			} catch (Exception e) {
 				errorMsgs.add(e.getMessage());
-				RequestDispatcher failureView = req.getRequestDispatcher("back/dish/addDish2.jsp");
+				RequestDispatcher failureView = req.getRequestDispatcher("back/dish/addDish.jsp");
 				failureView.forward(req, res);
 			}
 
@@ -239,7 +239,7 @@ public class DishServlet extends HttpServlet {
 				 * 3.查詢完成,準備轉交(Send the Success view)
 				 ************/
 				req.setAttribute("dishVO", dishVO); // 資料庫取出的dishVO物件,存入req
-				String url = "/back/dish/update_dish_input2.jsp";
+				String url = "/back/dish/update_dish_input.jsp";
 				RequestDispatcher successView = req.getRequestDispatcher(url);// 成功轉交
 																				// update_dish_input.jsp
 				successView.forward(req, res);
@@ -303,7 +303,7 @@ public class DishServlet extends HttpServlet {
 				// Send the use back to the form, if there were errors
 				if (!errorMsgs.isEmpty()) {
 					req.setAttribute("dishVO", dishVO); // 含有輸入格式錯誤的empVO物件,也存入req
-					RequestDispatcher failureView = req.getRequestDispatcher("/back/dish/update_dish_input2.jsp");
+					RequestDispatcher failureView = req.getRequestDispatcher("/back/dish/update_dish_input.jsp");
 					failureView.forward(req, res);
 					return; // 程式中斷
 				}

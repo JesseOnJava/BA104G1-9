@@ -192,7 +192,7 @@ public class SetMealServlet extends HttpServlet {
 				 * 3.修改完成,準備轉交(Send the Success view)
 				 *************/
 				req.setAttribute("setMealVO", setMealVO); // 資料庫update成功後,正確的的empVO物件,存入req
-				String url = "/back/SetMeal/listAllSetMeal2.jsp";
+				String url = "/back/setMeal/listAllSetMeal.jsp";
 				RequestDispatcher successView = req.getRequestDispatcher(url); // 修改成功後,轉交listOneSetMeal.jsp
 				successView.forward(req, res);
 			} catch (Exception e) {

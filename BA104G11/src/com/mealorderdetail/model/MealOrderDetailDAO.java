@@ -17,7 +17,7 @@ public class MealOrderDetailDAO implements MealOrderDetailDAO_interface {
 	static {
 		try {
 			Context ctx = new InitialContext();
-			ds = (DataSource) ctx.lookup("java:comp/env/jdbc/TestDB3");
+			ds = (DataSource) ctx.lookup("java:comp/env/jdbc/BA104G1DB");
 		} catch (NamingException e) {
 			e.printStackTrace();
 		}
@@ -44,7 +44,7 @@ public class MealOrderDetailDAO implements MealOrderDetailDAO_interface {
 				mealOrderDetailVO.setMoDetailNo(rs.getString("MO_DETAIL_NO"));
 				mealOrderDetailVO.setMoNo(rs.getString("MO_NO"));
 				mealOrderDetailVO.setDeliveryDate(rs.getDate("DELIVER_DATE"));
-				mealOrderDetailVO.setMealTime(rs.getString("DELIVER_TIME"));
+				mealOrderDetailVO.setMealTime(rs.getString("MEALTIME"));
 				mealOrderDetailVO.setSmNo(rs.getInt("SM_NO"));
 				mealOrderDetailVO.setOrderQty(rs.getInt("ORDER_QTY"));
 				list.add(mealOrderDetailVO);

@@ -21,7 +21,7 @@ public class MenuDAO implements MenuDAO_interface {
 	static {
 		try {
 			Context ctx = new InitialContext();
-			ds = (DataSource) ctx.lookup("java:comp/env/jdbc/TestDB3");
+			ds = (DataSource) ctx.lookup("java:comp/env/jdbc/BA104G1DB");
 		} catch (NamingException e) {
 			e.printStackTrace();
 		}
@@ -87,7 +87,7 @@ public class MenuDAO implements MenuDAO_interface {
 				menuVO = new MenuVO();
 				menuVO.setMenuNo(rs.getInt("MENU_NO"));
 				menuVO.setSmNo(rs.getInt("SM_NO"));
-				menuVO.setMenuDate(rs.getDate("MENU_DATE"));
+				menuVO.setMenuDate(rs.getDate("MENUDATE"));
 				menuVO.setMealTime(rs.getString("MEALTIME"));
 				menuVO.setDishName(rs.getString("DISH_NAME"));
 				list.add(menuVO); // Store the row in the list

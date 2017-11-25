@@ -155,7 +155,43 @@
     <servlet-name>AndroidEmpServiceDetailController</servlet-name>
     <url-pattern>/android/EmpServiceDetailController</url-pattern>
   </servlet-mapping>
-  
+<!-- 送餐開始 -->
+<servlet>
+    <servlet-name>DishServlet</servlet-name>
+    <servlet-class>com.dish.controller.DishServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>DishServlet</servlet-name>
+    <url-pattern>/dish.do</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <servlet-name>SetMealServlet</servlet-name>
+    <servlet-class>com.setmeal.controller.SetMealServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>SetMealServlet</servlet-name>
+    <url-pattern>/setMeal.do</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <servlet-name>MealOrderServlet</servlet-name>
+    <servlet-class>com.mealorder.controller.MealOrderServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>MealOrderServlet</servlet-name>
+    <url-pattern>/MealOrder.do</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <servlet-name>MenuServlet</servlet-name>
+    <servlet-class>com.menu.controller.MenuServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>MenuServlet</servlet-name>
+    <url-pattern>/Menu.do</url-pattern>
+  </servlet-mapping>
+
+
+
+<!-- 送餐結束 -->
   
   <filter>
     <filter-name>loginFilter</filter-name>

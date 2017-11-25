@@ -16,5 +16,4 @@ public interface MealOrderDAO_interface {
 
 	public List<MealOrderVO> getByMember(String memNo);//OK
 	
-	
 }
