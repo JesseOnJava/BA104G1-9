@@ -8,8 +8,8 @@ import java.sql.Date;
 public class ThecaredDAO implements ThecaredDAO_interface {
 	String driver = "oracle.jdbc.driver.OracleDriver";
 	String url = "jdbc:oracle:thin:@localhost:1521:XE";
-	String userid = "BA104G1BD";
-	String passwd = "BA104G1BD";
+	String userid = "BA104G1";
+	String passwd = "123456";
 	
 	
 	//---------------前端------------------

@@ -21,8 +21,8 @@ public class HcOrderDetailJDBCDAO implements HcOrderDetailDAO_interface {
 	
 	private String driver = "oracle.jdbc.driver.OracleDriver";
 	private String url = "jdbc:oracle:thin:@localhost:1521:XE";
-	private String userid = "BA104G1BD";
-	private String passwd = "BA104G1BD";
+	private String userid = "BA104G1DB";
+	private String passwd = "BA104G1DB";
 	
 	
 	private static final String INSERT_STMT = 

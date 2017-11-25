@@ -3,11 +3,12 @@
 <%@ page import="com.hcworkshifts.model.*" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <% MemberService memSvc = new MemberService();
-   MemberVO memVO = (MemberVO)memSvc.findByPrimaryKey("MEM0002");
+   MemberVO memVO = (MemberVO)memSvc.getOneMemByNo("MEM0002");
    session.setAttribute("memVO",memVO);
 %>
 <jsp:useBean id="crdSvc" scope="page" class="com.thecared.model.ThecaredService"/>
 <jsp:useBean id="empPhSvc" scope="page" class="com.employee_photo.model.EmpPhotosService"/>
+<jsp:useBean id="expertlistService" scope="page" class="com.expertlist.model.ExpertlistService"/>
 
 
 <% String memNo = memVO.getMemNo();
@@ -17,17 +18,15 @@ request.setCharacterEncoding("UTF-8");
 
 
 <%@ include file="/front/navbar.jsp" %>
-<!DOCTYPE html>
-<html lang="">
+
 	<head>
 	
 		<meta charset="utf-8">
 		<meta http-equiv="X-UA-Compatible" content="IE=edge">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
 		<title>長照服務</title>
-<!-- 		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css"> -->
-<!-- 		<link href="css/takecare.css" rel="stylesheet"> -->
-<!-- 		<!--[if lt IE 9]--> -->
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+<!-- 		<!--[if lt IE 9]--> 
 <!-- 			<script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.min.js"></script> -->
 <!-- 			<script src="https://cdnjs.cloudflare.com/ajax/libs/respond.js/1.4.2/respond.min.js"></script> -->
 
@@ -77,9 +76,13 @@ request.setCharacterEncoding("UTF-8");
 				margin:auto;
 				display:block;
             }
-            .hc_order .modal-footer{
-            	
-            }
+
+            
+
+            
+            
+            
+            
             
         </style>
 
@@ -163,6 +166,7 @@ request.setCharacterEncoding("UTF-8");
                                 
                             </div>
                             <a href='#modal-step1' data-toggle="modal" class="btn btn-primary">選擇日期</a>
+                            
                         </div>
                       </div>
                     </div>
@@ -188,7 +192,7 @@ request.setCharacterEncoding("UTF-8");
                                 repellat qui reprehenderit? Amet, perferendis <br><br><br>
                                 animi. Asperiores iure, excepturi fugit delectus!</p>
                                 <a href='#modal-step2' data-toggle="modal" class="btn btn-primary">選擇照護人員</a>
-                                <a href='<%= request.getContextPath()%>/back/' data-toggle="modal" class="btn btn-primary">選擇照護人員(跳頁)</a>
+                                
                             </div>
                         </div>
                       </div>
@@ -225,14 +229,41 @@ request.setCharacterEncoding("UTF-8");
 	                          	<option value="中"> 下午 (13:30~17:30)</option>
 	                          	<option value="晚"> 晚上 (18:00~22:00)</option>
 	                          </select>
+	                        </div>
+	                        
+	                        	                        
+<!-- 	                        <div class="form-group has-success"> -->
+<!-- 	                          <label class="control-label" for="location">請點選服務地區</label> -->
+<!-- 	                          <select class="form-control" id="location" name="location" aria-describedby="helpBlock2"> -->
+<!-- 	                            <option value="" selected>請點選服務地區</option> -->
+<!-- 	                          	<option value="早"> 北區</option> -->
+<!-- 	                          	<option value="中"> 中區</option> -->
+<!-- 	                          	<option value="晚"> 南區</option> -->
+<!-- 	                          </select> -->
+<!-- 	                        </div> -->
+	                        
+	                         <div class="form-group has-success">
+	                          <label class="control-label" for="expNo">請選擇服務人員條件</label>
+	                          <select class="form-control" id="expNo" name="expNo" aria-describedby="helpBlock2">
+	                            <option value="" selected>請選擇服務人員條件(非必選)</option>
+	                          	<option value="101"> 丙級照護員</option>
+	                          	<option value="102"> 乙級照護員</option>
+	                          	<option value="201"> 護士</option>
+	                          	<option value="202"> 護理師</option>
+	                          </select>
 	                          <span id="helpBlock2" class="help-block">貼心提醒:照護服務僅提供會員使用喔!<a href="#">點我加入會員</a></span>
 	                        </div>
-	                        <input type="hidden" name="action" value="getAllByDateTime">
 	                        
+	                        <input type="hidden" name="action" value="getAllByDateTime">
+	                        <input type="hidden" name="successView" value="/front/homeCare/Hc_show_emps.jsp">
+        					<input type="hidden" name="failureV" value="/front/homeCare/Hc_order.jsp">
+	                        
+	                        <a href='<%=request.getContextPath()%>/front/homeCare/Hc_order_long.jsp' data-toggle="modal" class="btn btn-primary">長期服務</a>
 	                    </div>
 	                    <div class="modal-footer">                      
 	<!--                         <input type="submit" class="btn btn-primary" data-dismiss="modal" id="datenloc-check" value="確認"> -->
 	                        <input type="submit" class="btn btn-primary"  id="datenloc-check" value="確認">
+	                        
 	                        
 	                    </div>
                     </form>
@@ -240,85 +271,85 @@ request.setCharacterEncoding("UTF-8");
             </div>
         </div>
 
-        <div class="modal fade" id="modal-step2">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                        <h4 class="modal-title">選擇照護人員</h4>
-                    </div>
-                    <div class="modal-body">
+<!--         <div class="modal fade" id="modal-step2"> -->
+<!--             <div class="modal-dialog"> -->
+<!--                 <div class="modal-content"> -->
+<!--                     <div class="modal-header"> -->
+<!--                         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button> -->
+<!--                         <h4 class="modal-title">選擇照護人員</h4> -->
+<!--                     </div> -->
+<!--                     <div class="modal-body"> -->
                         
-                        <div class="form-group has-success">
-                          <label class="control-label" for="caredNo">照護對象</label>
-							<select size="1" class="form-control" name="caredNo" id="caredNo" aria-describedby="helpBlock2">
-								<option value="" selected>請選擇</option>
-								<c:forEach var="crdVO" items="${crdSvc.getAllByMemNo('MEM0002')}" > 
-									<option value="${crdVO.caredNo}">${crdVO.caredName}
-								</c:forEach>   
-							</select>                     
+<!--                         <div class="form-group has-success"> -->
+<!--                           <label class="control-label" for="caredNo">照護對象</label> -->
+<!-- 							<select size="1" class="form-control" name="caredNo" id="caredNo" aria-describedby="helpBlock2"> -->
+<!-- 								<option value="" selected>請選擇</option> -->
+<%-- 								<c:forEach var="crdVO" items="${crdSvc.getAllByMemNo('MEM0002')}" >  --%>
+<%-- 									<option value="${crdVO.caredNo}">${crdVO.caredName} --%>
+<%-- 								</c:forEach>    --%>
+<!-- 							</select>                      -->
 
-                        </div>
+<!--                         </div> -->
                         
-                        <div class="carer form-group has-success">
-                        <label class="control-label" for="cared">選擇照護人員</label>
-                        <input type="text"  class="form-control" id="empNo" name="empNo" aria-describedby="helpBlock2" readonly>
+<!--                         <div class="carer form-group has-success"> -->
+<!--                         <label class="control-label" for="cared">選擇照護人員</label> -->
+<!--                         <input type="text"  class="form-control" id="empNo" name="empNo" aria-describedby="helpBlock2" readonly> -->
                         
-<%--                         	<c:if test='${hcWorkShiftsVOList} == null || ${hcWorkShiftsVOList}.equals("")'>還沒選擇日期喔!</c:if> --%>
-					       <div class="col-xs-12 col-sm-6">
-							    <a href="#" class="thumbnail" ">
-							        <img src="<%=request.getContextPath()%>/noData/noPic.jpg" alt="圖片載入中">
-							        <div class="caption">
-							            <h2>由我們幫你找最優秀的照護人員</h2>
-							            <p>經驗豐富</p>
-							        </div>
-							    </a>
-							</div>
-							<c:forEach var="hcWorkShiftsVO" items="${hcWorkShiftsVOList}" varStatus="s" > 
-							<div class="col-xs-12 col-sm-6" id>
-                                <a href="javascript:produceEmp${s.index}()" class="thumbnail emplist" id="emp-btn${s.index}" aria-describedby="helpBlock2">
-									<c:choose>
-									    <c:when test="${empPhSvc.getAllByEMPNO(hcWorkShiftsVO.empNo).size()!= 0}">
-									    <div class="emp-img">
-									        <img src="<%=request.getContextPath()%>/DBGifReader4?emp_photo_no=${empPhSvc.getAllByEMPNO(hcWorkShiftsVO.getEmpNo()).get(0).getEmpPhtoNo()}"  alt="圖片連線中" class="chose-img${s.index}"> 
-									    </div>
-									    </c:when>
+<%-- <%--                         	<c:if test='${hcWorkShiftsVOList} == null || ${hcWorkShiftsVOList}.equals("")'>還沒選擇日期喔!</c:if> --%> --%>
+<!-- 					       <div class="col-xs-12 col-sm-6"> -->
+<!-- 							    <a href="#" class="thumbnail" "> -->
+<%-- 							        <img src="<%=request.getContextPath()%>/noData/noPic.jpg" alt="圖片載入中"> --%>
+<!-- 							        <div class="caption"> -->
+<!-- 							            <h2>由我們幫你找最優秀的照護人員</h2> -->
+<!-- 							            <p>經驗豐富</p> -->
+<!-- 							        </div> -->
+<!-- 							    </a> -->
+<!-- 							</div> -->
+<%-- 							<c:forEach var="hcWorkShiftsVO" items="${hcWorkShiftsVOList}" varStatus="s" >  --%>
+<!-- 							<div class="col-xs-12 col-sm-6" id> -->
+<%--                                 <a href="javascript:produceEmp${s.index}()" class="thumbnail emplist" id="emp-btn${s.index}" aria-describedby="helpBlock2"> --%>
+<%-- 									<c:choose> --%>
+<%-- 									    <c:when test="${empPhSvc.getAllByEMPNO(hcWorkShiftsVO.empNo).size()!= 0}"> --%>
+<!-- 									    <div class="emp-img"> -->
+<%-- 									        <img src="<%=request.getContextPath()%>/DBGifReader4?emp_photo_no=${empPhSvc.getAllByEMPNO(hcWorkShiftsVO.getEmpNo()).get(0).getEmpPhtoNo()}"  alt="圖片連線中" class="chose-img${s.index}">  --%>
+<!-- 									    </div> -->
+<%-- 									    </c:when> --%>
 
-									    <c:otherwise>
-									    	<div class="emp-img">
-									        <img src="<%=request.getContextPath()%>/noData/noPic.jpg" alt="圖片連線中" class="chose-img${s.index}">
-									        </div>
-									    </c:otherwise>
-									</c:choose>
+<%-- 									    <c:otherwise> --%>
+<!-- 									    	<div class="emp-img"> -->
+<%-- 									        <img src="<%=request.getContextPath()%>/noData/noPic.jpg" alt="圖片連線中" class="chose-img${s.index}"> --%>
+<!-- 									        </div> -->
+<%-- 									    </c:otherwise> --%>
+<%-- 									</c:choose> --%>
 
 								
-                                    <div class="caption">
-                                        <h2>${hcWorkShiftsVO.getEmpNo()}</h2>
-                                        <p>經驗豐富</p>
-                                    </div>
-                                </a>
-                                <script>
-                                	function produceEmp${s.index}(){
-                                		console.log('${hcWorkShiftsVO.getEmpNo()}');
-                                		$('.input-img').attr('src',$('.chose-img${s.index}').attr('src'));
+<!--                                     <div class="caption"> -->
+<%--                                         <h2>${hcWorkShiftsVO.getEmpNo()}</h2> --%>
+<!--                                         <p>經驗豐富</p> -->
+<!--                                     </div> -->
+<!--                                 </a> -->
+<!--                                 <script> -->
+//                                 	function produceEmp${s.index}(){
+//                                 		console.log('${hcWorkShiftsVO.getEmpNo()}');
+//                                 		$('.input-img').attr('src',$('.chose-img${s.index}').attr('src'));
                                 		
-                                		$('#empNo-final').attr('value','${hcWorkShiftsVO.getEmpNo()}');
-                                		$('#empName-final').html('${hcWorkShiftsVO.getEmpNo()}');
+//                                 		$('#empNo-final').attr('value','${hcWorkShiftsVO.getEmpNo()}');
+//                                 		$('#empName-final').html('${hcWorkShiftsVO.getEmpNo()}');
                                 		
-                                	};
-                                </script> 
-                            </div>
-							</c:forEach>
-<!-- 							須加入無人員處理 -->
+//                                 	};
+<!--                                 </script>  -->
+<!--                             </div> -->
+<%-- 							</c:forEach> --%>
+<!-- <!-- 							須加入無人員處理 --> -->
 
-                        </div>
-                    </div>
-                    <div class="modal-footer">                      
-                        <button type="button" class="btn btn-primary" data-dismiss="modal">確認</button>
-                    </div>
-                </div>
-            </div>
-        </div>
+<!--                         </div> -->
+<!--                     </div> -->
+<!--                     <div class="modal-footer">                       -->
+<!--                         <button type="button" class="btn btn-primary" data-dismiss="modal">確認</button> -->
+<!--                     </div> -->
+<!--                 </div> -->
+<!--             </div> -->
+<!--         </div> -->
 
 
         <!-- form -------------------------------->
@@ -365,7 +396,7 @@ request.setCharacterEncoding("UTF-8");
 	                              <label class="control-label" for="cared-fianl">服務對象</label>	                              
 									<select size="1" class="form-control" name="caredNo"  id="caredNo-final" aria-describedby="helpBlock2">
 										<option value="" selected>請選擇</option>
-										<c:forEach var="crdVO" items="${crdSvc.getAllByMemNo('MEM0002')}" > 
+										<c:forEach var="crdVO" items="${crdSvc.getAllByMemNo(memVO.getMem_no())}" > 
 											<option value="${crdVO.caredNo}">${crdVO.caredName}
 										</c:forEach>   
 									</select>    
@@ -374,8 +405,8 @@ request.setCharacterEncoding("UTF-8");
 	                              <div id="showfinal-emp">
 	                              
 	                              	<c:choose>
-									    <c:when test='${not empty param.empNo}'>
-									        <img src="<%=request.getContextPath()%>/DBGifReader4?emp_photo_no=${empPhSvc.getAllByEMPNO(param.empNo).get(0).getEmpPhtoNo()}"  alt="圖片連線中" class="input-img"> 
+									    <c:when test='${not empty param.empNo && empPhSvc.getAllByEMPNO(param.empNo).size()!=0}'>
+									        <img src="<%=request.getContextPath()%>/DBGifReader4?emp_photo_no=${empPhSvc.getAllByEMPNO(param.empNo).get(0).getEmpPhtoNo()}"  alt="圖片連線中1" class="input-img"> 
 									    
 									    </c:when>
 									    <c:when test='${not empty param.empNo && empPhSvc.getAllByEMPNO(param.empNo).size()==0}'>
@@ -392,11 +423,12 @@ request.setCharacterEncoding("UTF-8");
 	                              </div>
 	                              
 	                              
-	                              <span id='empName-final'>${param.empNo}(${not empty param.empNo})</span>
+	                              <span id='empName-final'>${employeeService.getOneEMPLOYEE(param.empNo).getEmpName()}(${not empty param.empNo})</span>
 	                              
 	                              <input type="hidden" class="form-control" id="empNo-final" name="empNo" value="${param.empNo}" aria-describedby="helpBlock2">
 	                              <input type="hidden" class="form-control" name="memNo" value="${memVO.mem_no}" aria-describedby="helpBlock2">
 	                              <input type="hidden" class="form-control" name="action" value="add_hc_order" aria-describedby="helpBlock2">
+	                              <input type="hidden" class="form-control" name="forwardURL" value="<%=request.getServletPath()%>" aria-describedby="helpBlock2">
 		                         </div>	                        
 	                    </div>
 	                    <div class="modal-footer">
@@ -420,14 +452,14 @@ request.setCharacterEncoding("UTF-8");
 
 
 <%@ include file="/front/footerbar.jsp" %>        
-<!-- <script src="https://code.jquery.com/jquery.js"></script> -->
-<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script> -->
-<script src="<%=request.getContextPath()%>/front/homeCare/laydate/laydate.js"></script> 
+<script src="https://code.jquery.com/jquery.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script src="<%=request.getContextPath()%>/front/css/homeCare/laydate/laydate.js"></script>
 <script>
     laydate.render({
         elem: '#servDate' 
         ,min: '0'
-        ,max: '2017-12-31'
+        ,max: '2018-12-31'
         ,done: function(value, date, endDate){
             $('#servDate-final').attr('value',value);
             console.log(value); 
@@ -446,7 +478,6 @@ request.setCharacterEncoding("UTF-8");
         }
     });
     
-
            
     $(function() { 
     	console.log('${param.servDate}'+'!!!');
@@ -480,5 +511,3 @@ request.setCharacterEncoding("UTF-8");
 
 
 
-	</body>
-</html>

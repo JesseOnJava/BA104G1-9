@@ -92,7 +92,14 @@
 
 
 					<!-- 長照服務 ================================================== -->
-					<li><a href="#">長照服務</a></li>
+			        <li class="dropdown">
+			          <a class="dropdown-toggle" data-toggle="dropdown" href="#" id="themes">照護服務 <span class="caret"></span></a>
+			          <ul class="dropdown-menu" aria-labelledby="themes">
+			            <li><a href="<%=request.getContextPath()%>/front/homeCare/Hc_order.jsp">短期照護服務</a></li>
+			            <li><a href="<%=request.getContextPath()%>/front/homeCare/Hc_order_long.jsp">長期照護服務</a></li>
+			            <li><a href="#">Q&A</a></li>
+			          </ul>
+			        </li>
 					<!-- 長照服務 ================================================== -->
 
 					<!-- 派車服務 ================================================== -->

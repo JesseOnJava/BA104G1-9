@@ -157,6 +157,33 @@
   </servlet-mapping>
   
   
+  
+  <servlet>
+    <servlet-name>employeePhotoServlet</servlet-name>
+    <servlet-class>com.employee_photo.controller.EmployeePhotoServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>employeePhotoServlet</servlet-name>
+    <url-pattern>/employee_photo/employeePhoto.do</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <servlet-name>HcWorkshiftsServlet</servlet-name>
+    <servlet-class>com.hcworkshifts.controller.HcWorkshiftsServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>HcWorkshiftsServlet</servlet-name>
+    <url-pattern>/HcWorkshifts/HcWorkshiftsServlet.do</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <servlet-name>HcOrderController</servlet-name>
+    <servlet-class>com.hcorder.controller.HcOrderController</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>HcOrderController</servlet-name>
+    <url-pattern>/HcOrder/HcOrderController.do</url-pattern>
+  </servlet-mapping>
+  
+  
   <filter>
     <filter-name>loginFilter</filter-name>
     <filter-class>com.filters.LoginFilter</filter-class>
