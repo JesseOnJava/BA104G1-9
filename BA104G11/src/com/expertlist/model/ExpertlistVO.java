@@ -9,14 +9,6 @@ public class ExpertlistVO implements Serializable{
 	private String expSpec;
 	private Integer expPrice;
 	
-	
-	
-	public Integer getExpPrice() {
-		return expPrice;
-	}
-	public void setExpPrice(Integer expPrice) {
-		this.expPrice = expPrice;
-	}
 	public String getExpNo() {
 		return expNo;
 	}
@@ -35,5 +27,12 @@ public class ExpertlistVO implements Serializable{
 	public void setExpSpec(String expSpec) {
 		this.expSpec = expSpec;
 	}
+	public Integer getExpPrice() {
+		return expPrice;
+	}
+	public void setExpPrice(Integer expPrice) {
+		this.expPrice = expPrice;
+	}
+
 
 }

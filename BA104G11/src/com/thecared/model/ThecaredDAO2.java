@@ -2,28 +2,16 @@
 package com.thecared.model;
 
 import java.util.*;
-
-import javax.naming.Context;
-import javax.naming.NamingException;
-import javax.sql.DataSource;
-
 import java.sql.*;
 import java.sql.Date;
 
-public class ThecaredDAO implements ThecaredDAO_interface {
+public class ThecaredDAO2 implements ThecaredDAO_interface {
+	String driver = "oracle.jdbc.driver.OracleDriver";
+	String url = "jdbc:oracle:thin:@localhost:1521:XE";
+	String userid = "BA104G1DB";
+	String passwd = "BA104G1DB";
 	
-	private static DataSource ds = null;
 	
-	static {
-		try {
-			Context ctx = new javax.naming.InitialContext();
-			ds = (DataSource) ctx.lookup("java:comp/env/jdbc/BA104G1DB");
-		} catch ( NamingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
-
 	
 	//---------------前端------------------
 	//設定：可增
@@ -59,7 +47,7 @@ public class ThecaredDAO implements ThecaredDAO_interface {
 		+ "WHERE CARED_NO =?";
 	 
 	//設定：可查
-	private static final String GET_ONESTMT = "SELECT * FROM THECARED WHERE CARED_NO = ?";
+	private static final String GET_ONESTMT = "SELECT * FROM THECARED WHERE cared_No = ?";
 		
 
 	private static final String GETALL_MEM = "SELECT * FROM THECARED WHERE MEM_NO = ?";
@@ -79,7 +67,8 @@ public class ThecaredDAO implements ThecaredDAO_interface {
 
 		try {
 					
-			con  = ds.getConnection();
+			Class.forName(driver);
+			con = DriverManager.getConnection(url, userid, passwd);
 			pstmt = con.prepareStatement(INSERTSTMT);
 		
 			pstmt.setString(1, thecaredVO.getMemNo());
@@ -97,7 +86,11 @@ public class ThecaredDAO implements ThecaredDAO_interface {
 			System.out.println("新增ＯＫ"+i);
 
 			// Handle any driver errors
-		}catch (SQLException se) {
+		} catch (ClassNotFoundException e) {
+			throw new RuntimeException("Couldn't load database driver. "
+					+ e.getMessage());
+			// Handle any SQL errors
+		} catch (SQLException se) {
 			throw new RuntimeException("A database error occured. "
 					+ se.getMessage());
 			// Clean up JDBC resources
@@ -128,7 +121,8 @@ public class ThecaredDAO implements ThecaredDAO_interface {
 
 		try {
 				
-			con  = ds.getConnection();
+			Class.forName(driver);
+			con = DriverManager.getConnection(url, userid, passwd);
 			pstmt = con.prepareStatement(UPDATE);
 
 			pstmt.setString(1, thecaredVO.getCaredName());
@@ -144,7 +138,11 @@ public class ThecaredDAO implements ThecaredDAO_interface {
 			System.out.println("修改ＯＫ"+i);
 
 			// Handle any driver errors
-		}  catch (SQLException se) {
+		} catch (ClassNotFoundException e) {
+			throw new RuntimeException("Couldn't load database driver. "
+					+ e.getMessage());
+			// Handle any SQL errors
+		} catch (SQLException se) {
 			throw new RuntimeException("A database error occured. "
 					+ se.getMessage());
 			// Clean up JDBC resources
@@ -175,7 +173,8 @@ public class ThecaredDAO implements ThecaredDAO_interface {
 
 		try {
 
-			con  = ds.getConnection();
+			Class.forName(driver);
+			con = DriverManager.getConnection(url, userid, passwd);
 			pstmt = con.prepareStatement(DELETE);
 
 			pstmt.setString(1, caredNo);
@@ -183,6 +182,10 @@ public class ThecaredDAO implements ThecaredDAO_interface {
 			pstmt.executeUpdate();
 
 			// Handle any driver errors
+		} catch (ClassNotFoundException e) {
+			throw new RuntimeException("Couldn't load database driver. "
+					+ e.getMessage());
+			// Handle any SQL errors
 		} catch (SQLException se) {
 			throw new RuntimeException("A database error occured. "
 					+ se.getMessage());
@@ -216,7 +219,8 @@ public class ThecaredDAO implements ThecaredDAO_interface {
 
 		try {
 
-			con  = ds.getConnection();
+			Class.forName(driver);
+			con = DriverManager.getConnection(url, userid, passwd);
 			pstmt = con.prepareStatement(GET_ONESTMT);
 			pstmt.setString(1, caredNo);
 			rs = pstmt.executeQuery();
@@ -234,12 +238,16 @@ public class ThecaredDAO implements ThecaredDAO_interface {
 				thecaredVO.setCaredPhone(rs.getString("CARED_PHONE"));
 				thecaredVO.setConStatus(rs.getString("CON_STATUS"));
 				thecaredVO.setBioStatus(rs.getString("BIO_STATUS"));
-				thecaredVO.setModifyTime(rs.getDate("MODIFY_TIME"));
+				thecaredVO.setModifyTime(rs.getTimestamp("MODIFY_TIME"));
 							
 			}
 
 			// Handle any driver errors
-		}  catch (SQLException se) {
+		} catch (ClassNotFoundException e) {
+			throw new RuntimeException("Couldn't load database driver. "
+					+ e.getMessage());
+			// Handle any SQL errors
+		} catch (SQLException se) {
 			throw new RuntimeException("A database error occured. "
 					+ se.getMessage());
 			// Clean up JDBC resources
@@ -278,7 +286,8 @@ public class ThecaredDAO implements ThecaredDAO_interface {
 
 		try {
 
-			con  = ds.getConnection();
+			Class.forName(driver);
+			con = DriverManager.getConnection(url, userid, passwd);
 			pstmt = con.prepareStatement(GETALL_MEM);
 			pstmt.setString(1, MemNo);
 			rs = pstmt.executeQuery();
@@ -296,7 +305,7 @@ public class ThecaredDAO implements ThecaredDAO_interface {
 				thecaredVO.setCaredPhone(rs.getString("CARED_PHONE"));
 				thecaredVO.setConStatus(rs.getString("CON_STATUS"));
 				thecaredVO.setBioStatus(rs.getString("BIO_STATUS"));
-				thecaredVO.setModifyTime(rs.getDate("MODIFY_TIME"));
+				thecaredVO.setModifyTime(rs.getTimestamp("MODIFY_TIME"));
 				
 				
 				list.add(thecaredVO);
@@ -304,7 +313,11 @@ public class ThecaredDAO implements ThecaredDAO_interface {
 			}
 
 			// Handle any driver errors
-		}  catch (SQLException se) {
+		} catch (ClassNotFoundException e) {
+			throw new RuntimeException("Couldn't load database driver. "
+					+ e.getMessage());
+			// Handle any SQL errors
+		} catch (SQLException se) {
 			throw new RuntimeException("A database error occured. "
 					+ se.getMessage());
 			// Clean up JDBC resources
@@ -345,7 +358,8 @@ public class ThecaredDAO implements ThecaredDAO_interface {
 
 		try {
 
-			con  = ds.getConnection();
+			Class.forName(driver);
+			con = DriverManager.getConnection(url, userid, passwd);
 			pstmt = con.prepareStatement(GETALLSTMT);
 			rs = pstmt.executeQuery();
 			
@@ -363,13 +377,17 @@ public class ThecaredDAO implements ThecaredDAO_interface {
 				thecaredVO.setCaredPhone(rs.getString("CARED_PHONE"));
 				thecaredVO.setConStatus(rs.getString("CON_STATUS"));
 				thecaredVO.setBioStatus(rs.getString("BIO_STATUS"));
-				thecaredVO.setModifyTime(rs.getDate("MODIFY_TIME"));
+				thecaredVO.setModifyTime(rs.getTimestamp("MODIFY_TIME"));
 				
 				list.add(thecaredVO); // Store the row in the list
 			}
 
 			// Handle any driver errors
-		}  catch (SQLException se) {
+		} catch (ClassNotFoundException e) {
+			throw new RuntimeException("Couldn't load database driver. "
+					+ e.getMessage());
+			// Handle any SQL errors
+		} catch (SQLException se) {
 			throw new RuntimeException("A database error occured. "
 					+ se.getMessage());
 			// Clean up JDBC resources
@@ -401,23 +419,22 @@ public class ThecaredDAO implements ThecaredDAO_interface {
 
 	public static void main(String[] args) {
 
-		ThecaredDAO dao = new ThecaredDAO();
+		ThecaredDAO2 dao = new ThecaredDAO2();
 
 		 //新增
-//		ThecaredVO thecaredVO1 = new ThecaredVO();
-//
-//		thecaredVO1.setCaredNo("CRD1003");
-//	    thecaredVO1.setMemNo("MEM0003");
-//		thecaredVO1.setCaredName("王武");
-//		thecaredVO1.setCaredGender("M");
-//		thecaredVO1.setKinship("父親");
-//		thecaredVO1.setCaredHeight(168);
-//		thecaredVO1.setCaredWeight(55);
-//		thecaredVO1.setCaredAddress("臥龍崗");
-//		thecaredVO1.setCaredPhone("000012312");
-//		thecaredVO1.setConStatus("輕度");
-//		thecaredVO1.setBioStatus("輕度");		
-//		dao.insert(thecaredVO1);
+		ThecaredVO thecaredVO1 = new ThecaredVO();
+
+	    thecaredVO1.setMemNo("MEM0003");
+		thecaredVO1.setCaredName("王武");
+		thecaredVO1.setCaredGender("M");
+		thecaredVO1.setKinship("父親");
+		thecaredVO1.setCaredHeight(168);
+		thecaredVO1.setCaredWeight(55);
+		thecaredVO1.setCaredAddress("臥龍崗");
+		thecaredVO1.setCaredPhone("000012312");
+		thecaredVO1.setConStatus("輕度");
+		thecaredVO1.setBioStatus("輕度");		
+		dao.insert(thecaredVO1);
 
 
 		// 修改
@@ -441,36 +458,36 @@ public class ThecaredDAO implements ThecaredDAO_interface {
 //
 //
 //		// 查詢
-		ThecaredVO thecaredVO3 = dao.findByPrimaryKey("CRD0002");
-		
-		System.out.print(thecaredVO3.getCaredNo() );
-		System.out.print(thecaredVO3.getCaredName() );	
-		System.out.print(thecaredVO3.getCaredGender() );	
-		System.out.print(thecaredVO3.getKinship() );
-		System.out.print(thecaredVO3.getCaredHeight() );
-		System.out.print(thecaredVO3.getCaredWeight() );	
-		System.out.print(thecaredVO3.getCaredAddress() );	
-		System.out.print(thecaredVO3.getCaredPhone() );	
-		System.out.print(thecaredVO3.getCaredName() );	
-		System.out.print(thecaredVO3.getCaredName() );	
-		System.out.print(thecaredVO3.getCaredName() );
-		
-		System.out.println("---------------------");
-		
-
-
-		
-		
-		
-		
-//		List<ThecaredVO> list = dao.getAllByMemNo("MEM0002");
-//		System.out.println("getAllByMemNo*--------------------------------*");
-//		for(ThecaredVO thecaredVO:list){
-//			
-//			System.out.println(thecaredVO.getCaredName());
-//			System.out.println("*--------------------------------*");
+//		ThecaredVO thecaredVO3 = dao.findByPrimaryKey("CRD0001");
 //		
-//		}
+//		System.out.print(thecaredVO3.getCaredNo() );
+//		System.out.print(thecaredVO3.getCaredName() );	
+//		System.out.print(thecaredVO3.getCaredGender() );	
+//		System.out.print(thecaredVO3.getKinship() );
+//		System.out.print(thecaredVO3.getCaredHeight() );
+//		System.out.print(thecaredVO3.getCaredWeight() );	
+//		System.out.print(thecaredVO3.getCaredAddress() );	
+//		System.out.print(thecaredVO3.getCaredPhone() );	
+//		System.out.print(thecaredVO3.getCaredName() );	
+//		System.out.print(thecaredVO3.getCaredName() );	
+//		System.out.print(thecaredVO3.getCaredName() );
+//		
+//		System.out.println("---------------------");
+		
+
+
+		
+		
+		
+		
+		List<ThecaredVO> list = dao.getAllByMemNo("MEM0002");
+		System.out.println("getAllByMemNo*--------------------------------*");
+		for(ThecaredVO thecaredVO:list){
+			
+			System.out.println(thecaredVO.getCaredName());
+			System.out.println("*--------------------------------*");
+		
+		}
 		 //查詢
 		
 //		List<ThecaredVO> list2 = dao.getAll();
@@ -482,5 +499,9 @@ public class ThecaredDAO implements ThecaredDAO_interface {
 //	
 //			System.out.println();
 //		}
+	
 	}
+
 }
+	
+	

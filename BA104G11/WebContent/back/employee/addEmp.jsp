@@ -190,9 +190,11 @@ h4 {
 										<label class="col-md-4 control-label">員工姓名</label>
 										<div class="col-md-4 inputGroupContainer">
 											<div class="input-group">
-												<span class="input-group-addon"><i
-													class="glyphicon glyphicon-user"></i></span> <input name="empName"
-													placeholder="Name" class="form-control" type="text">
+												<span class="input-group-addon">
+												<i class="glyphicon glyphicon-user"></i>
+												</span> 
+												<input name="empName" placeholder="Name" id="empName" value="" 
+												class="form-control" type="text">
 											</div>
 										</div>
 									</div>
@@ -202,14 +204,18 @@ h4 {
 										<div class="col-md-4 selectContainer">
 											<div class="buying-selling-group" id="buying-selling-group"
 												data-toggle="buttons">
-												<label class="btn btn-default buying-selling"> <input
+												<label class="btn btn-default buying-selling"> 
+												<input
 													type="radio" name="empGender" id="option1"
-													autocomplete="off" value="M"> <span
-													class="radio-dot"></span> <span class="buying-selling-word">男</span>
-												</label> <label class="btn btn-default buying-selling"> <input
+													autocomplete="off" value="M"> 
+													<span class="radio-dot"></span> 
+													<span class="buying-selling-word">男</span>
+												</label> <label class="btn btn-default buying-selling"> 
+												<input
 													type="radio" name="empGender" id="option2"
-													autocomplete="off" value="F"> <span
-													class="radio-dot"></span> <span class="buying-selling-word">女</span>
+													autocomplete="off" value="F"> 
+													<span class="radio-dot"></span>
+													<span class="buying-selling-word">女</span>
 												</label>
 											</div>
 										</div>
@@ -218,15 +224,17 @@ h4 {
 										<label class="col-md-4 control-label">員工部門</label>
 										<div class="col-md-4 selectContainer">
 											<div class="input-group">
-												<span class="input-group-addon"><i
-													class="glyphicon glyphicon-list"></i></span> <select name="empDep"
-													class="form-control selectpicker">
+												<span class="input-group-addon">
+												<i class="glyphicon glyphicon-list"></i>
+												</span> 
+												<select name="empDep" class="form-control selectpicker">
 													<option value="">選擇部門</option>
-													<option value="春我部地球防衛隊總部">春我部地球防衛隊總部</option>
 													<option value="長照">長照部門</option>
 													<option value="派車">派車部門</option>
 													<option value="送餐">送餐部門</option>
-													<option value="後勤">後勤部門</option>
+													<option value="商城">商城部門</option>
+													<option value="客服">客服部門</option>
+													<option value="總部">總部部門</option>
 												</select>
 											</div>
 										</div>
@@ -235,15 +243,15 @@ h4 {
 										<label class="col-md-4 control-label">部門據點</label>
 										<div class="col-md-4 selectContainer">
 											<div class="input-group">
-												<span class="input-group-addon"><i
-													class="glyphicon glyphicon-list"></i></span> <select
+												<span class="input-group-addon">
+												<i class="glyphicon glyphicon-list"></i>
+												</span> 
+												<select
 													name="empBranches" class="form-control selectpicker">
 													<option value="">選擇據點</option>
 													<option value="10">台北分部</option>
 													<option value="20">桃園分部</option>
-													<option value="30">台中分部</option>
-													<option value="40">台南分部</option>
-													<option value="50">高雄分部</option>
+													<option value="30">台南分部</option>
 												</select>
 											</div>
 										</div>
@@ -252,14 +260,15 @@ h4 {
 										<label class="col-md-4 control-label">員工職位</label>
 										<div class="col-md-4 selectContainer">
 											<div class="input-group">
-												<span class="input-group-addon"><i
-													class="glyphicon glyphicon-list"></i></span> <select
+												<span class="input-group-addon">
+												<i class="glyphicon glyphicon-list"></i>
+												</span> 
+												<select
 													name="empTitle" class="form-control selectpicker">
 													<option value="">選擇職位</option>
 													<option value="總經理">總經理</option>
-													<option value="分部經理">分部經理</option>
-													<option value="分部課長">分部課長</option>
-													<option value="分部專員">分部專員</option>
+													<option value="經理">經理</option>
+													<option value="專員">專員</option>
 												</select>
 											</div>
 										</div>
@@ -268,13 +277,16 @@ h4 {
 										<label class="col-md-4 control-label">員工權限</label>
 										<div class="col-md-4 selectContainer">
 											<div class="input-group">
-												<span class="input-group-addon"><i
-													class="glyphicon glyphicon-list"></i></span> <select
+												<span class="input-group-addon">
+												<i class="glyphicon glyphicon-list"></i>
+												</span> 
+												<select
 													name="authorityNo" class="form-control selectpicker">
-													<option value="總經理">總經理</option>
-													<option value="部門經理">部門經理</option>
 													<option value="管理員">管理員</option>
-													<option value="一般專員">一般專員</option>
+													<option value="長照人員">長照人員</option>
+													<option value="派車人員">派車人員</option>
+													<option value="送餐人員">送餐人員</option>
+													<option value="客服人員">客服人員</option>
 												</select>
 											</div>
 										</div>
@@ -284,9 +296,11 @@ h4 {
 										<label class="col-md-4 control-label">員工帳號</label>
 										<div class="col-md-4 inputGroupContainer">
 											<div class="input-group">
-												<span class="input-group-addon"><i
-													class="glyphicon glyphicon-user"></i></span> <input name="empId"
-													placeholder="Account" class="form-control" type="text">
+												<span class="input-group-addon">
+												<i class="glyphicon glyphicon-user"></i>
+												</span> 
+												<input name="empId" placeholder="Account" id="empId" value=""  
+												class="form-control" type="text">
 											</div>
 										</div>
 									</div>
@@ -294,9 +308,11 @@ h4 {
 										<label class="col-md-4 control-label">員工EMail</label>
 										<div class="col-md-4 inputGroupContainer">
 											<div class="input-group">
-												<span class="input-group-addon"><i
-													class="glyphicon glyphicon-envelope"></i></span> <input
-													name="empEmail" placeholder="E-Mail Address"
+												<span class="input-group-addon">
+												<i class="glyphicon glyphicon-envelope"></i>
+												</span>
+												<input 
+													name="empEmail" placeholder="E-Mail Address"  id="empMail" value="" 
 													class="form-control" type="email">
 											</div>
 										</div>
@@ -306,21 +322,17 @@ h4 {
 										<label class="col-md-4 control-label">員工電話</label>
 										<div class="col-md-4 inputGroupContainer">
 											<div class="input-group">
-												<span class="input-group-addon"><i
-													class="glyphicon glyphicon-earphone"></i></span> <input
-													name="empPhone" placeholder="(639)" class="form-control"
+												<span class="input-group-addon">
+												<i class="glyphicon glyphicon-earphone"></i>
+												</span> 
+												<input
+													name="empPhone" placeholder="0911000123" class="form-control"  id="empPhone" value="" 
 													type="text">
 											</div>
 										</div>
 									</div>
 
-									<!-------------------------------------------------------------------------------- 神奇小按鈕 ------------------------------------------------------------------------------------------------------->
-									<div class="form-group">
-										<label class="col-sm-1 col-sm-offset-3"></label>
-										<div class="col-md-4">
-											<button type="submit" class="btn btn-default">
-										</div>
-									</div>
+
 									<!-------------------------------------------------------------------------------- 神奇小按鈕 ------------------------------------------------------------------------------------------------------->
 									<!-- Button -->
 									<div class="form-group">
@@ -331,7 +343,7 @@ h4 {
 											<button type="submit" class="btn btn-warning">
 												&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbspSUBMIT <span
 													class="glyphicon glyphicon-send"></span>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
-											</button>
+
 										</div>
 									</div>
 								</fieldset>
@@ -341,7 +353,13 @@ h4 {
 
 						</div>
 					</div>
-
+											</button>
+												<button onclick="addEmp()">
+												<div class="col-xs-12 col-sm-6">
+													<div class="btn"><span >magic</span>
+													</div>
+												</div>
+											</button>
 
 
 
@@ -353,98 +371,14 @@ h4 {
 </div>
 </div>
 
-<!-- <script type="text/javascript">
-$(document).ready(function() {
-    $('#contact_form').bootstrapValidator({
-            // To use feedback icons, ensure that you use Bootstrap v3.1.0 or later
-            feedbackIcons: {
-                valid: 'glyphicon glyphicon-ok',
-                invalid: 'glyphicon glyphicon-remove',
-                validating: 'glyphicon glyphicon-refresh'
-            },
-            fields: {
-            	empName: {
-                    validators: {
-                        stringLength: {
-                            min: 2,
-                        },
-                        notEmpty: {
-                            message: 'Please enter your First Name'
-                        }
-                    }
-                },
-                empId: {
-                    validators: {
-                        stringLength: {
-                            min: 2,
-                        },
-                        notEmpty: {
-                            message: 'Please enter your Last Name'
-                        }
-                    }
-                },
-                user_name: {
-                    validators: {
-                        stringLength: {
-                            min: 8,
-                        },
-                        notEmpty: {
-                            message: 'Please enter your Username'
-                        }
-                    }
-                },
-                user_password: {
-                    validators: {
-                        stringLength: {
-                            min: 8,
-                        },
-                        notEmpty: {
-                            message: 'Please enter your Password'
-                        }
-                    }
-                },
-                confirm_password: {
-                    validators: {
-                        stringLength: {
-                            min: 8,
-                        },
-                        notEmpty: {
-                            message: 'Please confirm your Password'
-                        }
-                    }
-                },
-                email: {
-                    validators: {
-                        notEmpty: {
-                            message: 'Please enter your Email Address'
-                        },
-                        emailAddress: {
-                            message: 'Please enter a valid Email Address'
-                        }
-                    }
-                },
-                contact_no: {
-                    validators: {
-                        stringLength: {
-                            min: 12,
-                            max: 12,
-                            notEmpty: {
-                                message: 'Please enter your Contact No.'
-                            }
-                        }
-                    },
-                    department: {
-                        validators: {
-                            notEmpty: {
-                                message: 'Please select your Department/Office'
-                            }
-                        }
-                    },
-                }
-            }
-        })
-});
-</script>  --->
+	<script type="text/JavaScript">
+		function addEmp() {
+		    document.getElementById("empName").value = "王小明";
+		    document.getElementById("empId").value = "ming.w";
+		    document.getElementById("empMail").value = "seekastyle@gmail.com";
+		    document.getElementById("empPhone").value = "0912000123";
+		}
+	</script>
 
 <%@ include file="/back/production/BA104G1_footer.jsp"%>
 

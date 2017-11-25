@@ -2,7 +2,7 @@ package com.expert.model;
 
 import java.sql.Date;
 import java.util.List;
-import com.balance.model.*;
+import com.expert.model.*;
 
 public class ExpertService {
 
@@ -50,8 +50,5 @@ public class ExpertService {
 
 	public List<ExpertVO> getAll() {
 		return dao.getAll();
-	}
-	public List<ExpertVO> getAllByEmpNo(String expNo) {
-		return dao.getAllByEMPNO(expNo);
 	}
 }

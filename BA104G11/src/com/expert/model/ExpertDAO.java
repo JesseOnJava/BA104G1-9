@@ -15,7 +15,7 @@ public class ExpertDAO implements ExpertDAO_interface {
 	static {
 		try {
 			Context ctx = new InitialContext();
-			ds = (DataSource) ctx.lookup("java:comp/env/jdbc/BA104G1DB");
+			ds = (DataSource) ctx.lookup("java:comp/env/jdbc/ba104a1");
 		} catch (NamingException e) {
 			e.printStackTrace();
 		}
@@ -38,9 +38,6 @@ public class ExpertDAO implements ExpertDAO_interface {
 	//設定：可查
 	private static final String GET_ONE_STMT = 			
 		" SELECT EXP_OWN, EMP_NO,EXP_NO FROM EXPERT WHERE EXP_OWN =? ";
-	
-	private static final String GETALL_BY_EXPNO = 			
-			" SELECT * FROM EXPERT WHERE EXP_NO =? ";
 	
 	//---------------後端-------------------
 	//設定：不增
@@ -224,8 +221,6 @@ public class ExpertDAO implements ExpertDAO_interface {
 		return expertVO;
 	}
 
-	
-	
 	@Override
 	public List<ExpertVO> getAll() {
 		List<ExpertVO> list = new ArrayList<ExpertVO>();
@@ -281,8 +276,6 @@ public class ExpertDAO implements ExpertDAO_interface {
 		}
 		return list;
 	}
-	
-	
 
 	public static void main(String[] args) {
 
@@ -330,12 +323,6 @@ System.out.println("修改ＯＫ");
 			System.out.print(aEmp.getExpNo() );
 			System.out.println();
 		}
-	}
-
-	@Override
-	public List<ExpertVO> getAllByEMPNO(String empNo) {
-		// TODO Auto-generated method stub
-		return null;
 	}
 }
 	
