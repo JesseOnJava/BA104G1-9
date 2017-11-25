@@ -2,15 +2,28 @@ package com.hcorder.modal;
 
 import java.util.*;
 
+import javax.naming.Context;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
+import javax.sql.DataSource;
+
 import jdbc.util.CompositeQuery.jdbcUtil_CompositeQuery_order;
 
 import java.sql.*;
 
 public class HcOrderJDBCDAO implements HcOrderMasterDAO_interface {
-	String driver = "oracle.jdbc.driver.OracleDriver";
-	String url = "jdbc:oracle:thin:@localhost:1521:XE";
-	String userid = "BA104G1BD";
-	String passwd = "BA104G1BD";
+	
+	private static DataSource ds = null;
+	static {
+		try {
+			Context ctx = new InitialContext();
+			ds = (DataSource) ctx.lookup("java:comp/env/jdbc/BA104G1DB");
+		} catch (NamingException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	
 
 	private static final String INSERT_STMT = 
 			"INSERT INTO HC_ORDER_MASTER (ORDER_NO,MEM_NO,ORDER_DATE,CARED_NO,ORDER_STATUS) "
@@ -37,7 +50,9 @@ public class HcOrderJDBCDAO implements HcOrderMasterDAO_interface {
 	
 	private static final String UPDATE = 
 		"UPDATE HC_ORDER_MASTER SET CARED_NO=?, ORDER_STATUS=? where ORDER_NO = ?";
-
+	private static final String GET_BY_MEM_NO = "SELECT * FROM HC_ORDER_MASTER WHERE MEM_NO = ?";
+	
+	
 	@Override
 	public String insert(HcOrderMasterVO hcOrderMasterVO,List<HcOrderDetailVO> list) {
 
@@ -50,8 +65,7 @@ public class HcOrderJDBCDAO implements HcOrderMasterDAO_interface {
 
 		try {
 
-			Class.forName(driver);
-			con = DriverManager.getConnection(url, userid, passwd);
+			con = ds.getConnection();
 			con.setAutoCommit(false);
 			
 			String cols[] = {"ORDER_NO"};
@@ -128,13 +142,7 @@ public class HcOrderJDBCDAO implements HcOrderMasterDAO_interface {
 			con.commit();
 			System.out.println("dao  訂單新增完成");
 			// Handle any driver errors
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
-			throw new RuntimeException("Couldn't load database driver. "
-					+ e.getMessage());
-			
-			// Handle any SQL errors
-		} catch (SQLException se) {
+		}  catch (SQLException se) {
 			try {
 				con.rollback();
 			} catch (SQLException se2) {
@@ -194,8 +202,7 @@ public class HcOrderJDBCDAO implements HcOrderMasterDAO_interface {
 
 		try {
 
-			Class.forName(driver);
-			con = DriverManager.getConnection(url, userid, passwd);
+			con  =ds.getConnection();
 			pstmt = con.prepareStatement(UPDATE);
 
 			
@@ -206,11 +213,7 @@ public class HcOrderJDBCDAO implements HcOrderMasterDAO_interface {
 			pstmt.executeUpdate();
 
 			// Handle any driver errors
-		} catch (ClassNotFoundException e) {
-			throw new RuntimeException("Couldn't load database driver. "
-					+ e.getMessage());
-			// Handle any SQL errors
-		} catch (SQLException se) {
+		}catch (SQLException se) {
 			throw new RuntimeException("A database error occured. "
 					+ se.getMessage());
 			// Clean up JDBC resources
@@ -245,8 +248,7 @@ public class HcOrderJDBCDAO implements HcOrderMasterDAO_interface {
 
 		try {
 
-			Class.forName(driver);
-			con = DriverManager.getConnection(url, userid, passwd);
+			con  =ds.getConnection();
 			pstmt = con.prepareStatement(GET_ONE_STMT);
 
 			pstmt.setString(1, orderNo);
@@ -265,11 +267,7 @@ public class HcOrderJDBCDAO implements HcOrderMasterDAO_interface {
 			}
 
 			// Handle any driver errors
-		} catch (ClassNotFoundException e) {
-			throw new RuntimeException("Couldn't load database driver. "
-					+ e.getMessage());
-			// Handle any SQL errors
-		} catch (SQLException se) {
+		}  catch (SQLException se) {
 			throw new RuntimeException("A database error occured. "
 					+ se.getMessage());
 			// Clean up JDBC resources
@@ -310,8 +308,7 @@ public class HcOrderJDBCDAO implements HcOrderMasterDAO_interface {
 
 		try {
 
-			Class.forName(driver);
-			con = DriverManager.getConnection(url, userid, passwd);
+			con  =ds.getConnection();
 			pstmt = con.prepareStatement(GET_ALL_STMT);
 			rs = pstmt.executeQuery();
 
@@ -328,10 +325,6 @@ public class HcOrderJDBCDAO implements HcOrderMasterDAO_interface {
 			}
 
 			// Handle any driver errors
-		} catch (ClassNotFoundException e) {
-			throw new RuntimeException("Couldn't load database driver. "
-					+ e.getMessage());
-			// Handle any SQL errors
 		} catch (SQLException se) {
 			throw new RuntimeException("A database error occured. "
 					+ se.getMessage());
@@ -374,8 +367,7 @@ public class HcOrderJDBCDAO implements HcOrderMasterDAO_interface {
 
 		try {
 
-			Class.forName(driver);
-			con = DriverManager.getConnection(url, userid, passwd);
+			con  =ds.getConnection();
 			String finalSQL = "select * from HC_ORDER_MASTER "
 			          + jdbcUtil_CompositeQuery_order.get_WhereCondition(map)
 			          + "order by order_No";
@@ -398,11 +390,7 @@ public class HcOrderJDBCDAO implements HcOrderMasterDAO_interface {
 			}
 
 			// Handle any driver errors
-		} catch (ClassNotFoundException e) {
-			throw new RuntimeException("Couldn't load database driver. "
-					+ e.getMessage());
-			// Handle any SQL errors
-		} catch (SQLException se) {
+		}catch (SQLException se) {
 			throw new RuntimeException("A database error occured. "
 					+ se.getMessage());
 			// Clean up JDBC resources
@@ -543,5 +531,41 @@ System.out.println(strb.replace(new  Integer(b), new  Integer(b+1), "晚"));
 //		
 //		dao.getAll(map);
 ;
+	}
+
+	@Override
+	public List<HcOrderMasterVO> getByMemNo(String memNo) {
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		List<HcOrderMasterVO> orderList = new ArrayList<>();
+		try {
+			con = ds.getConnection();
+			pstmt = con.prepareStatement(GET_BY_MEM_NO);
+			pstmt.setString(1, memNo);
+			rs = pstmt.executeQuery();
+			while(rs.next()){
+				HcOrderMasterVO order = new HcOrderMasterVO();
+				order.setOrderNo(rs.getString("ORDER_NO"));
+				order.setOrderDate(rs.getDate("ORDER_DATE"));
+				order.setOrderStatus(rs.getString("ORDER_STATUS"));
+				order.setCaredNo(rs.getString("CARED_NO"));
+				orderList.add(order);
+			}
+			
+			
+		} catch (SQLException e){ 
+			e.printStackTrace();
+		}finally{
+			if(con!=null){
+				try {
+					con.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		
+		return orderList;
 	}
 }

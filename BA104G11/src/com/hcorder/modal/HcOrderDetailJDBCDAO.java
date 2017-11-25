@@ -13,16 +13,26 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
+import javax.naming.Context;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
+import javax.sql.DataSource;
+
 import com.hcworkshifts.model.HcWorkShiftsVO;
 
 import sun.security.jca.GetInstance;
 
 public class HcOrderDetailJDBCDAO implements HcOrderDetailDAO_interface {
 	
-	private String driver = "oracle.jdbc.driver.OracleDriver";
-	private String url = "jdbc:oracle:thin:@localhost:1521:XE";
-	private String userid = "BA104G1BD";
-	private String passwd = "BA104G1BD";
+	private static DataSource ds = null;
+	static {
+		try {
+			Context ctx = new InitialContext();
+			ds = (DataSource) ctx.lookup("java:comp/env/jdbc/BA104G1DB");
+		} catch (NamingException e) {
+			e.printStackTrace();
+		}
+	}
 	
 	
 	private static final String INSERT_STMT = 
@@ -45,8 +55,7 @@ public class HcOrderDetailJDBCDAO implements HcOrderDetailDAO_interface {
 
 		try {
 
-			Class.forName(driver);
-			con = DriverManager.getConnection(url, userid, passwd);
+			con = ds.getConnection();
 			pstmt = con.prepareStatement(INSERT_STMT);
 
 			pstmt.setString(1, hcOrderDetailVO.getOrderNo());
@@ -62,10 +71,6 @@ public class HcOrderDetailJDBCDAO implements HcOrderDetailDAO_interface {
 
 
 			// Handle any driver errors
-		} catch (ClassNotFoundException e) {
-			throw new RuntimeException("Couldn't load database driver. "
-					+ e.getMessage());
-			// Handle any SQL errors
 		} catch (SQLException se) {
 			throw new RuntimeException("A database error occured. "
 					+ se.getMessage());
@@ -97,8 +102,7 @@ public class HcOrderDetailJDBCDAO implements HcOrderDetailDAO_interface {
 
 		try {
 
-			Class.forName(driver);
-			con = DriverManager.getConnection(url, userid, passwd);
+			con = ds.getConnection();
 			pstmt = con.prepareStatement(UPDATE);
 
 			pstmt.setDate(1, hcOrderDetailVO.getServiceDate());
@@ -112,11 +116,7 @@ public class HcOrderDetailJDBCDAO implements HcOrderDetailDAO_interface {
 			System.out.println("Update  "+i+" row");
 
 			// Handle any driver errors
-		} catch (ClassNotFoundException e) {
-			throw new RuntimeException("Couldn't load database driver. "
-					+ e.getMessage());
-			// Handle any SQL errors
-		} catch (SQLException se) {
+		}  catch (SQLException se) {
 			throw new RuntimeException("A database error occured. "
 					+ se.getMessage());
 			// Clean up JDBC resources
@@ -145,8 +145,7 @@ public class HcOrderDetailJDBCDAO implements HcOrderDetailDAO_interface {
 		
 		try {
 			
-			Class.forName(driver);
-			con = DriverManager.getConnection(url, userid, passwd);
+			con = ds.getConnection();
 			con.setAutoCommit(false);
 			pstmt = con.prepareStatement(UPDATE);
 			
@@ -167,11 +166,7 @@ public class HcOrderDetailJDBCDAO implements HcOrderDetailDAO_interface {
 			
 			
 			// Handle any driver errors
-		} catch (ClassNotFoundException e) {
-			throw new RuntimeException("Couldn't load database driver. "
-					+ e.getMessage());
-			// Handle any SQL errors
-		} catch (SQLException se) {
+		}  catch (SQLException se) {
 			try {
 				con.rollback();
 			} catch (SQLException e) {
@@ -211,8 +206,7 @@ public class HcOrderDetailJDBCDAO implements HcOrderDetailDAO_interface {
 
 		try {
 
-			Class.forName(driver);
-			con = DriverManager.getConnection(url, userid, passwd);
+			con = ds.getConnection();
 			pstmt = con.prepareStatement(GET_ONE_STMT);
 
 			pstmt.setString(1, OrderDetailNo);
@@ -232,11 +226,7 @@ public class HcOrderDetailJDBCDAO implements HcOrderDetailDAO_interface {
 			}
 
 			// Handle any driver errors
-		} catch (ClassNotFoundException e) {
-			throw new RuntimeException("Couldn't load database driver. "
-					+ e.getMessage());
-			// Handle any SQL errors
-		} catch (SQLException se) {
+		}  catch (SQLException se) {
 			throw new RuntimeException("A database error occured. "
 					+ se.getMessage());
 			// Clean up JDBC resources
@@ -276,9 +266,7 @@ public class HcOrderDetailJDBCDAO implements HcOrderDetailDAO_interface {
 		ResultSet rs = null;
 
 		try {
-
-			Class.forName(driver);
-			con = DriverManager.getConnection(url, userid, passwd);
+			con = ds.getConnection();
 			pstmt = con.prepareStatement(GET_ALL_STMT);
 			rs = pstmt.executeQuery();
 			
@@ -297,10 +285,6 @@ public class HcOrderDetailJDBCDAO implements HcOrderDetailDAO_interface {
 			}
 
 			// Handle any driver errors
-		} catch (ClassNotFoundException e) {
-			throw new RuntimeException("Couldn't load database driver. "
-					+ e.getMessage());
-			// Handle any SQL errors
 		} catch (SQLException se) {
 			throw new RuntimeException("A database error occured. "
 					+ se.getMessage());
@@ -345,8 +329,7 @@ public class HcOrderDetailJDBCDAO implements HcOrderDetailDAO_interface {
 
 		try {
 
-			Class.forName(driver);
-			con = DriverManager.getConnection(url, userid, passwd);
+			con = ds.getConnection();
 			pstmt = con.prepareStatement(GETALL_BY_ORDERNO);
 			
 			pstmt.setString(1, orderNo);
@@ -367,11 +350,7 @@ public class HcOrderDetailJDBCDAO implements HcOrderDetailDAO_interface {
 			}
 
 			// Handle any driver errors
-		} catch (ClassNotFoundException e) {
-			throw new RuntimeException("Couldn't load database driver. "
-					+ e.getMessage());
-			// Handle any SQL errors
-		} catch (SQLException se) {
+		}  catch (SQLException se) {
 			throw new RuntimeException("A database error occured. "
 					+ se.getMessage());
 			// Clean up JDBC resources
@@ -424,8 +403,7 @@ public class HcOrderDetailJDBCDAO implements HcOrderDetailDAO_interface {
 
 		try {
 
-			Class.forName(driver);
-			con = DriverManager.getConnection(url, userid, passwd);
+			con = ds.getConnection();
 			pstmt = con.prepareStatement(GETALl_ONE_MONTH);
 			
 			pstmt.setDate(1, firstDayofMonth);
@@ -447,10 +425,6 @@ public class HcOrderDetailJDBCDAO implements HcOrderDetailDAO_interface {
 			}
 
 			// Handle any driver errors
-		} catch (ClassNotFoundException e) {
-			throw new RuntimeException("Couldn't load database driver. "
-					+ e.getMessage());
-			// Handle any SQL errors
 		} catch (SQLException se) {
 			throw new RuntimeException("A database error occured. "
 					+ se.getMessage());
@@ -498,8 +472,7 @@ public class HcOrderDetailJDBCDAO implements HcOrderDetailDAO_interface {
 		try {
 			Date SreviceDate = Date.valueOf(date);			
 			
-			Class.forName(driver);
-			con = DriverManager.getConnection(url, userid, passwd);
+			con = ds.getConnection();
 			pstmt = con.prepareStatement(GETALL_BY_SERVICEDATE);
 			
 			pstmt.setDate(1, SreviceDate);
@@ -520,11 +493,7 @@ public class HcOrderDetailJDBCDAO implements HcOrderDetailDAO_interface {
 			}
 
 			// Handle any driver errors
-		} catch (ClassNotFoundException e) {
-			throw new RuntimeException("Couldn't load database driver. "
-					+ e.getMessage());
-			// Handle any SQL errors
-		} catch (SQLException se) {
+		}  catch (SQLException se) {
 			throw new RuntimeException("A database error occured. "
 					+ se.getMessage());
 			// Clean up JDBC resources
@@ -572,8 +541,7 @@ public class HcOrderDetailJDBCDAO implements HcOrderDetailDAO_interface {
 		try {
 			Date SreviceDate = Date.valueOf(date);
 
-			Class.forName(driver);
-			con = DriverManager.getConnection(url, userid, passwd);
+			con = ds.getConnection();
 			pstmt = con.prepareStatement(GETALL_BY_SERVIECTIME);
 			pstmt.setDate(1, SreviceDate);
 			pstmt.setString(2, time);
@@ -594,10 +562,6 @@ public class HcOrderDetailJDBCDAO implements HcOrderDetailDAO_interface {
 			}
 
 			// Handle any driver errors
-		} catch (ClassNotFoundException e) {
-			throw new RuntimeException("Couldn't load database driver. "
-					+ e.getMessage());
-			// Handle any SQL errors
 		} catch (SQLException se) {
 			throw new RuntimeException("A database error occured. "
 					+ se.getMessage());
@@ -652,8 +616,7 @@ public class HcOrderDetailJDBCDAO implements HcOrderDetailDAO_interface {
 
 		try {
 
-			Class.forName(driver);
-			con = DriverManager.getConnection(url, userid, passwd);
+			con = ds.getConnection();
 			pstmt = con.prepareStatement(GETALL_ONEMONTH_IN_PERSON);
 			pstmt.setDate(1, firstDayofMonth);
 			pstmt.setDate(2, lastDayofMonth);
@@ -675,10 +638,6 @@ public class HcOrderDetailJDBCDAO implements HcOrderDetailDAO_interface {
 			}
 
 			// Handle any driver errors
-		} catch (ClassNotFoundException e) {
-			throw new RuntimeException("Couldn't load database driver. "
-					+ e.getMessage());
-			// Handle any SQL errors
 		} catch (SQLException se) {
 			throw new RuntimeException("A database error occured. "
 					+ se.getMessage());
@@ -726,8 +685,7 @@ public class HcOrderDetailJDBCDAO implements HcOrderDetailDAO_interface {
 		try {
 			Date SreviceDate = Date.valueOf(date);
 
-			Class.forName(driver);
-			con = DriverManager.getConnection(url, userid, passwd);
+			con = ds.getConnection();
 			pstmt = con.prepareStatement(GETALL_BY_SERVICESDATE_IN_PERSON);
 			pstmt.setDate(1, SreviceDate);
 			pstmt.setString(2, empNo);
@@ -748,10 +706,6 @@ public class HcOrderDetailJDBCDAO implements HcOrderDetailDAO_interface {
 			}
 
 			// Handle any driver errors
-		} catch (ClassNotFoundException e) {
-			throw new RuntimeException("Couldn't load database driver. "
-					+ e.getMessage());
-			// Handle any SQL errors
 		} catch (SQLException se) {
 			throw new RuntimeException("A database error occured. "
 					+ se.getMessage());
@@ -798,8 +752,7 @@ public class HcOrderDetailJDBCDAO implements HcOrderDetailDAO_interface {
 			System.out.println("DATE:" + date);
 			Date SreviceDate = Date.valueOf(date);
 
-			Class.forName(driver);
-			con = DriverManager.getConnection(url, userid, passwd);
+			con = ds.getConnection();
 			pstmt = con.prepareStatement(GETALL_BYSERVICETIME_IN_PERSON);
 
 			pstmt.setDate(1, SreviceDate);
@@ -821,11 +774,7 @@ public class HcOrderDetailJDBCDAO implements HcOrderDetailDAO_interface {
 			}
 
 			// Handle any driver errors
-		} catch (ClassNotFoundException e) {
-			throw new RuntimeException("Couldn't load database driver. "
-					+ e.getMessage());
-			// Handle any SQL errors
-		} catch (SQLException se) {
+		}  catch (SQLException se) {
 			throw new RuntimeException("A database error occured. "
 					+ se.getMessage());
 			// Clean up JDBC resources

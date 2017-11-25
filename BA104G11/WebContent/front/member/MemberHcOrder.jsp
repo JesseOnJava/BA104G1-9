@@ -11,9 +11,6 @@
 <jsp:useBean id="empSvc" class="com.employee.model.EmployeeService" />
 <jsp:useBean id="theCaredSvc" class="com.thecared.model.ThecaredService" />
 
-<% HcOrderMasterVO hcOrder = hcOrderSvc.getOne("20171001-500001"); 
-MemberService MemberService = new MemberService();
- memberVO memberVO = MemberService.getOneMEMBER("MEM0002");  %>
 <!DOCTYPE html>
 <html lang="">
 

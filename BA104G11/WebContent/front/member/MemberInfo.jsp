@@ -42,6 +42,15 @@
 									<b>個人資料維護</b>
 								</h2>
 							</center>
+							<c:if test="${not empty errorMsgs}">
+								<font color='red'>請修正以下錯誤:
+									<ul>
+										<c:forEach var="message" items="${errorMsgs}">
+											<li>${message}</li>
+										</c:forEach>
+									</ul>
+								</font>
+							</c:if>
 
 						</legend>
 						<br>

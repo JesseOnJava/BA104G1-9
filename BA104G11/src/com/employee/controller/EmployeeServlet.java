@@ -2,6 +2,7 @@ package com.employee.controller;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -99,6 +100,14 @@ public class EmployeeServlet extends HttpServlet {
 
 			res.sendRedirect(req.getContextPath() + "/back/employee/listAllEmployee.jsp");
 
+		}
+		
+		
+		if("logout".equals(action)){
+			HttpSession session = req.getSession();
+			session.setAttribute("empVO", null);
+			session.setAttribute("isLogin", "false");
+			res.sendRedirect(req.getContextPath()+"/back/Login.jsp");
 		}
 
 		// =================================================================================================================================================
@@ -248,6 +257,7 @@ public class EmployeeServlet extends HttpServlet {
 			empVO.setEmpBranches(empBranches);
 			empVO.setEmpTitle(empTitle);
 			empVO.setAuthorityNo(authorityNo);
+			empVO.setOnBoardDate(new Date(System.currentTimeMillis()));
 			String empPwd = getPwd();
 			empVO.setEmpPwd(empPwd);
 			System.out.println(new Gson().toJson(empVO));
@@ -268,12 +278,15 @@ public class EmployeeServlet extends HttpServlet {
 		
 		if ("modifyManager".equals(action)) {
 			String url = "/back/employee/listAllEmployee.jsp";
-			System.out.println("132");
+			System.out.println("modifyManager");
 			String empNo = req.getParameter("empNo");
 			String empDep = req.getParameter("empDep");
 			String empBranches = req.getParameter("empBranches");
 			String empTitle = req.getParameter("empTitle");
 			String authorityNo = req.getParameter("authorityNo");
+			String empStatus = req.getParameter("empStatus");
+			System.out.println(empStatus);
+			
 
 			EmployeeService empSvc = new EmployeeService();
 			EmployeeVO empVO = empSvc.findByPrimaryKey(empNo);
@@ -281,8 +294,8 @@ public class EmployeeServlet extends HttpServlet {
 			empVO.setEmpBranches(empBranches);
 			empVO.setEmpTitle(empTitle);
 			empVO.setAuthorityNo(authorityNo);
+			empVO.setEmpStatus(empStatus);
 			empSvc.update(empVO);
-			System.out.println("後台更新一筆員工資料");
 			List<EmployeeVO> list = new ArrayList<>();
 			list.add(empVO);
 			req.setAttribute("list", list);
