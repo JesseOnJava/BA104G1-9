@@ -7,6 +7,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import javax.naming.Context;
 import javax.naming.InitialContext;
@@ -19,7 +20,7 @@ public class HcWorkShiftsDAO implements HcWorkShiftsDAO_interface {
 	static {
 		try {
 			Context ctx = new InitialContext();
-			ds = (DataSource) ctx.lookup("java:comp/env/jdbc/Project");
+			ds = (DataSource) ctx.lookup("java:comp/env/jdbc/BA104G1BD");
 		} catch (NamingException e) {
 			e.printStackTrace();
 		}
@@ -297,5 +298,17 @@ public class HcWorkShiftsDAO implements HcWorkShiftsDAO_interface {
 			}
 		}
 		return list;
+	}
+
+	@Override
+	public HcWorkShiftsVO getOneByDateTime(String yearOfMonth, String shiftNumber) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<HcWorkShiftsVO> getAll(Map map) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

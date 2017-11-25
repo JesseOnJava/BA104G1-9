@@ -2,6 +2,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ page import="java.util.*"%>
 <%@ page import="com.member.model.*"%>
+<%@ page import="com.hcorder.model.*"%>
 
 <jsp:useBean id="hcOrderSvc"
 	class="com.hcorder.modal.HcOrderMasterService" />
@@ -9,6 +10,10 @@
 	class="com.hcorder.modal.HcOrderDetailService" />
 <jsp:useBean id="empSvc" class="com.employee.model.EmployeeService" />
 <jsp:useBean id="theCaredSvc" class="com.thecared.model.ThecaredService" />
+
+<% HcOrderMasterVO hcOrder = hcOrderSvc.getOne("20171001-500001"); 
+MemberService MemberService = new MemberService();
+ memberVO memberVO = MemberService.getOneMEMBER("MEM0002");  %>
 <!DOCTYPE html>
 <html lang="">
 

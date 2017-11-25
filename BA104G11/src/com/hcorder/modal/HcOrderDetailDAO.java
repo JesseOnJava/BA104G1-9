@@ -16,12 +16,14 @@ import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.sql.DataSource;
 
+import com.hcworkshifts.model.HcWorkShiftsVO;
+
 public class HcOrderDetailDAO implements HcOrderDetailDAO_interface {
 	private static DataSource ds = null;
 	static {
 		try {
 			Context ctx = new InitialContext();
-			ds = (DataSource) ctx.lookup("java:comp/env/jdbc/Project");
+			ds = (DataSource) ctx.lookup("java:comp/env/jdbc/BA104G1BD");
 		} catch (NamingException e) {
 			e.printStackTrace();
 		}
@@ -754,6 +756,12 @@ public class HcOrderDetailDAO implements HcOrderDetailDAO_interface {
 			}
 		}
 		return hcOrderDetail;
+	}
+
+	@Override
+	public void updateAll(List<HcOrderDetailVO> hcOrderDetailVOList, HcWorkShiftsVO hcWorkShiftsVO) {
+		// TODO Auto-generated method stub
+		
 	}
 	
 

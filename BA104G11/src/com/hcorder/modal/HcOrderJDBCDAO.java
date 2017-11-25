@@ -2,27 +2,15 @@ package com.hcorder.modal;
 
 import java.util.*;
 
-import javax.naming.Context;
-import javax.naming.NamingException;
-import javax.sql.DataSource;
-
-import com.jdbc.util.CompositeQuery.jdbcUtil_CompositeQuery_order;
+import jdbc.util.CompositeQuery.jdbcUtil_CompositeQuery_order;
 
 import java.sql.*;
 
 public class HcOrderJDBCDAO implements HcOrderMasterDAO_interface {
-	
-	private static DataSource ds;
-	static{
-		try {
-			Context ctx = new javax.naming.InitialContext();
-			ds =(DataSource) ctx.lookup("java:comp/env/jdbc/BA104G1DB");
-		} catch (NamingException e) {
-			e.printStackTrace();
-		}
-		
-	}
-	private static final String GET_BY_MEM_NO = "SELECT * FROM HC_ORDER_MASTER WHERE MEM_NO = ?";
+	String driver = "oracle.jdbc.driver.OracleDriver";
+	String url = "jdbc:oracle:thin:@localhost:1521:XE";
+	String userid = "BA104G1BD";
+	String passwd = "BA104G1BD";
 
 	private static final String INSERT_STMT = 
 			"INSERT INTO HC_ORDER_MASTER (ORDER_NO,MEM_NO,ORDER_DATE,CARED_NO,ORDER_STATUS) "
@@ -38,7 +26,7 @@ public class HcOrderJDBCDAO implements HcOrderMasterDAO_interface {
 //			+"where MONTH_OF_YEAR=? and EMP_NO=?";
 	
 	
-	private static final String UPDATE_POINT ="UPDATE MEMBER SET POINT=((select POINT from MEMBER WHERE mem_no=?)-?) WHERE mem_no =?";
+	private static final String UPDATE_POINT ="UPDATE MEMBER SET POINT=((select POINT from MEMBER WHERE mem_no=?)-(select exp_price from EXPERT T JOIN EXPERT_LIST L  on T.EXP_NO = L.EXP_NO WHERE EMP_no=?)) WHERE mem_no =?";
 	
 	
 	private static final String GET_ALL_STMT = 
@@ -56,14 +44,14 @@ public class HcOrderJDBCDAO implements HcOrderMasterDAO_interface {
 		Connection con = null;
 		PreparedStatement pstmt = null;
 		PreparedStatement pstmt2 = null;
-		Statement stmt = null;
 		ResultSet rs= null;
 		ResultSet rs2= null;
 		String nextOrderNo = null;
 
 		try {
 
-			con = ds.getConnection();
+			Class.forName(driver);
+			con = DriverManager.getConnection(url, userid, passwd);
 			con.setAutoCommit(false);
 			
 			String cols[] = {"ORDER_NO"};
@@ -73,7 +61,7 @@ public class HcOrderJDBCDAO implements HcOrderMasterDAO_interface {
 			pstmt.setString(2, hcOrderMasterVO.getCaredNo());
 			pstmt.setString(3, hcOrderMasterVO.getOrderStatus());
 			int i =pstmt.executeUpdate();
-			System.out.println("update  "+i+"  row");
+		System.out.println("update  "+i+"  row");
 			rs = pstmt.getGeneratedKeys();
 			if (rs.next()) {
 				nextOrderNo = rs.getString(1);
@@ -128,7 +116,7 @@ public class HcOrderJDBCDAO implements HcOrderMasterDAO_interface {
 				
 				pstmt2 = con.prepareStatement(UPDATE_POINT,ResultSet.TYPE_SCROLL_SENSITIVE,ResultSet.CONCUR_UPDATABLE);
 				pstmt2.setString(1, hcOrderMasterVO.getMemNo());
-				pstmt2.setString(2, "1000");
+				pstmt2.setString(2, hcOrderDetailVO.getEmpNo());
 				pstmt2.setString(3, hcOrderMasterVO.getMemNo());
 				pstmt2.executeUpdate();
 				
@@ -140,7 +128,11 @@ public class HcOrderJDBCDAO implements HcOrderMasterDAO_interface {
 			con.commit();
 			System.out.println("dao  訂單新增完成");
 			// Handle any driver errors
-	
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+			throw new RuntimeException("Couldn't load database driver. "
+					+ e.getMessage());
+			
 			// Handle any SQL errors
 		} catch (SQLException se) {
 			try {
@@ -202,8 +194,8 @@ public class HcOrderJDBCDAO implements HcOrderMasterDAO_interface {
 
 		try {
 
-			
-			con = ds.getConnection();
+			Class.forName(driver);
+			con = DriverManager.getConnection(url, userid, passwd);
 			pstmt = con.prepareStatement(UPDATE);
 
 			
@@ -214,7 +206,10 @@ public class HcOrderJDBCDAO implements HcOrderMasterDAO_interface {
 			pstmt.executeUpdate();
 
 			// Handle any driver errors
-	
+		} catch (ClassNotFoundException e) {
+			throw new RuntimeException("Couldn't load database driver. "
+					+ e.getMessage());
+			// Handle any SQL errors
 		} catch (SQLException se) {
 			throw new RuntimeException("A database error occured. "
 					+ se.getMessage());
@@ -250,7 +245,8 @@ public class HcOrderJDBCDAO implements HcOrderMasterDAO_interface {
 
 		try {
 
-			con =ds.getConnection();
+			Class.forName(driver);
+			con = DriverManager.getConnection(url, userid, passwd);
 			pstmt = con.prepareStatement(GET_ONE_STMT);
 
 			pstmt.setString(1, orderNo);
@@ -269,7 +265,10 @@ public class HcOrderJDBCDAO implements HcOrderMasterDAO_interface {
 			}
 
 			// Handle any driver errors
-	
+		} catch (ClassNotFoundException e) {
+			throw new RuntimeException("Couldn't load database driver. "
+					+ e.getMessage());
+			// Handle any SQL errors
 		} catch (SQLException se) {
 			throw new RuntimeException("A database error occured. "
 					+ se.getMessage());
@@ -311,7 +310,8 @@ public class HcOrderJDBCDAO implements HcOrderMasterDAO_interface {
 
 		try {
 
-			con = ds.getConnection();
+			Class.forName(driver);
+			con = DriverManager.getConnection(url, userid, passwd);
 			pstmt = con.prepareStatement(GET_ALL_STMT);
 			rs = pstmt.executeQuery();
 
@@ -328,7 +328,9 @@ public class HcOrderJDBCDAO implements HcOrderMasterDAO_interface {
 			}
 
 			// Handle any driver errors
-	
+		} catch (ClassNotFoundException e) {
+			throw new RuntimeException("Couldn't load database driver. "
+					+ e.getMessage());
 			// Handle any SQL errors
 		} catch (SQLException se) {
 			throw new RuntimeException("A database error occured. "
@@ -372,7 +374,8 @@ public class HcOrderJDBCDAO implements HcOrderMasterDAO_interface {
 
 		try {
 
-			con = ds.getConnection();
+			Class.forName(driver);
+			con = DriverManager.getConnection(url, userid, passwd);
 			String finalSQL = "select * from HC_ORDER_MASTER "
 			          + jdbcUtil_CompositeQuery_order.get_WhereCondition(map)
 			          + "order by order_No";
@@ -395,7 +398,10 @@ public class HcOrderJDBCDAO implements HcOrderMasterDAO_interface {
 			}
 
 			// Handle any driver errors
-
+		} catch (ClassNotFoundException e) {
+			throw new RuntimeException("Couldn't load database driver. "
+					+ e.getMessage());
+			// Handle any SQL errors
 		} catch (SQLException se) {
 			throw new RuntimeException("A database error occured. "
 					+ se.getMessage());
@@ -432,15 +438,17 @@ public class HcOrderJDBCDAO implements HcOrderMasterDAO_interface {
 		String[] servDatas = new String[2];
 		String monthOfYear = (Integer.valueOf(date.substring(0,4))-1911)+date.substring(5,7);
 		servDatas[0] = monthOfYear;
+		System.out.println("monthOfYear in hcor :"+monthOfYear);
 		int shiftNumber = (Integer.valueOf(date.substring(8,10))*3);
 		if(time.equals("\u65e9")){
-			shiftNumber = shiftNumber-2;
+			shiftNumber = shiftNumber-3;
 		}else if(time.equals("\u4e2d")){
-			shiftNumber = shiftNumber-1;
+			shiftNumber = shiftNumber-2;
 		}else if(time.equals("\u665a")){
-			shiftNumber = shiftNumber;
+			shiftNumber = shiftNumber-1;
 		}
 		servDatas[1] = String.valueOf(shiftNumber);
+		System.out.println("shiftNumber in hcor :"+shiftNumber);
 		return servDatas;
 	}
 	
@@ -516,57 +524,24 @@ public class HcOrderJDBCDAO implements HcOrderMasterDAO_interface {
 //		
 //		dao.insert(hcOrderMaster , hcOrderDetailList);
 		
-//String str = "空空空空空空空空空空空空空空空空空空空空空空空空空空空空空空空空空空空空空空空空空空空空空空空空空空空空空空空空空空空空空空空空空空空空空空空空空空空空空空空空空空空空空空空空空空空空空";
-//StringBuilder strb = new StringBuilder(str);
-//System.out.println(strb.replace(35, 36, "一"));
+String str = "空空空空空空空空空空空空空空空空空空空空空空空空空空空空空空空空空空空空空空空空空空空空空空空空空空空空空空空空空空空空空空空空空空空空空空空空空空空空空空空空空空空空空空空空空空空空空無無無";
+StringBuilder strb = new StringBuilder(str);
+String [] bababa =  dao.convertDateToNumber("2017-11-30","晚");
+String b = bababa[1];
+String a = bababa[0];
+System.out.println(strb.replace(new  Integer(b), new  Integer(b+1), "晚"));
 		
 		// 配合 req.getParameterMap()方法 回傳 java.util.Map<java.lang.String,java.lang.String[]> 之測試
-		Map<String, String[]> map = new TreeMap<String, String[]>();
-		map.put("orderNo", new String[] { "20171102-500001" });
-		map.put("memNo", new String[] { "MEM0002" });
-		map.put("orderDate", new String[] { "2017-11-02" });
-		map.put("caredNo", new String[] { "CRD0001" });
-		map.put("orderStatus", new String[] { "未確認" });
-
-		map.put("action", new String[] { "listOrds_ByCompositeQuery" }); // 注意Map裡面會含有action的key
-		
-		dao.getAll(map);
+//		Map<String, String[]> map = new TreeMap<String, String[]>();
+//		map.put("orderNo", new String[] { "20171102-500001" });
+//		map.put("memNo", new String[] { "MEM0002" });
+//		map.put("orderDate", new String[] { "2017-11-02" });
+//		map.put("caredNo", new String[] { "CRD0001" });
+//		map.put("orderStatus", new String[] { "未確認" });
+//
+//		map.put("action", new String[] { "listOrds_ByCompositeQuery" }); // 注意Map裡面會含有action的key
+//		
+//		dao.getAll(map);
 ;
-	}
-
-	@Override
-	public List<HcOrderMasterVO> getByMemNo(String memNo) {
-		Connection con = null;
-		PreparedStatement pstmt = null;
-		ResultSet rs = null;
-		List<HcOrderMasterVO> orderList = new ArrayList<>();
-		try {
-			con = ds.getConnection();
-			pstmt = con.prepareStatement(GET_BY_MEM_NO);
-			pstmt.setString(1, memNo);
-			rs = pstmt.executeQuery();
-			while(rs.next()){
-				HcOrderMasterVO order = new HcOrderMasterVO();
-				order.setOrderNo(rs.getString("ORDER_NO"));
-				order.setOrderDate(rs.getDate("ORDER_DATE"));
-				order.setOrderStatus(rs.getString("ORDER_STATUS"));
-				order.setCaredNo(rs.getString("CARED_NO"));
-				orderList.add(order);
-			}
-			
-			
-		} catch (SQLException e){ 
-			e.printStackTrace();
-		}finally{
-			if(con!=null){
-				try {
-					con.close();
-				} catch (SQLException e) {
-					e.printStackTrace();
-				}
-			}
-		}
-		
-		return orderList;
 	}
 }

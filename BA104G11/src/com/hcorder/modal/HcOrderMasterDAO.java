@@ -20,7 +20,7 @@ public class HcOrderMasterDAO implements HcOrderMasterDAO_interface{
 	static {
 		try {
 			Context ctx = new InitialContext();
-			ds = (DataSource) ctx.lookup("java:comp/env/jdbc/Project");
+			ds = (DataSource) ctx.lookup("java:comp/env/jdbc/BA104G1BD");
 		} catch (NamingException e) {
 			e.printStackTrace();
 		}
@@ -267,11 +267,6 @@ public class HcOrderMasterDAO implements HcOrderMasterDAO_interface{
 		}
 		@Override
 		public List<HcOrderMasterVO> getAll(Map map) {
-			// TODO Auto-generated method stub
-			return null;
-		}
-		@Override
-		public List<HcOrderMasterVO> getByMemNo(String memNo) {
 			// TODO Auto-generated method stub
 			return null;
 		}

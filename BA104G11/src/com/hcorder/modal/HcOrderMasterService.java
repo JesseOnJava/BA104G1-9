@@ -14,19 +14,12 @@ public class HcOrderMasterService {
 		dao = new HcOrderJDBCDAO();
 	}
 	
-	
-	public List<HcOrderMasterVO> getByMemNo(String memNo) {
-		return dao.getByMemNo(memNo);
-	}
-	
-	
-	
 	public HcOrderMasterVO addHcOrderMaster(String memNo, String caredNo, String orderStatus,
 			Date serviceDate,String serviceTime,String empNo ){
 		
 		HcOrderMasterVO hcOrderMaster = new HcOrderMasterVO();
 		hcOrderMaster.setMemNo(memNo);
-		hcOrderMaster.setOrderDate(new Date(System.nanoTime()));
+		hcOrderMaster.setOrderDate(new Date(System.currentTimeMillis()));
 		hcOrderMaster.setCaredNo(caredNo);
 		hcOrderMaster.setOrderStatus(orderStatus);
 		
@@ -37,9 +30,9 @@ public class HcOrderMasterService {
 		hcOrderDetail.setEmpNo(empNo);
 		hcOrderDetail.setOrderDetailStataus("未服務");
 		hcOrderDetailList.add(hcOrderDetail);
-		
+	System.out.println("svc bf "+empNo);	
 		String orderNo =  dao.insert(hcOrderMaster , hcOrderDetailList);
-		System.out.println("svc  "+orderNo);
+	System.out.println("svc af "+orderNo);
 		hcOrderMaster.setOrderNo(orderNo);
 		return hcOrderMaster;
 		
@@ -92,9 +85,8 @@ public class HcOrderMasterService {
 	}
 	
 	public List<HcOrderMasterVO> getAll(Map map){
-		return dao.getAll();
+		return dao.getAll(map);
 	}
-	
 	
 	
 	

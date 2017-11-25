@@ -13,20 +13,17 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
+import com.hcworkshifts.model.HcWorkShiftsVO;
+
 import sun.security.jca.GetInstance;
 
 public class HcOrderDetailJDBCDAO implements HcOrderDetailDAO_interface {
-	String driver = "oracle.jdbc.driver.OracleDriver";
-	String userid = "BA104G1";
-	String passwd = "BA104G1";
 	
-//	// ************** AWS **************
-//	String url = "jdbc:oracle:thin:@13.229.86.22:1521:XE";
-//	String url = "jdbc:oracle:thin:@13.124.90.221:1521:XE";	
-	// ************** BA104 **************
-//	String url = "jdbc:oracle:thin:@10.120.25.6:1521:XE";
-//	// ************* Localhost **********
-	String url = "jdbc:oracle:thin:@localhost:1521:XE";
+	private String driver = "oracle.jdbc.driver.OracleDriver";
+	private String url = "jdbc:oracle:thin:@localhost:1521:XE";
+	private String userid = "BA104G1BD";
+	private String passwd = "BA104G1BD";
+	
 	
 	private static final String INSERT_STMT = 
 			"INSERT INTO HC_ORDER_DETAIL (ORDER_DETAIL_NO,ORDER_NO,SERVICE_DATE,SERVICE_TIME,EMP_NO,ORDER_DEDIAL_STATUS)"
@@ -120,6 +117,68 @@ public class HcOrderDetailJDBCDAO implements HcOrderDetailDAO_interface {
 					+ e.getMessage());
 			// Handle any SQL errors
 		} catch (SQLException se) {
+			throw new RuntimeException("A database error occured. "
+					+ se.getMessage());
+			// Clean up JDBC resources
+		} finally {
+			if (pstmt != null) {
+				try {
+					pstmt.close();
+				} catch (SQLException se) {
+					se.printStackTrace(System.err);
+				}
+			}
+			if (con != null) {
+				try {
+					con.close();
+				} catch (Exception e) {
+					e.printStackTrace(System.err);
+				}
+			}
+		}
+	}
+	@Override
+	public void updateAll(List<HcOrderDetailVO> hcOrderDetailVOList, HcWorkShiftsVO hcWorkShiftsVO) {
+		
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		
+		try {
+			
+			Class.forName(driver);
+			con = DriverManager.getConnection(url, userid, passwd);
+			con.setAutoCommit(false);
+			pstmt = con.prepareStatement(UPDATE);
+			
+			for(HcOrderDetailVO hcOrderDetailVO :hcOrderDetailVOList ){			
+			pstmt.setDate(1, hcOrderDetailVO.getServiceDate());
+			pstmt.setString(2, hcOrderDetailVO.getServiceTime());
+			pstmt.setString(3, hcOrderDetailVO.getEmpNo());
+			pstmt.setString(4, hcOrderDetailVO.getOrderDetailStataus());
+			pstmt.setString(5, hcOrderDetailVO.getOrderDetailNo());
+			int i = pstmt.executeUpdate();
+			System.out.println("Update hcdetail "+i+" row");
+			}
+			
+			new com.hcworkshifts.model.HcWorkShiftsService()
+			.updateHcWorkShifts(hcWorkShiftsVO.getMonthOfYear(), hcWorkShiftsVO.getEmpNo(), hcWorkShiftsVO.getWorkShiftStatus());
+			
+			con.commit();
+			
+			
+			// Handle any driver errors
+		} catch (ClassNotFoundException e) {
+			throw new RuntimeException("Couldn't load database driver. "
+					+ e.getMessage());
+			// Handle any SQL errors
+		} catch (SQLException se) {
+			try {
+				con.rollback();
+			} catch (SQLException e) {
+				System.out.println("rollback fail!");
+				e.printStackTrace();
+			};
+
 			throw new RuntimeException("A database error occured. "
 					+ se.getMessage());
 			// Clean up JDBC resources
@@ -437,7 +496,7 @@ public class HcOrderDetailJDBCDAO implements HcOrderDetailDAO_interface {
 		
 
 		try {
-			Date SreviceDate = new Date(DateFormat.getDateInstance().parse(date).getTime());			
+			Date SreviceDate = Date.valueOf(date);			
 			
 			Class.forName(driver);
 			con = DriverManager.getConnection(url, userid, passwd);
@@ -469,10 +528,6 @@ public class HcOrderDetailJDBCDAO implements HcOrderDetailDAO_interface {
 			throw new RuntimeException("A database error occured. "
 					+ se.getMessage());
 			// Clean up JDBC resources
-		} catch (ParseException e) {
-			throw new RuntimeException("A database error occured. "
-					+ e.getMessage());
-			//捕捉轉型失敗
 		} finally {
 			if (rs != null) {
 				try {
@@ -515,7 +570,7 @@ public class HcOrderDetailJDBCDAO implements HcOrderDetailDAO_interface {
 		ResultSet rs = null;
 
 		try {
-			Date SreviceDate = new Date(DateFormat.getDateInstance().parse(date).getTime());
+			Date SreviceDate = Date.valueOf(date);
 
 			Class.forName(driver);
 			con = DriverManager.getConnection(url, userid, passwd);
@@ -547,9 +602,6 @@ public class HcOrderDetailJDBCDAO implements HcOrderDetailDAO_interface {
 			throw new RuntimeException("A database error occured. "
 					+ se.getMessage());
 			// Clean up JDBC resources
-		} catch (ParseException e) {
-			throw new RuntimeException("A database error occured. "
-					+ e.getMessage());
 		} finally {
 			if (rs != null) {
 				try {
@@ -672,7 +724,7 @@ public class HcOrderDetailJDBCDAO implements HcOrderDetailDAO_interface {
 		ResultSet rs = null;
 
 		try {
-			Date SreviceDate = new Date(DateFormat.getDateInstance().parse(date).getTime());
+			Date SreviceDate = Date.valueOf(date);
 
 			Class.forName(driver);
 			con = DriverManager.getConnection(url, userid, passwd);
@@ -704,9 +756,6 @@ public class HcOrderDetailJDBCDAO implements HcOrderDetailDAO_interface {
 			throw new RuntimeException("A database error occured. "
 					+ se.getMessage());
 			// Clean up JDBC resources
-		} catch (ParseException e) {
-			throw new RuntimeException("A database error occured. "
-					+ e.getMessage());
 		} finally {
 			if (rs != null) {
 				try {
@@ -736,7 +785,7 @@ public class HcOrderDetailJDBCDAO implements HcOrderDetailDAO_interface {
 	private static final String GETALL_BYSERVICETIME_IN_PERSON=
 			"SELECT ORDER_DETAIL_NO,ORDER_NO,to_char(SERVICE_DATE,'yyyy-mm-dd') SERVICE_DATE,SERVICE_TIME,EMP_NO,"
 			+ "ORDER_DEDIAL_STATUS FROM HC_ORDER_DETAIL WHERE SERVICE_DATE = ? "
-			+ "AND SERVICE_TIME=?  AND EMP_NO =?  ORDER BY SERVICE_DATE ;";
+			+ "AND SERVICE_TIME=?  AND EMP_NO =?  ORDER BY SERVICE_DATE ";
 
 	@Override
 	public HcOrderDetailVO getAllBySreviceTimeInPerson(String date , String time,String empNo) {
@@ -746,7 +795,8 @@ public class HcOrderDetailJDBCDAO implements HcOrderDetailDAO_interface {
 		ResultSet rs = null;
 
 		try {
-			Date SreviceDate = new Date(DateFormat.getDateInstance().parse(date).getTime());
+			System.out.println("DATE:" + date);
+			Date SreviceDate = Date.valueOf(date);
 
 			Class.forName(driver);
 			con = DriverManager.getConnection(url, userid, passwd);
@@ -779,9 +829,6 @@ public class HcOrderDetailJDBCDAO implements HcOrderDetailDAO_interface {
 			throw new RuntimeException("A database error occured. "
 					+ se.getMessage());
 			// Clean up JDBC resources
-		} catch (ParseException e) {
-			throw new RuntimeException("A database error occured. "
-					+ e.getMessage());
 		} finally {
 			if (rs != null) {
 				try {
@@ -808,7 +855,7 @@ public class HcOrderDetailJDBCDAO implements HcOrderDetailDAO_interface {
 		return hcOrderDetail;
 	}
 	
-	public static void main( String[] args){
+	public static void main( String[] args) throws ParseException{
 		HcOrderDetailJDBCDAO dao = new HcOrderDetailJDBCDAO();
 		
 		//inster
@@ -851,17 +898,17 @@ public class HcOrderDetailJDBCDAO implements HcOrderDetailDAO_interface {
 //		}
 		
 		
-		List<HcOrderDetailVO> list2 = dao.getAllByOrderNo("20171112-500007");
-		System.out.println("getAllByOrderNo-------------------------------------------------");
-		for(HcOrderDetailVO detail : list2 ){
-			System.out.println(detail.getOrderDetailNo());
-			System.out.println(detail.getOrderNo());
-			System.out.println(detail.getServiceDate());
-			System.out.println(detail.getServiceTime());
-			System.out.println(detail.getOrderDetailStataus());
-			System.out.println(detail.getEmpNo());
-			System.out.println("-------------------------------------------------");
-		}
+//		List<HcOrderDetailVO> list2 = dao.getAllByOrderNo("20171112-500007");
+//		System.out.println("getAllByOrderNo-------------------------------------------------");
+//		for(HcOrderDetailVO detail : list2 ){
+//			System.out.println(detail.getOrderDetailNo());
+//			System.out.println(detail.getOrderNo());
+//			System.out.println(detail.getServiceDate());
+//			System.out.println(detail.getServiceTime());
+//			System.out.println(detail.getOrderDetailStataus());
+//			System.out.println(detail.getEmpNo());
+//			System.out.println("-------------------------------------------------");
+//		}
 		
 //		List<HcOrderDetailVO> list3 = dao.getAllOneMonth(new Integer(10));
 //		System.out.println("getAllOneMonth-------------------------------------------------");
@@ -899,9 +946,22 @@ public class HcOrderDetailJDBCDAO implements HcOrderDetailDAO_interface {
 //			System.out.println("-------------------------------------------------");	
 //		}
 		
-//		List<HcOrderDetailVO> list6 = dao.getAllOneMonthInPerson(new Integer(11),"EMP0002005");
-//		System.out.println("getAllOneMonthInPerson-------------------------------------------------");
-//		for(HcOrderDetailVO detail : list6 ){
+		List<HcOrderDetailVO> list6 = dao.getAllOneMonthInPerson(new Integer(11),"EMP0000");
+		System.out.println("getAllOneMonthInPerson-------------------------------------------------");
+		for(HcOrderDetailVO detail : list6 ){
+			System.out.println(detail.getOrderDetailNo());
+			System.out.println(detail.getOrderNo());
+			System.out.println(detail.getServiceDate());
+			System.out.println(detail.getServiceTime());
+			System.out.println(detail.getOrderDetailStataus());
+			System.out.println(detail.getEmpNo());
+			System.out.println("-------------------------------------------------");	
+		}
+		
+		
+//		List<HcOrderDetailVO> list7 = dao.getAllBySreviceDateInPerson("2017/11/17","EMP0002");
+//		System.out.println("getAllBySreviceDateInPerson-------------------------------------------------");
+//		for(HcOrderDetailVO detail : list7 ){
 //			System.out.println(detail.getOrderDetailNo());
 //			System.out.println(detail.getOrderNo());
 //			System.out.println(detail.getServiceDate());
@@ -911,18 +971,16 @@ public class HcOrderDetailJDBCDAO implements HcOrderDetailDAO_interface {
 //			System.out.println("-------------------------------------------------");	
 //		}
 		
-		
-		List<HcOrderDetailVO> list7 = dao.getAllBySreviceDateInPerson("2017/11/17","EMP0002");
-		System.out.println("getAllBySreviceDateInPerson-------------------------------------------------");
-		for(HcOrderDetailVO detail : list7 ){
-			System.out.println(detail.getOrderDetailNo());
-			System.out.println(detail.getOrderNo());
-			System.out.println(detail.getServiceDate());
-			System.out.println(detail.getServiceTime());
-			System.out.println(detail.getOrderDetailStataus());
-			System.out.println(detail.getEmpNo());
-			System.out.println("-------------------------------------------------");	
-		}
+//		HcOrderDetailVO hcOrderDetailVO = dao.getAllBySreviceTimeInPerson("2017-11-30","晚","EMP0020");
+//		System.out.println("getAllBySreviceDateInPerson-------------------------------------------------");
+//		
+//			System.out.println(hcOrderDetailVO.getOrderDetailNo());
+//			System.out.println(hcOrderDetailVO.getOrderNo());
+//			System.out.println(hcOrderDetailVO.getServiceDate());
+//			System.out.println(hcOrderDetailVO.getServiceTime());
+//			System.out.println(hcOrderDetailVO.getOrderDetailStataus());
+//			System.out.println(hcOrderDetailVO.getEmpNo());
+			
 		
 	}
 

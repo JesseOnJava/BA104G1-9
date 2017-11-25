@@ -4,9 +4,13 @@ import java.io.IOException;
 
 import java.io.PrintWriter;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Enumeration;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.sql.Date;
 
 import javax.servlet.RequestDispatcher;
@@ -15,9 +19,13 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
+import com.hcorder.modal.HcOrderDetailVO;
 import com.hcorder.modal.HcOrderMasterService;
 import com.hcorder.modal.HcOrderMasterVO;
+import com.hcworkshifts.model.HcWorkShiftsService;
+import com.hcworkshifts.model.HcWorkShiftsVO;
 
 
 
@@ -42,16 +50,15 @@ public class HcOrderController extends HttpServlet {
 
 
 		req.setCharacterEncoding("UTF-8");
-		res.setCharacterEncoding("UTF-8");
+		res.setCharacterEncoding("UTF-8");;
 		String action = req.getParameter("action");
 		
 		Enumeration en = req.getParameterNames();
-		System.out.println("----------------------------");
-		
+	System.out.println("----------------------------");	
 		
 		while(en.hasMoreElements()){
 			String name = (String)en.nextElement();
-			System.out.println(name+":"+req.getParameter(name)); 
+	System.out.println(name+":"+req.getParameter(name)); 
 		}
 		
 		
@@ -89,13 +96,13 @@ public class HcOrderController extends HttpServlet {
 				if (servDate == null || (servDate.trim()).length() == 0) {
 					errorMsgs.add("請選擇服務日期");
 				}
-				if (serviceTime == null || (servDate.trim()).length() == 0) {
-					errorMsgs.add("請選擇服務日期");
+				if (serviceTime == null || (serviceTime.trim()).length() == 0) {
+					errorMsgs.add("請選擇服務時段");
 				}
-				if (caredNo == null || (servDate.trim()).length() == 0) {
+				if (caredNo == null || (caredNo.trim()).length() == 0) {
 					errorMsgs.add("請選擇服務對象");
 				}
-				if (empNo == null || (servDate.trim()).length() == 0) {
+				if (empNo == null || (empNo.trim()).length() == 0) {
 					errorMsgs.add("請選擇服務人員");
 				}				
 				// Send the use back to the form, if there were errors
@@ -124,10 +131,18 @@ public class HcOrderController extends HttpServlet {
 
 				
 				/***************************2.開始新增資料*****************************************/
+				if(empNo.equals("EMP0000")){
+					HcWorkShiftsService hcWorkShiftsService = new HcWorkShiftsService();
+					//分派當天有空  工作時數最少員工
+					HcWorkShiftsVO hcWorkShiftsVO = hcWorkShiftsService.getOneByDateTime(servDate, serviceTime);
+					empNo = hcWorkShiftsVO.getEmpNo();
+					System.out.println("empNo  "+empNo);
+				}				
 				
 				HcOrderMasterService hcOrderSvc = new HcOrderMasterService();
 				HcOrderMasterVO hcOrderMasterVO = hcOrderSvc.addHcOrderMaster(memNo, caredNo, "未確認",serviceDate,serviceTime,empNo);
-				System.out.println("取回來的VO"+hcOrderMasterVO.getOrderNo());
+			System.out.println("取回來的VO"+hcOrderMasterVO.getOrderNo());
+				
 				
 				
 				/***************************3.新增完成,準備轉交(Send the Success view)*************/
@@ -150,7 +165,8 @@ public class HcOrderController extends HttpServlet {
 		
 
 		if ("add_hc_order_many".equals(action)) { // 來自select_page.jsp的請求
-			System.out.println("YY");
+	System.out.println("cr order_many");
+			String forwardURL = req.getParameter("forwardURL");
 
 			List<String> errorMsgs = new LinkedList<String>();
 			// Store this set in the request scope, in case we need to
@@ -159,69 +175,99 @@ public class HcOrderController extends HttpServlet {
 
 			try {
 				/***************************1.接收請求參數 - 輸入格式的錯誤處理**********************/
-				String servDate = req.getParameter("servDate");
-				String serviceTime = req.getParameter("servTime");
+				String[] servDates = req.getParameterValues("servDate");				
 				String caredNo = req.getParameter("caredNo");
-				String empNo = req.getParameter("empNo");
 				String memNo = req.getParameter("memNo");
 				
-				if(req.getSession().getAttribute("memVO") == null){
-					errorMsgs.add("請登入");
-					RequestDispatcher failureView = req
-							.getRequestDispatcher("/front/homeCare/Hc_order.jsp");
-					failureView.forward(req, res);
+			if (servDates == null || servDates.length == 0) {
+				errorMsgs.add("請選擇服務日期");
+			}
+
+			if (caredNo == null || (caredNo.trim()).length() == 0) {
+				errorMsgs.add("請選擇服務對象");
+			}
+			
+			// Send the use back to the form, if there were errors
+			if (!errorMsgs.isEmpty()) {
+				RequestDispatcher failureView = req
+						.getRequestDispatcher(forwardURL);
+				failureView.forward(req, res);
+				return;//程式中斷
+			}
+				
+				HcWorkShiftsService hcWorkShiftsService = new HcWorkShiftsService();
+				List<HcOrderDetailVO> hcOrderDetailList =  new ArrayList<HcOrderDetailVO>();
+				for(int i =0;i<servDates.length;i++){
+					String servDate = 	servDates[i].substring(0, servDates[i].lastIndexOf("-"));
+			System.out.println(servDate);
+					String servTime = 	servDates[i].substring(servDates[i].length()-1, servDates[i].length());
+			System.out.println(servTime);
 					
+					//錯誤驗證
+					Date serviceDate = null;				
+					try {
+						serviceDate = java.sql.Date.valueOf(servDate);
+					} catch (Exception e) {
+						errorMsgs.add(servDate+": 服務日期格式不正確");
+					}
+					
+					if(serviceDate.getTime() < System.currentTimeMillis()){
+						continue;
+					}
+					
+					
+					//分派當天有空  工作時數最少員工
+					HcWorkShiftsVO hcWorkShiftsVO = hcWorkShiftsService.getOneByDateTime(servDate, servTime);
+					 String empno = hcWorkShiftsVO.getEmpNo();
+					 
+					 if(empno.equals("")){
+						 
+					 }
+					
+					HcOrderDetailVO hcOrderDetail = new HcOrderDetailVO();					
+					hcOrderDetail.setServiceDate(serviceDate);
+					hcOrderDetail.setServiceTime(servTime);
+					hcOrderDetail.setEmpNo(hcWorkShiftsVO.getEmpNo());
+					hcOrderDetail.setOrderDetailStataus("未服務");
+					hcOrderDetailList.add(hcOrderDetail);
 				}
+				
+//				if(req.getSession().getAttribute("memVO") == null){
+//					errorMsgs.add("請登入");
+//					RequestDispatcher failureView = req
+//							.getRequestDispatcher("/front/homeCare/Hc_order.jsp");
+//					failureView.forward(req, res);
+//					
+//				}
 				
 				if (!errorMsgs.isEmpty()) {
 					RequestDispatcher failureView = req
-							.getRequestDispatcher("/front/homeCare/Hc_order.jsp");
+							.getRequestDispatcher(forwardURL);
 					failureView.forward(req, res);
 					return;//程式中斷
 				}
 				
-				if (servDate == null || (servDate.trim()).length() == 0) {
-					errorMsgs.add("請選擇服務日期");
-				}
-				if (serviceTime == null || (servDate.trim()).length() == 0) {
-					errorMsgs.add("請選擇服務日期");
-				}
-				if (caredNo == null || (servDate.trim()).length() == 0) {
-					errorMsgs.add("請選擇服務對象");
-				}
-				if (empNo == null || (servDate.trim()).length() == 0) {
-					errorMsgs.add("請選擇服務人員");
-				}				
-				// Send the use back to the form, if there were errors
+
+				
+
 				if (!errorMsgs.isEmpty()) {
 					RequestDispatcher failureView = req
-							.getRequestDispatcher("/front/homeCare/Hc_order.jsp");
+							.getRequestDispatcher(forwardURL);
 					failureView.forward(req, res);
 					return;//程式中斷
 				}
-				
-				Date serviceDate = null;				
-				try {
-					serviceDate = java.sql.Date.valueOf(req.getParameter("servDate").trim());
-				} catch (Exception e) {
-					errorMsgs.add("服務日期格式不正確");
-				}
-				// Send the use back to the form, if there were errors
-				if (!errorMsgs.isEmpty()) {
-					RequestDispatcher failureView = req
-							.getRequestDispatcher("/front/homeCare/Hc_order.jsp");
-					failureView.forward(req, res);
-					return;//程式中斷
-				}
-				
-			//檢查該天是否已經下定
 
 				
 				/***************************2.開始新增資料*****************************************/
-				
+				HcOrderMasterVO hcOrderMaster = new HcOrderMasterVO();
+				hcOrderMaster.setMemNo(memNo);
+				hcOrderMaster.setOrderDate(new Date(System.currentTimeMillis()));
+				hcOrderMaster.setCaredNo(caredNo);
+				hcOrderMaster.setOrderStatus("未確認");
+
 				HcOrderMasterService hcOrderSvc = new HcOrderMasterService();
-				HcOrderMasterVO hcOrderMasterVO = hcOrderSvc.addHcOrderMaster(memNo, caredNo, "未確認",serviceDate,serviceTime,empNo);
-				System.out.println("取回來的VO"+hcOrderMasterVO.getOrderNo());
+				HcOrderMasterVO hcOrderMasterVO = hcOrderSvc.addHcOrderMaster(hcOrderMaster,hcOrderDetailList);
+			System.out.println("取回來的VO"+hcOrderMasterVO.getOrderNo());
 				
 				
 				/***************************3.新增完成,準備轉交(Send the Success view)*************/
@@ -232,251 +278,124 @@ public class HcOrderController extends HttpServlet {
 
 				/***************************其他可能的錯誤處理*************************************/
 			} catch (Exception e) {
+				
+				errorMsgs.add("無法取得資料:" + e.getMessage());
+
+				RequestDispatcher failureView = req
+						.getRequestDispatcher(forwardURL);
+				failureView.forward(req, res);
+			}
+		}
+		
+
+		if ("getOne_For_Display".equals(action)) { // 來自select_page.jsp的請求
+
+			List<String> errorMsgs = new LinkedList<String>();
+			// Store this set in the request scope, in case we need to
+			// send the ErrorPage view.
+			req.setAttribute("errorMsgs", errorMsgs);
+
+			try {
+				/***************************1.接收請求參數 - 輸入格式的錯誤處理**********************/
+				String orderNo = req.getParameter("orderNo");
+				if (orderNo == null || (orderNo.trim()).length() == 0) {
+					errorMsgs.add("請輸入員工編號");
+				}
+				// Send the use back to the form, if there were errors
+				if (!errorMsgs.isEmpty()) {
+					RequestDispatcher failureView = req
+							.getRequestDispatcher("/back/homeCare/Hc_order_manage.jsp");
+					failureView.forward(req, res);
+					return;//程式中斷
+				}
+				
+//				Integer empno = null;
+//				try {
+//					empno = new Integer(str);
+//				} catch (Exception e) {
+//					errorMsgs.add("員工編號格式不正確");
+//				}
+				// Send the use back to the form, if there were errors
+				if (!errorMsgs.isEmpty()) {
+					RequestDispatcher failureView = req
+							.getRequestDispatcher("/back/homeCare/Hc_order_manage.jsp");
+					failureView.forward(req, res);
+					return;//程式中斷
+				}
+				
+				/***************************2.開始查詢資料*****************************************/
+				HcOrderMasterService empSvc = new HcOrderMasterService();
+				HcOrderMasterVO hcOrderMasterVO = empSvc.getOne(orderNo);
+				if (hcOrderMasterVO == null) {
+					errorMsgs.add("查無資料");
+				}
+				// Send the use back to the form, if there were errors
+				if (!errorMsgs.isEmpty()) {
+					RequestDispatcher failureView = req
+							.getRequestDispatcher("/back/homeCare/Hc_order_manage.jsp");
+					failureView.forward(req, res);
+					return;//程式中斷
+				}
+				
+				/***************************3.查詢完成,準備轉交(Send the Success view)*************/
+				req.setAttribute("hcOrderMasterVO", hcOrderMasterVO); // 資料庫取出的empVO物件,存入req
+				String url = "/front/homeCare/Hc_show_order.jsp";
+				RequestDispatcher successView = req.getRequestDispatcher(url); // 成功轉交listOneEmp.jsp
+				successView.forward(req, res);
+
+				/***************************其他可能的錯誤處理*************************************/
+			} catch (Exception e) {
 				errorMsgs.add("無法取得資料:" + e.getMessage());
 				RequestDispatcher failureView = req
-						.getRequestDispatcher("/front/homeCare/Hc_order.jsp");
+						.getRequestDispatcher("/back/homeCare/Hc_order_manage.jsp");
+				failureView.forward(req, res);
+			}
+		}
+		
+		
+
+		if ("listOrds_ByCompositeQuery".equals(action)) { // 來自select_page.jsp的複合查詢請求
+			List<String> errorMsgs = new LinkedList<String>();
+			// Store this set in the request scope, in case we need to
+			// send the ErrorPage view.
+			req.setAttribute("errorMsgs", errorMsgs);
+
+			try {
+				
+				/***************************1.將輸入資料轉為Map**********************************/ 
+				//採用Map<String,String[]> getParameterMap()的方法 
+				//注意:an immutable java.util.Map 
+				//Map<String, String[]> map = req.getParameterMap();
+				HttpSession session = req.getSession();
+				Map<String, String[]> map = (Map<String, String[]>)session.getAttribute("map");
+				if (req.getParameter("whichPage") == null){
+					HashMap<String, String[]> map1 = (HashMap<String, String[]>)req.getParameterMap();
+					HashMap<String, String[]> map2 = new HashMap<String, String[]>();
+					map2 = (HashMap<String, String[]>)map1.clone();
+					session.setAttribute("map",map2);
+					map = (HashMap<String, String[]>)req.getParameterMap();
+				} 
+				
+				/***************************2.開始複合查詢***************************************/
+				HcOrderMasterService hcOrderMasterService = new HcOrderMasterService();
+				List<HcOrderMasterVO> list  = hcOrderMasterService.getAll(map);
+				
+				/***************************3.查詢完成,準備轉交(Send the Success view)************/
+				req.setAttribute("listOrds_ByCompositeQuery", list); // 資料庫取出的list物件,存入request
+				RequestDispatcher successView = req.getRequestDispatcher("/back/homeCare/Hc_order_manage.jsp"); // 成功轉交listEmps_ByCompositeQuery.jsp
+				successView.forward(req, res);
+				
+				/***************************其他可能的錯誤處理**********************************/
+			} catch (Exception e) {
+				errorMsgs.add(e.getMessage());
+				RequestDispatcher failureView = req
+						.getRequestDispatcher("/back/homeCare/Hc_order_manage.jsp");
 				failureView.forward(req, res);
 			}
 		}
 				
-				
-//		
-//		if ("getOne_For_Update".equals(action)) { // 來自listAllEmp.jsp的請求
-//
-//			List<String> errorMsgs = new LinkedList<String>();
-//			// Store this set in the request scope, in case we need to
-//			// send the ErrorPage view.
-//			req.setAttribute("errorMsgs", errorMsgs);
-//			
-//			try {
-//				/***************************1.接收請求參數****************************************/
-//				Integer empno = new Integer(req.getParameter("empno"));
-//				
-//				/***************************2.開始查詢資料****************************************/
-//				EmpService empSvc = new EmpService();
-//				EmpVO empVO = empSvc.getOneEmp(empno);
-//								
-//				/***************************3.查詢完成,準備轉交(Send the Success view)************/
-//				req.setAttribute("empVO", empVO);         // 資料庫取出的empVO物件,存入req
-//				String url = "/emp/update_emp_input.jsp";
-//				RequestDispatcher successView = req.getRequestDispatcher(url);// 成功轉交 update_emp_input.jsp
-//				successView.forward(req, res);
-//
-//				/***************************其他可能的錯誤處理**********************************/
-//			} catch (Exception e) {
-//				errorMsgs.add("無法取得要修改的資料:" + e.getMessage());
-//				RequestDispatcher failureView = req
-//						.getRequestDispatcher("/emp/listAllEmp.jsp");
-//				failureView.forward(req, res);
-//			}
-//		}
-//	
-				
-				
-				
-				
-//		
-//		if ("update".equals(action)) { // 來自update_emp_input.jsp的請求
-//			
-//			List<String> errorMsgs = new LinkedList<String>();
-//			// Store this set in the request scope, in case we need to
-//			// send the ErrorPage view.
-//			req.setAttribute("errorMsgs", errorMsgs);
-//		
-//			try {
-//				/***************************1.接收請求參數 - 輸入格式的錯誤處理**********************/
-//				Integer empno = new Integer(req.getParameter("empno").trim());
-//				
-//				String ename = req.getParameter("ename");
-//				String enameReg = "^[(\u4e00-\u9fa5)(a-zA-Z0-9_)]{2,10}$";
-//				if (ename == null || ename.trim().length() == 0) {
-//					errorMsgs.add("員工姓名: 請勿空白");
-//				} else if(!ename.trim().matches(enameReg)) { //以下練習正則(規)表示式(regular-expression)
-//					errorMsgs.add("員工姓名: 只能是中、英文字母、數字和_ , 且長度必需在2到10之間");
-//	            }
-//				
-//				String job = req.getParameter("job").trim();
-//				if (job == null || job.trim().length() == 0) {
-//					errorMsgs.add("職位請勿空白");
-//				}	
-//				
-//				java.sql.Date hiredate = null;
-//				try {
-//					hiredate = java.sql.Date.valueOf(req.getParameter("hiredate").trim());
-//				} catch (IllegalArgumentException e) {
-//					hiredate=new java.sql.Date(System.currentTimeMillis());
-//					errorMsgs.add("請輸入日期!");
-//				}
-//
-//				Double sal = null;
-//				try {
-//					sal = new Double(req.getParameter("sal").trim());
-//				} catch (NumberFormatException e) {
-//					sal = 0.0;
-//					errorMsgs.add("薪水請填數字.");
-//				}
-//
-//				Double comm = null;
-//				try {
-//					comm = new Double(req.getParameter("comm").trim());
-//				} catch (NumberFormatException e) {
-//					comm = 0.0;
-//					errorMsgs.add("獎金請填數字.");
-//				}
-//
-//				Integer deptno = new Integer(req.getParameter("deptno").trim());
-//
-//				EmpVO empVO = new EmpVO();
-//				empVO.setEmpno(empno);
-//				empVO.setEname(ename);
-//				empVO.setJob(job);
-//				empVO.setHiredate(hiredate);
-//				empVO.setSal(sal);
-//				empVO.setComm(comm);
-//				empVO.setDeptno(deptno);
-//
-//				// Send the use back to the form, if there were errors
-//				if (!errorMsgs.isEmpty()) {
-//					req.setAttribute("empVO", empVO); // 含有輸入格式錯誤的empVO物件,也存入req
-//					RequestDispatcher failureView = req
-//							.getRequestDispatcher("/emp/update_emp_input.jsp");
-//					failureView.forward(req, res);
-//					return; //程式中斷
-//				}
-//				
-//				/***************************2.開始修改資料*****************************************/
-//				EmpService empSvc = new EmpService();
-//				empVO = empSvc.updateEmp(empno, ename, job, hiredate, sal,comm, deptno);
-//				
-//				/***************************3.修改完成,準備轉交(Send the Success view)*************/
-//				req.setAttribute("empVO", empVO); // 資料庫update成功後,正確的的empVO物件,存入req
-//				String url = "/emp/listOneEmp.jsp";
-//				RequestDispatcher successView = req.getRequestDispatcher(url); // 修改成功後,轉交listOneEmp.jsp
-//				successView.forward(req, res);
-//
-//				/***************************其他可能的錯誤處理*************************************/
-//			} catch (Exception e) {
-//				errorMsgs.add("修改資料失敗:"+e.getMessage());
-//				RequestDispatcher failureView = req
-//						.getRequestDispatcher("/emp/update_emp_input.jsp");
-//				failureView.forward(req, res);
-//			}
-//		}
-//
-//        if ("insert".equals(action)) { // 來自addEmp.jsp的請求  
-//			
-//			List<String> errorMsgs = new LinkedList<String>();
-//			// Store this set in the request scope, in case we need to
-//			// send the ErrorPage view.
-//			req.setAttribute("errorMsgs", errorMsgs);
-//
-//			try {
-//				/***********************1.接收請求參數 - 輸入格式的錯誤處理*************************/
-//				String ename = req.getParameter("ename");
-//				//String enameReg = "^[(\u4e00-\u9fa5)(a-zA-Z0-9_)]{2,10}$";
-//				
-//				if (ename == null || ename.trim().length() == 0) {
-//					errorMsgs.add("員工姓名: 請勿空白");
-//				} else if(!ename.trim().matches(enameReg)) { //以下練習正則(規)表示式(regular-expression)
-//					errorMsgs.add("員工姓名: 只能是中、英文字母、數字和_ , 且長度必需在2到10之間");
-//	            }
-//				
-//				String job = req.getParameter("job").trim();
-//				if (job == null || job.trim().length() == 0) {
-//					errorMsgs.add("職位請勿空白");
-//				}
-//				
-//				java.sql.Date hiredate = null;
-//				try {
-//					hiredate = java.sql.Date.valueOf(req.getParameter("hiredate").trim());
-//				} catch (IllegalArgumentException e) {
-//					hiredate=new java.sql.Date(System.currentTimeMillis());
-//					errorMsgs.add("請輸入日期!");
-//				}
-//				
-//				Double sal = null;
-//				try {
-//					sal = new Double(req.getParameter("sal").trim());
-//				} catch (NumberFormatException e) {
-//					sal = 0.0;
-//					errorMsgs.add("薪水請填數字.");
-//				}
-//				
-//				Double comm = null;
-//				try {
-//					comm = new Double(req.getParameter("comm").trim());
-//				} catch (NumberFormatException e) {
-//					comm = 0.0;
-//					errorMsgs.add("獎金請填數字.");
-//				}
-//				
-//				Integer deptno = new Integer(req.getParameter("deptno").trim());
-//
-//				EmpVO empVO = new EmpVO();
-//				empVO.setEname(ename);
-//				empVO.setJob(job);
-//				empVO.setHiredate(hiredate);
-//				empVO.setSal(sal);
-//				empVO.setComm(comm);
-//				empVO.setDeptno(deptno);
-//
-//				// Send the use back to the form, if there were errors
-//				if (!errorMsgs.isEmpty()) {
-//					req.setAttribute("empVO", empVO); // 含有輸入格式錯誤的empVO物件,也存入req
-//					RequestDispatcher failureView = req
-//							.getRequestDispatcher("/emp/addEmp.jsp");
-//					failureView.forward(req, res);
-//					return;
-//				}
-//				
-//				/***************************2.開始新增資料***************************************/
-//				EmpService empSvc = new EmpService();
-//				empVO = empSvc.addEmp(ename, job, hiredate, sal, comm, deptno);
-//				
-//				/***************************3.新增完成,準備轉交(Send the Success view)***********/
-//				String url = "/emp/listAllEmp.jsp";
-//				RequestDispatcher successView = req.getRequestDispatcher(url); // 新增成功後轉交listAllEmp.jsp
-//				successView.forward(req, res);				
-//				
-//				/***************************其他可能的錯誤處理**********************************/
-//			} catch (Exception e) {
-//				errorMsgs.add(e.getMessage());
-//				RequestDispatcher failureView = req
-//						.getRequestDispatcher("/emp/addEmp.jsp");
-//				failureView.forward(req, res);
-//			}
-//		}
-//		
-//		
-//		if ("delete".equals(action)) { // 來自listAllEmp.jsp
-//
-//			List<String> errorMsgs = new LinkedList<String>();
-//			// Store this set in the request scope, in case we need to
-//			// send the ErrorPage view.
-//			req.setAttribute("errorMsgs", errorMsgs);
-//	
-//			try {
-//				/***************************1.接收請求參數***************************************/
-//				Integer empno = new Integer(req.getParameter("empno"));
-//				
-//				/***************************2.開始刪除資料***************************************/
-//				EmpService empSvc = new EmpService();
-//				empSvc.deleteEmp(empno);
-//				
-//				/***************************3.刪除完成,準備轉交(Send the Success view)***********/								
-//				String url = "/emp/listAllEmp.jsp";
-//				RequestDispatcher successView = req.getRequestDispatcher(url);// 刪除成功後,轉交回送出刪除的來源網頁
-//				successView.forward(req, res);
-//				
-//				/***************************其他可能的錯誤處理**********************************/
-//			} catch (Exception e) {
-//				errorMsgs.add("刪除資料失敗:"+e.getMessage());
-//				RequestDispatcher failureView = req
-//						.getRequestDispatcher("/emp/listAllEmp.jsp");
-//				failureView.forward(req, res);
-//			}
-//		}
-//	
+		
+
 
 	}
 

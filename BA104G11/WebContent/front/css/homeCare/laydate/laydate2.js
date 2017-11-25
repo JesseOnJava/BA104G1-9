@@ -1032,12 +1032,21 @@
       YMD[1]++;
       YMD[2] = st + 1;
       item.attr('lay-ymd', YMD.join('-')).html(YMD[2]);
-//--加工區      
+//--加工區      --------------------------------------------------------------
+      var orr = YMD[1];
+      if(YMD[1] < 10){
+    		  YMD[1] = '0'+YMD[1];
+      }
+      var orr2 = YMD[2];
+      if(YMD[2] < 10){
+    	  YMD[2] = '0'+YMD[2];
+      }
+      
       var divCheck = document.createElement('div');
       divCheck.setAttribute('class','divCheck');
 
       var txt1 = document.createTextNode('早');
-      divCheck.append(txt1);
+//      divCheck.append(txt1);
 
       var input1 = document.createElement('input');
       input1.setAttribute('type','checkbox');
@@ -1045,7 +1054,13 @@
       input1.setAttribute('name','servDate');
       input1.setAttribute('form','hc_order');
       input1.setAttribute('id',YMD.join('-')+'-'+'早');        
+      input1.setAttribute('class','flat');
+      
+      var lab1 = document.createElement('label');
+      lab1.setAttribute('for',YMD.join('-')+'-'+'早');
+      lab1.append(txt1);     
       divCheck.append(input1);
+      divCheck.append(lab1);
 
 
       var txt2 = document.createTextNode('中');
@@ -1056,8 +1071,15 @@
       input2.setAttribute('value',YMD.join('-')+'-'+'中');
       input2.setAttribute('name','servDate');
       input2.setAttribute('form','hc_order');
-      input2.setAttribute('id',YMD.join('-')+'-'+'中'); 
+      input2.setAttribute('id',YMD.join('-')+'-'+'中');
+      input2.setAttribute('class','flat22');    
       divCheck.append(input2);
+      
+      var lab2 = document.createElement('label');
+      lab2.setAttribute('for',YMD.join('-')+'-'+'中');
+      lab2.append(txt2);     
+      divCheck.append(input2);
+      divCheck.append(lab2);
 
 
       var txt3 = document.createTextNode('晚');
@@ -1068,10 +1090,21 @@
       input3.setAttribute('value',YMD.join('-')+'-'+'晚');
       input3.setAttribute('name','servDate');
       input3.setAttribute('form','hc_order');
-      input3.setAttribute('id',YMD.join('-')+'-'+'晚'); 
+      input3.setAttribute('id',YMD.join('-')+'-'+'晚');
+      input3.setAttribute('class','flat'); 
       divCheck.append(input3);
+      
+      var lab3 = document.createElement('label');
+      lab3.setAttribute('for',YMD.join('-')+'-'+'晚');
+      lab3.append(txt3);     
+      divCheck.append(input3);
+      divCheck.append(lab3);
+      
       item.append(divCheck);
-//加工區--
+      
+      YMD[1] = orr;
+      YMD[2] = orr2;
+//加工區---------------------------------------------------------------
       that.mark(item, YMD).limit(item, {
         year: YMD[0]
         ,month: YMD[1] - 1
@@ -1447,7 +1480,7 @@
     ,startTime, endTime
     ,tds = lay(that.elem).find('td');
     
-    if(options.range && !that.endDate) lay(that.footer).find(ELEM_CONFIRM).addClass(DISABLED);
+    if(options.range && !that.endDate) lay(that.footer).find(ELEM_CONFIRM).addClass(DISABLED);//----------------------------
     if(!that.endDate) return;
 
     startTime = that.newDate({
@@ -1535,7 +1568,10 @@
       ,date: YMD[2] | 0
     };
     
-    if(td.hasClass(DISABLED)) return;
+    if(td.hasClass(DISABLED)){
+    	td.find('input')
+    	return;
+    } 
 
     //范围选择
     if(options.range){

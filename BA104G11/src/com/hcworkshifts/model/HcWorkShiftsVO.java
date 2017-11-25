@@ -34,7 +34,7 @@ public class HcWorkShiftsVO implements Serializable{
 		return workShiftStatus;
 	}
 	public void setWorkShiftStatus(String workShiftStatus) {
-		workShiftStatus = workShiftStatus;
+		this.workShiftStatus = workShiftStatus;
 	}
 	public Integer getTotalWorkShifts() {
 		return totalWorkShifts;
