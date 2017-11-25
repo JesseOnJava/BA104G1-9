@@ -395,7 +395,7 @@ request.setCharacterEncoding("UTF-8");
 	                              <span id='empName-final'>${param.empNo}(${not empty param.empNo})</span>
 	                              
 	                              <input type="hidden" class="form-control" id="empNo-final" name="empNo" value="${param.empNo}" aria-describedby="helpBlock2">
-	                              <input type="hidden" class="form-control" name="memNo" value="${memVO.mem_no}" aria-describedby="helpBlock2">
+	                              <input type="hidden" class="form-control" name="memNo" value="${memVO.memNo}" aria-describedby="helpBlock2">
 	                              <input type="hidden" class="form-control" name="action" value="add_hc_order" aria-describedby="helpBlock2">
 		                         </div>	                        
 	                    </div>
