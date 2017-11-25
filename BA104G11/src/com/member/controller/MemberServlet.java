@@ -87,7 +87,7 @@ public class MemberServlet extends HttpServlet {
 			
 			HttpSession session = req.getSession();
 			session.setAttribute("memberVO", memberVO);
-			session.setAttribute("isLogin", "true");
+			session.setAttribute("isLogin", "correct");
 
 			String location = (String) session.getAttribute("location");
 			System.out.println("location"+location);
@@ -104,7 +104,6 @@ public class MemberServlet extends HttpServlet {
 		if("logout".equals(action)){
 			HttpSession session = req.getSession();
 			session.setAttribute("memberVO", null);
-			session.setAttribute("isLogin", false);
 			res.sendRedirect(req.getContextPath() + "/index.jsp");
 		}
 //======================================================================================================================================================

@@ -11,4 +11,6 @@ public interface HcOrderMasterDAO_interface {
 	public HcOrderMasterVO findByPrimaryKey(String orderNo);
 	public List<HcOrderMasterVO> getAll();
 	public void transaction(HcOrderMasterVO hcOrderMasterVO,List<HcOrderDetailVO> detailList);
+	public List<HcOrderMasterVO> getByMemNo(String memNo);
+	
 }

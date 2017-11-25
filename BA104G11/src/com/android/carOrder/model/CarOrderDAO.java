@@ -15,13 +15,14 @@ import com.android.member.model.MemberVO;
 public class CarOrderDAO implements CarOrderDAO_interface{
 	private static DataSource ds;
 	
-	private static final String FIND_MEMNO_ORDER = "SELECT * FROM CAR_ORDER WHERE MEM_NO=?";
+	
 	private static final String INSERT_CAR_ORDER="INSERT INTO CAR_ORDER(ORDER_NO,MEM_NO,ORDER_DATE,ORDER_STATUS)　VALUES(to_char(sysdate,'yyyymmdd')||'-'||LPAD(to_char(CARORDER_SEQ.Nextval),6,'0'),?,CURRENT_TIMESTAMP,?);";
 	private static final String INSERT_CAR_DETAIL="INSERT INTO CAR_DETAIL(DETAIL_NO,ORDER_NO,VEHICLE_NO,DETAIL_DATE,DETAIL_TIME,PASSENGER_NAME,PASSENGER_PHONE,GETINTO_ADDRESS,ARRIVAL_ADDRESS,SENDER_STATUS)　"
 			+ "VALUES(to_char(sysdate,'yyyymmdd')||'-'||LPAD(to_char(cardetail_seq.Nextval),6,'0'),?,?,?,?,?,?,?,?,?);";
 	private static final String UPDATE_CAR_SCHEDUL = "UPDATE CAR_SCHEDUL SET ATTENDANCE = ? WHERE SERIAL_NO=?";
 	private static final String UPDATE_MEMBER_POINT = "UPDATE MEMBER SET POINT = ? WHERE MEM_NO=?";
-	
+	private static final String FIND_MEMNO_ORDER = "SELECT * FROM CAR_ORDER WHERE MEM_NO=?";
+	private static final String GET_DETAIL_BY_ORDERNO = "SELECT * FROM CAR_DETAIL WHERE ORDER_NO=?";
 	static{
 		try {
 			Context ctx = new javax.naming.InitialContext();
@@ -118,14 +119,15 @@ public class CarOrderDAO implements CarOrderDAO_interface{
 	public List<CarOrderVO> findByMemNo(String memNo) {
 		Connection con = null;
 		PreparedStatement pstmt = null;
+		PreparedStatement pstmt2 = null;
 		ResultSet rs = null;
-		List<CarOrderVO> orderList = null;
+		ResultSet rs2 = null;
+		List<CarOrderVO> orderList =new ArrayList<>();
 		try {
 			con = ds.getConnection();
 			pstmt = con.prepareStatement(FIND_MEMNO_ORDER);
 			pstmt.setString(1,memNo);
 			rs = pstmt.executeQuery();
-			orderList = new ArrayList<>();
 			while(rs.next()){
 				CarOrderVO carOrderVO = new CarOrderVO();
 				carOrderVO.setOrderNo(rs.getString("ORDER_NO"));
@@ -134,8 +136,27 @@ public class CarOrderDAO implements CarOrderDAO_interface{
 				carOrderVO.setOrderStatus(rs.getString("ORDER_STATUS"));
 				orderList.add(carOrderVO);
 				System.out.println("抓出一筆會員派車定單");
+				
+				pstmt2 = con.prepareStatement(GET_DETAIL_BY_ORDERNO);
+				pstmt2.setString(1, carOrderVO.getOrderNo());
+				rs2 = pstmt2.executeQuery();
+				List<CarDetailVO> list = carOrderVO.getDetailList();
+	
+				while(rs2.next()){
+					CarDetailVO carDetailVO = new CarDetailVO();
+					carDetailVO.setDetialNo(rs2.getString("DETAIL_NO"));
+					carDetailVO.setDetailTime(rs2.getString("DETAIL_TIME"));
+					carDetailVO.setPassengerName(rs2.getString("PASSENGER_NAME"));
+					carDetailVO.setPassengerPhone(rs2.getInt("PASSENGER_PHONE"));
+					carDetailVO.setDetailDate(rs2.getDate("DETAIL_DATE"));
+					carDetailVO.setGetintoAddress(rs2.getString("GETINTO_ADDRESS"));
+					carDetailVO.setArrivalAddress(rs2.getString("ARRIVAL_ADDRESS"));
+					carDetailVO.setSendCarStatus(rs2.getString("SENDCAR_STATUS"));
+					System.out.println("抓出一筆會員派車明細");
+					list.add(carDetailVO);
+				}
+				orderList.add(carOrderVO);
 			}
-			return orderList;
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}finally{

@@ -21,7 +21,6 @@ import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 	
 
-@WebServlet("/MemberController")
 public class MemberController extends HttpServlet {
 	protected void doGet(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
 		doPost(req,res);

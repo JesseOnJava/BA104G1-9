@@ -112,7 +112,7 @@ MemberService MemberService = new MemberService();
 
 					<!-- 商城服務 ================================================== -->
 					<li><a
-						href="<%=request.getContextPath()%>/front/footerbar.jsp">商&nbsp&nbsp&nbsp&nbsp城</a>
+						href="#">商&nbsp&nbsp&nbsp&nbsp城</a>
 					</li>
 					<!-- 商城服務 ================================================== -->
 
@@ -149,12 +149,13 @@ MemberService MemberService = new MemberService();
 					</c:if>
 					<!-- 登入 / 註冊 ================================================== -->
 
+					
 					<c:choose>
-						<c:when test="${isLogin!=true}">
+						<c:when test="${memberVO==null}">
 							<li><a href="<%=request.getContextPath()%>/front/Login.jsp">登入
 									/ 註冊</a></li>
 						</c:when>
-						<c:when test="${isLogin==true}">
+						<c:when test="${memberVO!=null}">
 							<li><a
 								href="<%=request.getContextPath()%>/member/member.do?action=logout">登出</a></li>
 						</c:when>
@@ -182,9 +183,9 @@ MemberService MemberService = new MemberService();
 				<div class="row">
 					<ol class="breadcrumb">
 						<li><a href="#">首頁</a></li>
-						<li>
-						<li>會員管理</li>
-						</li>
+
+						<li>會員專區</li>
+
 						<li class="active">訂單管理</li>
 					</ol>
 					<ul class="nav nav-tabs" id="navList">

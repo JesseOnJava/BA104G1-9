@@ -9,8 +9,6 @@
     <welcome-file>default.htm</welcome-file>
     <welcome-file>default.jsp</welcome-file>
   </welcome-file-list>
-  
-  
   <servlet>
     <servlet-name>MemberServlet</servlet-name>
     <servlet-class>com.member.controller.MemberServlet</servlet-class>
@@ -19,7 +17,6 @@
     <servlet-name>MemberServlet</servlet-name>
     <url-pattern>/member/member.do</url-pattern>
   </servlet-mapping>
-  
   <servlet>
     <servlet-name>EmployeeServlet</servlet-name>
     <servlet-class>com.employee.controller.EmployeeServlet</servlet-class>
@@ -28,10 +25,6 @@
     <servlet-name>EmployeeServlet</servlet-name>
     <url-pattern>/employee/employee.do</url-pattern>
   </servlet-mapping>
-  
-  
-    <!--************************************************************oo************************************************************ -->
-  
   <servlet>
     <servlet-name>NewsdetailServlet</servlet-name>
     <servlet-class>com.newsdetail.controller.NewsdetailServlet</servlet-class>
@@ -80,8 +73,6 @@
     <servlet-name>ShopComplainServlet</servlet-name>
     <url-pattern>/shopcomplain/shopcomplain.do</url-pattern>
   </servlet-mapping>
- 
- 
   <servlet>
     <servlet-name>NewsDBGifReader</servlet-name>
     <servlet-class>com.newsdetail.controller.NewsDBGifReader</servlet-class>
@@ -98,24 +89,72 @@
     <servlet-name>HealthNewsDBGifReader</servlet-name>
     <url-pattern>/healthnewsdetail/healthimgread.do</url-pattern>
   </servlet-mapping>
+  <servlet>
+    <servlet-name>AndroidMemberController</servlet-name>
+    <servlet-class>com.android.member.controller.MemberController</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>AndroidMemberController</servlet-name>
+    <url-pattern>/android/MemberController</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <servlet-name>AndroidSetMealController</servlet-name>
+    <servlet-class>com.android.setMeal.controller.SetMealController</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>AndroidSetMealController</servlet-name>
+    <url-pattern>/android/SetMealController</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <servlet-name>AndroidMealOrderController</servlet-name>
+    <servlet-class>com.android.mealOrder.controller.MealOrderController</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>AndroidMealOrderController</servlet-name>
+    <url-pattern>/android/MealOrderController</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <servlet-name>AndroidHcEmpController</servlet-name>
+    <servlet-class>com.android.emp.controller.HcEmpController</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>AndroidHcEmpController</servlet-name>
+    <url-pattern>/android/HcEmpController</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <servlet-name>AndroidCarTypeController</servlet-name>
+    <servlet-class>com.android.carType.controller.CarTypeController</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>AndroidCarTypeController</servlet-name>
+    <url-pattern>/android/CarTypeController</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <servlet-name>AndroidCarOrderController</servlet-name>
+    <servlet-class>com.android.carOrder.controller.CarOrderController</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>AndroidCarOrderController</servlet-name>
+    <url-pattern>/android/CarOrderController</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <servlet-name>AndroidHcOrderMasterController</servlet-name>
+    <servlet-class>com.android.hcOrderMaster.controller.HcOrderMasterController</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>AndroidHcOrderMasterController</servlet-name>
+    <url-pattern>/android/HcOrderMasterController</url-pattern>
+  </servlet-mapping>
   
-<!--************************************************************oo************************************************************ -->
   
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
+   <servlet>
+    <servlet-name>AndroidEmpServiceDetailController</servlet-name>
+    <servlet-class>com.android.websocket.EmpServiceDetailController</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>AndroidEmpServiceDetailController</servlet-name>
+    <url-pattern>/android/EmpServiceDetailController</url-pattern>
+  </servlet-mapping>
   
   
   <filter>
@@ -124,8 +163,8 @@
   </filter>
   <filter-mapping>
     <filter-name>loginFilter</filter-name>
-    <url-pattern>/front/footerbar.jsp</url-pattern>
-    
+    <url-pattern>/front/member/MemberHcOrder.jsp</url-pattern>
+    <url-pattern>/front/member/MemberInfo.jsp</url-pattern>
     <dispatcher>REQUEST</dispatcher>
     <dispatcher>FORWARD</dispatcher>
     <dispatcher>INCLUDE</dispatcher>
