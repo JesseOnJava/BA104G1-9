@@ -5,9 +5,10 @@
 
 <jsp:useBean id="shopOrderSvc"
 	class="com.shoporder.model.ShopOrderService" />
-	
 
-<% String orderNO = "0";
+
+<%
+	String orderNO = "0";
 %>
 
 <!DOCTYPE html>
@@ -178,9 +179,9 @@
 				<div class="row">
 					<ol class="breadcrumb">
 						<li><a href="#">首頁</a></li>
-						<li>
-						<li>會員管理</li>
-						</li>
+
+						<li>會員專區</li>
+
 						<li class="active">訂單管理</li>
 					</ol>
 					<ul class="nav nav-tabs" id="navList">

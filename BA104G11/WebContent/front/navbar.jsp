@@ -145,12 +145,13 @@
 					</c:if>
 					<!-- 登入 / 註冊 ================================================== -->
 
+					
 					<c:choose>
-						<c:when test="${isLogin!=true}">
+						<c:when test="${memberVO==null}">
 							<li><a href="<%=request.getContextPath()%>/front/Login.jsp">登入
 									/ 註冊</a></li>
 						</c:when>
-						<c:when test="${isLogin==true}">
+						<c:when test="${memberVO!=null}">
 							<li><a
 								href="<%=request.getContextPath()%>/member/member.do?action=logout">登出</a></li>
 						</c:when>

@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.List;
 
 import com.android.mealOrderDetail.model.MealOrderDetailVO;
@@ -16,7 +17,7 @@ public class MealOrderVO implements Serializable{
 	private String rcptName;
 	private String rcptAdd;
 	private String rcptPhone;
-	private List<MealOrderDetailVO> detailList ;
+	private List<MealOrderDetailVO> detailList = new ArrayList<>();
 	public MealOrderVO(){
 		
 	}

@@ -5,14 +5,23 @@
 
 <%@ include file="/front/navbar.jsp"%>
 
- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
- 
- 
- 
+<link rel="stylesheet"
+	href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+
+
+
 <head>
 </head>
 <body>
 	<div class="container-fluid">
+	<div class="row">
+		<div class="col-sm-12">
+			<ol class="breadcrumb">
+				<li><a href="#">首頁</a></li>
+				<li>登入/註冊</li>
+				<li class="active">註冊會員</li>
+			</ol>
+		</div>
 		<div class="col-xs-12 col-sm-8 col-sm-offset-2">
 			<form class="well form-horizontal"
 				action="<%=request.getContextPath()%>/member/member.do?action=insert"
@@ -64,7 +73,8 @@
 							<div class="input-group">
 								<span class="input-group-addon"><i
 									class="glyphicon glyphicon-edit"></i></span> <input name="memPWD"
-									placeholder="enter passwork again" class="form-control" type="password">
+									placeholder="enter passwork again" class="form-control"
+									type="password">
 							</div>
 						</div>
 					</div>
@@ -113,9 +123,8 @@
 						<div class="col-md-6 inputGroupContainer">
 							<div class="input-group">
 								<span class="input-group-addon"><i
-									class="glyphicon glyphicon-home"></i></span> <input
-									name="address" placeholder="Address"
-									class="form-control" type="text">
+									class="glyphicon glyphicon-home"></i></span> <input name="address"
+									placeholder="Address" class="form-control" type="text">
 							</div>
 						</div>
 					</div>
@@ -129,14 +138,14 @@
 
 						</div>
 					</div>
-<!-- ------------------------------------------------神奇小按鈕----------------------------------------------------------------------- -->
+					<!-- ------------------------------------------------神奇小按鈕----------------------------------------------------------------------- -->
 					<div class="form-group">
 						<label class="col-sm-1"></label>
 						<div class="col-sm-1">
 							<span class="btn btn-default" />
 						</div>
 					</div>
-<!-- ----------------------------------------------------------------------------------------------------------------------- -->					
+					<!-- ----------------------------------------------------------------------------------------------------------------------- -->
 					<!-- Button -->
 					<div class="form-group">
 						<label class="col-md-4 col-sm-4 col-sm-offset-1 control-label"></label>
@@ -150,11 +159,13 @@
 			</form>
 		</div>
 	</div>
+	
 
-
-<%@ include file="/front/footerbar.jsp"%>
-<script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
-<script src="<%=request.getContextPath()%>/front/js/navbar/bootstrap.min.js"></script>
-<script src="<%=request.getContextPath()%>/front/js/navbar/usebootstrap.js"></script>
+	<%@ include file="/front/footerbar.jsp"%>
+	<script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
+	<script
+		src="<%=request.getContextPath()%>/front/js/navbar/bootstrap.min.js"></script>
+	<script
+		src="<%=request.getContextPath()%>/front/js/navbar/usebootstrap.js"></script>
 </body>
 </html>
