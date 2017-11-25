@@ -2,7 +2,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ page import="java.util.*"%>
 <%@ page import="com.member.model.*"%>
-<%@ page import="com.hcorder.model.*"%>
+<%@ page import="com.hcorder.modal.*"%>
 
 <jsp:useBean id="hcOrderSvc"
 	class="com.hcorder.modal.HcOrderMasterService" />
