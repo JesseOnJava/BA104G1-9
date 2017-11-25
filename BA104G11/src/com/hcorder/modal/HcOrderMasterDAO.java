@@ -20,11 +20,13 @@ public class HcOrderMasterDAO implements HcOrderMasterDAO_interface{
 	static {
 		try {
 			Context ctx = new InitialContext();
-			ds = (DataSource) ctx.lookup("java:comp/env/jdbc/BA104G1BD");
+			ds = (DataSource) ctx.lookup("java:comp/env/jdbc/BA104G1DB");
 		} catch (NamingException e) {
 			e.printStackTrace();
 		}
 	}
+	
+	
 	private static final String INSERT_STMT = 
 			"INSERT INTO HC_ORDER_MASTER (ORDER_NO,MEM_NO,ORDER_DATE,CARED_NO,ORDER_STATUS) "
 			+ "VALUES(TO_CHAR(SYSDATE,'yyyymmdd')||'-'||LPAD(HC_ORDER_NO_SEQ.NEXTVAL,6,'0'),?,CURRENT_TIMESTAMP,?,?)";
@@ -41,6 +43,12 @@ public class HcOrderMasterDAO implements HcOrderMasterDAO_interface{
 	
 	private static final String UPDATE = 
 		"UPDATE HC_ORDER_MASTER SET CARED_NO=?, ORDER_STATUS=? where ORDER_NO = ?";
+	
+	private static final String GET_BY_MEM_NO = "SELECT * FROM HC_ORDER_MASTER WHERE MEM_NO = ?";
+	
+	
+	
+	
 	
 	public String insert(HcOrderMasterVO hcOrderMasterVO,List<HcOrderDetailVO> list) {
 
@@ -270,6 +278,42 @@ public class HcOrderMasterDAO implements HcOrderMasterDAO_interface{
 			// TODO Auto-generated method stub
 			return null;
 		}
-	
+		@Override
+		public List<HcOrderMasterVO> getByMemNo(String memNo) {
+			Connection con = null;
+			PreparedStatement pstmt = null;
+			ResultSet rs = null;
+			List<HcOrderMasterVO> orderList = new ArrayList<>();
+			try {
+				con = ds.getConnection();
+				pstmt = con.prepareStatement(GET_BY_MEM_NO);
+				pstmt.setString(1, memNo);
+				rs = pstmt.executeQuery();
+				while(rs.next()){
+					HcOrderMasterVO order = new HcOrderMasterVO();
+					order.setOrderNo(rs.getString("ORDER_NO"));
+					order.setOrderDate(rs.getDate("ORDER_DATE"));
+					order.setOrderStatus(rs.getString("ORDER_STATUS"));
+					order.setCaredNo(rs.getString("CARED_NO"));
+					orderList.add(order);
+				}
+				
+				
+			} catch (SQLException e){ 
+				e.printStackTrace();
+			}finally{
+				if(con!=null){
+					try {
+						con.close();
+					} catch (SQLException e) {
+						e.printStackTrace();
+					}
+				}
+			}
+			
+			return orderList;
+		}
+		
+		
 
 }

@@ -17,7 +17,7 @@ public class EmployeeDAO implements EmployeeDAO_interface {
 	private static final String GET_ONE_STMT = "SELECT * FROM EMPLOYEE WHERE EMP_NO=?";
 	private static final String GET_ONE_BYMEMID = "SELECT * FROM EMPLOYEE WHERE EMP_ID=?";
 	private static final String GET_BY_DEP = "SELECT * FROM  EMPLOYEE WHERE EMP_DEP = ? ";
-	private static final String UPDATE = "UPDATE EMPLOYEE SET EMP_NAME = ?,EMP_PHONE = ?,EMP_GENDER = ?,EMP_EMAIL = ?,EMP_DEP=?,AUTHORITY_NO=?,EMP_TITLE=?,EMP_ID=?,EMP_PWD=?,EMP_BRANCHES=? WHERE EMP_NO=?";
+	private static final String UPDATE = "UPDATE EMPLOYEE SET EMP_NAME = ?,EMP_PHONE = ?,EMP_GENDER = ?,EMP_EMAIL = ?,EMP_DEP=?,AUTHORITY_NO=?,EMP_TITLE=?,EMP_ID=?,EMP_PWD=?,EMP_BRANCHES=?,EMP_STATUS= ? WHERE EMP_NO=?";
 
 	static {
 		try {
@@ -84,7 +84,9 @@ public class EmployeeDAO implements EmployeeDAO_interface {
 			pstmt.setString(8,  employeeVO.getEmpId());
 			pstmt.setString(9,  employeeVO.getEmpPwd());
 			pstmt.setString(10, employeeVO.getEmpBranches());
-			pstmt.setString(11, employeeVO.getEmpNo());
+			pstmt.setString(11, employeeVO.getEmpStatus());
+			pstmt.setString(12, employeeVO.getEmpNo());
+			
 			
 			int i = pstmt.executeUpdate();
 			System.out.println("成功更新"+i+"筆員工資料");

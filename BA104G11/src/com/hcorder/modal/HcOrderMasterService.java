@@ -14,6 +14,12 @@ public class HcOrderMasterService {
 		dao = new HcOrderJDBCDAO();
 	}
 	
+	public List<HcOrderMasterVO> getByMemNo(String memNo){
+		return dao.getByMemNo(memNo);
+	}
+	
+	
+	
 	public HcOrderMasterVO addHcOrderMaster(String memNo, String caredNo, String orderStatus,
 			Date serviceDate,String serviceTime,String empNo ){
 		

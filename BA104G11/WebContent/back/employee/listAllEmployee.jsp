@@ -265,17 +265,16 @@ h4 {
 									</div>
 								</div>
 							</div>
+							
 							<div class="form-group">
 								<label class="col-md-4 control-label">員工部門</label>
 								<div class="col-md-4 selectContainer">
 									<div class="input-group">
 										<select name="empDep" class="form-control selectpicker">
-											<option value="">選擇部門</option>
-											<option value="春我部地球防衛隊總部">春我部地球防衛隊總部</option>
-											<option value="長照">長照部門</option>
-											<option value="派車">派車部門</option>
-											<option value="送餐">送餐部門</option>
-											<option value="後勤">後勤部門</option>
+											<option value="長照" ${empVO.empDep.equals("長照") ?"selected" :"" }>長照部門</option>
+											<option value="派車" ${empVO.empDep.equals("派車") ?"selected" :"" }>派車部門</option>
+											<option value="送餐" ${empVO.empDep.equals("送餐") ?"selected" :"" }>送餐部門</option>
+											<option value="後勤" ${empVO.empDep.equals("後勤") ?"selected" :"" }>後勤部門</option>
 										</select>
 									</div>
 								</div>
@@ -285,12 +284,11 @@ h4 {
 								<div class="col-md-4 selectContainer">
 									<div class="input-group">
 										<select name="empBranches" class="form-control selectpicker">
-											<option value="">選擇據點</option>
-											<option value="10">台北分部</option>
-											<option value="20">桃園分部</option>
-											<option value="30">台中分部</option>
-											<option value="40">台南分部</option>
-											<option value="50">高雄分部</option>
+											<option value="10" ${empVO.empBranches.equals("10") ?"selected" :"" }>台北分部</option>
+											<option value="20" ${empVO.empBranches.equals("20") ?"selected" :"" }>桃園分部</option>
+											<option value="30" ${empVO.empBranches.equals("30") ?"selected" :"" }>台中分部</option>
+											<option value="40" ${empVO.empBranches.equals("40") ?"selected" :"" }>台南分部</option>
+											<option value="50" ${empVO.empBranches.equals("50") ?"selected" :"" }>高雄分部</option>
 										</select>
 									</div>
 								</div>
@@ -300,11 +298,9 @@ h4 {
 								<div class="col-md-4 selectContainer">
 									<div class="input-group">
 										<select name="empTitle" class="form-control selectpicker">
-											<option value="">選擇職位</option>
-											<option value="總經理">總經理</option>
-											<option value="分部經理">分部經理</option>
-											<option value="分部課長">分部課長</option>
-											<option value="分部專員">分部專員</option>
+											<option value="總經理" ${empVO.empTitle.equals("總經理") ?"selected" :"" }>總經理</option>
+											<option value="分部經理" ${empVO.empTitle.equals("分部經理") ?"selected" :"" }>分部經理</option>
+											<option value="專員" ${empVO.empTitle.equals("專員") ?"selected" :"" }>分部專員</option>
 										</select>
 									</div>
 								</div>
@@ -314,10 +310,23 @@ h4 {
 								<div class="col-md-4 selectContainer">
 									<div class="input-group">
 										<select name="authorityNo" class="form-control selectpicker">
-											<option value="總經理">總經理</option>
-											<option value="部門經理">部門經理</option>
-											<option value="管理員">管理員</option>
-											<option value="一般專員">一般專員</option>
+											<option value="總經理" ${empVO.authorityNo.equals("總經理") ?"selected" :"" } >總經理</option>
+											<option value="部門經理" ${empVO.authorityNo.equals("部門經理") ?"selected" :"" } >部門經理</option>
+											<option value="管理員" ${empVO.authorityNo.equals("管理員") ?"selected" :"" } >管理員</option>
+											<option value="派車人員" ${empVO.authorityNo.equals("派車人員") ?"selected" :"" } >派車人員</option>
+											<option value="長照人員" ${empVO.authorityNo.equals("長照人員") ?"selected" :"" } >長照人員</option>
+											<option value="送餐人員" ${empVO.authorityNo.equals("送餐人員") ?"selected" :"" } >送餐人員</option>
+										</select>
+									</div>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-md-4 control-label">員工權限</label>
+								<div class="col-md-4 selectContainer">
+									<div class="input-group">
+										<select name="empStatus" class="form-control selectpicker">
+											<option value="on" ${empVO.empStatus.toLowerCase().equals("on") ?"selected":""}>就職中</option>
+											<option value="off" ${empVO.empStatus.toLowerCase().equals("on") ?"" :"selected"}>離職</option>
 										</select>
 									</div>
 								</div>
