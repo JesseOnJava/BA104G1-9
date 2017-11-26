@@ -10,15 +10,6 @@ public class ShopOrderService {
 		dao=new ShopOrderDAO();
 	}
 	
-	//******************************************
-	public List<ShopOrderVO> getMemNo(String memNo){
-		return dao.getMemNo(memNo);
-	}
-	//******************************************
-	
-	
-	
-	
 	public List<ShopOrderVO> getAllByOrderNo(String orderno){
 		return dao.getAllByOrderNo(orderno);
 	}
@@ -62,6 +53,15 @@ public class ShopOrderService {
 	}
 	public List<ShopOrderVO> getPriceByOrderNo(String orderno){
 		return dao.getPriceByOrderNo(orderno);
+	}
+	public void changeOrderToOK(String orderno){
+		dao.changeOrderToOK(orderno);
+	}
+	public void changeOrderToCancel(String orderno){
+		dao.changeOrderToCancel(orderno);
+	}
+	public void addPointForMember(Integer point, String memno){
+		dao.addPointForMember(point, memno);
 	}
 	
 }

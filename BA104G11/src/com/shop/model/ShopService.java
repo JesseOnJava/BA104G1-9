@@ -51,11 +51,18 @@ public class ShopService {
 		return dao.findByPrimaryKeyByString(shopNO);
 	}
 
+	public List<ShopVO> findByPrimaryKeyByString2(String pkName) {
+		return dao.findByPrimaryKeyByString2(pkName);
+	}
+	
 	public List<ShopVO> getAll() {
 		return dao.getAll();
 	}
 
 	public List<ShopVO> getAllFromBack() {
 		return dao.getAllFromBack();
+	}
+	public void deleteProShop(Integer itemno,Integer promotiomno) {
+		dao.deleteProShop(itemno, promotiomno);
 	}
 }

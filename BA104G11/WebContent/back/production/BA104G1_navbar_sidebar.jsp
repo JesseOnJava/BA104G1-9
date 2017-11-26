@@ -131,13 +131,14 @@
 										<li><a href="#">Dashboard3</a></li>
 									</ul></li>
 
-								<li><a><i class="fa fa-home"></i> 商城管理 <span
-										class="fa fa-chevron-down"></span></a>
-									<ul class="nav child_menu">
-										<li><a href="#">Dashboard</a></li>
-										<li><a href="#">Dashboard2</a></li>
-										<li><a href="#">Dashboard3</a></li>
-									</ul></li>
+								<li><a><i class="fa fa-home"></i> 商城管理 <span class="fa fa-chevron-down"></span></a>
+									   <ul class="nav child_menu">
+                      <li><a href="<%=request.getContextPath()%>/back/production/BA104G1_back_ShopMaster.jsp">訂單管理</a></li>
+                      <li><a href="<%=request.getContextPath()%>/back/production/BA104G1_back_ShopADD.jsp">新增商品</a></li>
+                      <li><a href="<%=request.getContextPath()%>/back/production/BA104G1_back_ShopSearch.jsp">瀏覽商品</a></li>
+                      <li><a href="<%=request.getContextPath()%>/back/production/BA104G1_back_ShopProSearch.jsp">促銷商品</a></li>
+                    </ul>
+									</li>
 
 							</ul>
 						</div>

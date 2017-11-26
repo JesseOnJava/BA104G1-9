@@ -25,7 +25,7 @@ public class CartServlet extends HttpServlet {
 	}
 	
 	public void doPost(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
-System.out.println("¶i¤Jcartservlet");
+System.out.println("é€²å…¥cartservlet");
 		req.setCharacterEncoding("UTF-8");
 		// res.setContentType("text/html; charset=UTF-8");
 		// PrintWriter out = res.getWriter();
@@ -44,37 +44,37 @@ System.out.println("¶i¤Jcartservlet");
 		}
 		if (!action.equals("CHECKOUT")) {
 
-			// §R°£ÁÊª«¨®¤¤ªº®ÑÄy
+			// åˆªé™¤è³¼ç‰©è»Šä¸­çš„æ›¸ç±
 			if (action.equals("DELETE")) {
-				System.out.println("¶i¤Jcartservlet.DELETE");
+				System.out.println("é€²å…¥cartservlet.DELETE");
 				String del = req.getParameter("del");
 //				String price = req.getParameter("price");
 				int d = Integer.parseInt(del);
 				buylist.removeElementAt(d);
 				
 			}
-			// ·s¼W®ÑÄy¦ÜÁÊª«¨®¤¤
+			// æ–°å¢æ›¸ç±è‡³è³¼ç‰©è»Šä¸­
 			else if (action.equals("ADD")) {
 				boolean match = false;
-				// ¨ú±o«á¨Ó·s¼Wªº®ÑÄy
+				// å–å¾—å¾Œä¾†æ–°å¢çš„æ›¸ç±
 				CartService CartSvc = new CartService();
-				// ³oÃä´ú¸Õ¥Îstock°t¦X«eºô­¶°Ñ¼Æ,¹ê»Ú°Ñ¼Æ¬Oquantity
+				// é€™é‚Šæ¸¬è©¦ç”¨stocké…åˆå‰ç¶²é åƒæ•¸,å¯¦éš›åƒæ•¸æ˜¯quantity
 				Integer ITEMNO = Integer.parseInt(req.getParameter("ITEMNO"));
 				Integer STOCK = Integer.parseInt(req.getParameter("STOCK"));
 				
 
 				if (STOCK == 0) {
-					errorMsgs.add("°Ó«~¼Æ¶q¤£¥i¬°0");
+					errorMsgs.add("å•†å“æ•¸é‡ä¸å¯ç‚º0");
 				}
 				if (!errorMsgs.isEmpty()) {
 					RequestDispatcher failureView = req.getRequestDispatcher("/listAll.jsp");
 					failureView.forward(req, res);
-					return;// µ{¦¡¤¤Â_
+					return;// ç¨‹å¼ä¸­æ–·
 				}
 				
 				CartVO CartVO = CartSvc.findshop(ITEMNO, STOCK);
 				// CartVO CartVO = getCartVO(req);
-				// ·s¼W²Ä¤@¥»®ÑÄy¦ÜÁÊª«¨®®É
+				// æ–°å¢ç¬¬ä¸€æœ¬æ›¸ç±è‡³è³¼ç‰©è»Šæ™‚
 				if (buylist == null) {
 					buylist = new Vector<CartVO>();
 					buylist.add(CartVO);
@@ -82,45 +82,45 @@ System.out.println("¶i¤Jcartservlet");
 					for (int i = 0; i < buylist.size(); i++) {
 						CartVO cartVO = buylist.get(i);
 
-						// °²­Y·s¼Wªº®ÑÄy©MÁÊª«¨®ªº®ÑÄy¤@¼Ë®É
+						// å‡è‹¥æ–°å¢çš„æ›¸ç±å’Œè³¼ç‰©è»Šçš„æ›¸ç±ä¸€æ¨£æ™‚
 						if (cartVO.getNAME().equals(CartVO.getNAME())) {
 							cartVO.setQUANTITY(cartVO.getQUANTITY() + CartVO.getQUANTITY());
 							buylist.setElementAt(cartVO, i);
-							System.out.println("·s¼W¨ì­«½Æªº°Ó«~¦WºÙ :" + cartVO.getNAME());
+							System.out.println("æ–°å¢åˆ°é‡è¤‡çš„å•†å“åç¨± :" + cartVO.getNAME());
 							match = true;
-							System.out.println("´Á¼Ğ¤w³Q§ó§ï");
+							System.out.println("æœŸæ¨™å·²è¢«æ›´æ”¹");
 						} // end of if name matches
-						// System.out.println("¿ï¾Üªº°Ó«~¦WºÙ"+cartVO.getNAME());
-						// System.out.println("¿ï¾Üªº°Ó«~¼Æ¶q"+cartVO.getQuantity());
-						// System.out.println("¿ï¾Üªº°Ó«~´y­z"+cartVO.getDES());
-						// System.out.println("¿ï¾Üªº°Ó«~½s¸¹"+cartVO.getITEMNO());
-						// System.out.println("¿ï¾Üªº°Ó«~»ù®æ"+cartVO.getPRICE());
+						// System.out.println("é¸æ“‡çš„å•†å“åç¨±"+cartVO.getNAME());
+						// System.out.println("é¸æ“‡çš„å•†å“æ•¸é‡"+cartVO.getQuantity());
+						// System.out.println("é¸æ“‡çš„å•†å“æè¿°"+cartVO.getDES());
+						// System.out.println("é¸æ“‡çš„å•†å“ç·¨è™Ÿ"+cartVO.getITEMNO());
+						// System.out.println("é¸æ“‡çš„å•†å“åƒ¹æ ¼"+cartVO.getPRICE());
 					} // end of for
 
-					// °²­Y·s¼Wªº®ÑÄy©MÁÊª«¨®ªº®ÑÄy¤£¤@¼Ë®É
+					// å‡è‹¥æ–°å¢çš„æ›¸ç±å’Œè³¼ç‰©è»Šçš„æ›¸ç±ä¸ä¸€æ¨£æ™‚
 					if (!match)
 						buylist.add(CartVO);
 				}
 			}else if (action.equals("ADD2")) {
 				boolean match = false;
-				// ¨ú±o«á¨Ó·s¼Wªº®ÑÄy
+				// å–å¾—å¾Œä¾†æ–°å¢çš„æ›¸ç±
 				CartService CartSvc = new CartService();
-				// ³oÃä´ú¸Õ¥Îstock°t¦X«eºô­¶°Ñ¼Æ,¹ê»Ú°Ñ¼Æ¬Oquantity
+				// é€™é‚Šæ¸¬è©¦ç”¨stocké…åˆå‰ç¶²é åƒæ•¸,å¯¦éš›åƒæ•¸æ˜¯quantity
 				Integer ITEMNO = Integer.parseInt(req.getParameter("ITEMNO"));
 				Integer STOCK = Integer.parseInt(req.getParameter("STOCK"));
 
 				if (STOCK == 0) {
-					errorMsgs.add("°Ó«~¼Æ¶q¤£¥i¬°0");
+					errorMsgs.add("å•†å“æ•¸é‡ä¸å¯ç‚º0");
 				}
 				if (!errorMsgs.isEmpty()) {
 					RequestDispatcher failureView = req.getRequestDispatcher("/listAll.jsp");
 					failureView.forward(req, res);
-					return;// µ{¦¡¤¤Â_
+					return;// ç¨‹å¼ä¸­æ–·
 				}
-				System.out.println("findshopbypro¶}©l");
+				System.out.println("findshopbyproé–‹å§‹");
 				CartVO CartVO = CartSvc.findshopbypro(ITEMNO, STOCK);
 				// CartVO CartVO = getCartVO(req);
-				// ·s¼W²Ä¤@¥»®ÑÄy¦ÜÁÊª«¨®®É
+				// æ–°å¢ç¬¬ä¸€æœ¬æ›¸ç±è‡³è³¼ç‰©è»Šæ™‚
 				if (buylist == null) {
 					buylist = new Vector<CartVO>();
 					buylist.add(CartVO);
@@ -128,22 +128,22 @@ System.out.println("¶i¤Jcartservlet");
 					for (int i = 0; i < buylist.size(); i++) {
 						CartVO cartVO = buylist.get(i);
 
-						// °²­Y·s¼Wªº®ÑÄy©MÁÊª«¨®ªº®ÑÄy¤@¼Ë®É
+						// å‡è‹¥æ–°å¢çš„æ›¸ç±å’Œè³¼ç‰©è»Šçš„æ›¸ç±ä¸€æ¨£æ™‚
 						if (cartVO.getNAME().equals(CartVO.getNAME())) {
 							cartVO.setQUANTITY(cartVO.getQUANTITY() + CartVO.getQUANTITY());
 							buylist.setElementAt(cartVO, i);
-							System.out.println("·s¼W¨ì­«½Æªº°Ó«~¦WºÙ :" + cartVO.getNAME());
+							System.out.println("æ–°å¢åˆ°é‡è¤‡çš„å•†å“åç¨± :" + cartVO.getNAME());
 							match = true;
-							System.out.println("´Á¼Ğ¤w³Q§ó§ï");
+							System.out.println("æœŸæ¨™å·²è¢«æ›´æ”¹");
 						} // end of if name matches
-						// System.out.println("¿ï¾Üªº°Ó«~¦WºÙ"+cartVO.getNAME());
-						// System.out.println("¿ï¾Üªº°Ó«~¼Æ¶q"+cartVO.getQuantity());
-						// System.out.println("¿ï¾Üªº°Ó«~´y­z"+cartVO.getDES());
-						// System.out.println("¿ï¾Üªº°Ó«~½s¸¹"+cartVO.getITEMNO());
-						// System.out.println("¿ï¾Üªº°Ó«~»ù®æ"+cartVO.getPRICE());
+						// System.out.println("é¸æ“‡çš„å•†å“åç¨±"+cartVO.getNAME());
+						// System.out.println("é¸æ“‡çš„å•†å“æ•¸é‡"+cartVO.getQuantity());
+						// System.out.println("é¸æ“‡çš„å•†å“æè¿°"+cartVO.getDES());
+						// System.out.println("é¸æ“‡çš„å•†å“ç·¨è™Ÿ"+cartVO.getITEMNO());
+						// System.out.println("é¸æ“‡çš„å•†å“åƒ¹æ ¼"+cartVO.getPRICE());
 					} // end of for
 
-					// °²­Y·s¼Wªº®ÑÄy©MÁÊª«¨®ªº®ÑÄy¤£¤@¼Ë®É
+					// å‡è‹¥æ–°å¢çš„æ›¸ç±å’Œè³¼ç‰©è»Šçš„æ›¸ç±ä¸ä¸€æ¨£æ™‚
 					if (!match)
 						buylist.add(CartVO);
 				}
@@ -171,15 +171,15 @@ System.out.println("¶i¤Jcartservlet");
 			session.setAttribute("amount", amount);
 			req.setAttribute("amount", amount);
 			
-			//¨C­ÓCARTVO±a¹L¥hªº°Ñ¼Æ¦³NAME,PRICE,DES,QUANTITY,ITEMNO
+			//æ¯å€‹CARTVOå¸¶éå»çš„åƒæ•¸æœ‰NAME,PRICE,DES,QUANTITY,ITEMNO
 			session.setAttribute("shoppingcart", buylist);
-			System.out.println("forward¨ì/Shop/listAll.jsp");
+			System.out.println("forwardåˆ°/Shop/listAll.jsp");
 			String url = "/MasterOrder/Cart.jsp";
 			RequestDispatcher rd = req.getRequestDispatcher(url);
 			rd.forward(req, res);
 		}
 
-		// µ²±b¡A­pºâÁÊª«¨®®ÑÄy»ù¿úÁ`¼Æ
+		// çµå¸³ï¼Œè¨ˆç®—è³¼ç‰©è»Šæ›¸ç±åƒ¹éŒ¢ç¸½æ•¸
 		else if (action.equals("CHECKOUT")) {
 			
 			float total = 0;
@@ -210,7 +210,7 @@ System.out.println("¶i¤Jcartservlet");
 		String STATE = req.getParameter("STATE");
 		String DES = req.getParameter("DES");
 		String NAME = req.getParameter("NAME");
-		// ­È¤J¦ÛªvÁÊª«¨®±M¥Îbean
+		// å€¼å…¥è‡ªæ²»è³¼ç‰©è»Šå°ˆç”¨bean
 		CartVO CartVO = new CartVO();
 		CartVO.setNAME(NAME);
 		CartVO.setITEMNO(ITEMNO);

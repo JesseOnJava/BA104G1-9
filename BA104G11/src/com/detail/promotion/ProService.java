@@ -43,40 +43,47 @@ public class ProService {
 	public void deleteEmp(Integer proVO) {
 		dao.delete(proVO);
 	}
+	public ProVO getProProjectNow() {
+		return dao.getProProjectNow();
+	}
 
-	//§A¦n¡A§Ú¬Oupdate±M¥Îªº
+	//ä½ å¥½ï¼Œæˆ‘æ˜¯updateå°ˆç”¨çš„
 	public ProVO getOneEmp(Integer proVO) {
 		return dao.findByPrimaryKey(proVO);
 	}
 	
-	//§A¦n¡A§Ú¬O¥Î±M®×½s¸¹¥h¬d¸ßªº
+	//ä½ å¥½ï¼Œæˆ‘æ˜¯ç”¨å°ˆæ¡ˆç·¨è™Ÿå»æŸ¥è©¢çš„
 	public ProVO getOneOnItemNO(int itemno){
 		return dao.getOneOnItemNO(itemno);
 	}
-	//§A¦n¡A§Ú¬O¥Î°Ó«~¦WºÙ¥h¬d¸ßªº
+	//ä½ å¥½ï¼Œæˆ‘æ˜¯ç”¨å•†å“åç¨±å»æŸ¥è©¢çš„
 	public ProVO getOneEmpForStringName(String actName){
 		return dao.getOneEmpForStringName(actName);
 	}
-	//§A¦n¡A§Ú¬O¥Î±M®×¦WºÙ¥h¬d¸ßªº(©Ò¥H·|¶Ç¦^«Ü¦h­Ó)
+	//ä½ å¥½ï¼Œæˆ‘æ˜¯ç”¨å°ˆæ¡ˆåç¨±å»æŸ¥è©¢çš„(æ‰€ä»¥æœƒå‚³å›å¾ˆå¤šå€‹)
 	public List<ProVO> getOneEmpbyString(String pk) {
 		return  dao.findByPrimaryKeyByString(pk);
 	}
-	//§A¦n¡A§Ú¬O¤@¦¸®³¥ş³¡ªº«P¾P°Ó«~
+	//ä½ å¥½ï¼Œæˆ‘æ˜¯ä¸€æ¬¡æ‹¿å…¨éƒ¨çš„ä¿ƒéŠ·å•†å“
 	public List<ProVO> getAllProNow() {
 		return dao.getAllProNow();
 	}
 	
-	//§A¦n¡A§Ú¬O¤@¦¸®³¥ş³¡ªº«P¾P±M®×
+	//ä½ å¥½ï¼Œæˆ‘æ˜¯ä¸€æ¬¡æ‹¿å…¨éƒ¨çš„ä¿ƒéŠ·å°ˆæ¡ˆ
 	public List<ProVO> getAllPro() {
 		return dao.getAllPro();
 	}
-	//§A¦n¡A§Ú¬O¤@¦¸®³¥ş³¡ªº«P¾P°Ó«~
+	//ä½ å¥½ï¼Œæˆ‘æ˜¯ä¸€æ¬¡æ‹¿å…¨éƒ¨çš„ä¿ƒéŠ·å•†å“
 	public List<ProVO> getAllProShop() {
 		return dao.getAllProShop();
 	}
-	//§A¦n¡A§Ú¬O¥Î°Ó«~½s¸¹®³·í«e«P¾P
+	//ä½ å¥½ï¼Œæˆ‘æ˜¯ç”¨å•†å“ç·¨è™Ÿæ‹¿ç•¶å‰ä¿ƒéŠ·
 	public ProVO getOneProShop(Integer itemno) {
 		return dao.getOneProShop(itemno);
+	}
+	//ä½ å¥½ï¼Œæˆ‘æ˜¯ç”¨å•†å“ç·¨è™Ÿæ‹¿ç•¶å‰ä¿ƒéŠ·
+	public void putShopInPromotion(Integer promotionno,Integer itemno,Integer price) {
+		dao.putShopInPromotion(promotionno, itemno, price);
 	}
 	
 }

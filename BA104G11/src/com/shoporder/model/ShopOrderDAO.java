@@ -19,12 +19,15 @@ import javax.sql.DataSource;
 import com.shop.model.ShopVO;
 
 public class ShopOrderDAO implements ShopOrderDAO_interface {
+	private static final String ADD_POINT_TO_MEMBER ="UPDATE MEMBER SET POINT =POINT+(?) WHERE MEM_NO=?";
+	private static final String CHANGE_ORDER_TO_OK ="UPDATE SHOPORDER SET ORDER_STATUS =2 WHERE ORDERNO=?";
+	private static final String CHANGE_ORDER_TO_CANCEL="UPDATE SHOPORDER SET ORDER_STATUS =3 WHERE ORDERNO=?";
 	private static final String GET_PROMOTIONPRICE_BY_ORDERNO ="SELECT OT.ORDERNO,OT.ITEMNO,ORDERCOUNT,MEM_NO,ORDER_DATE,CUSTOMER_ADDRESS,CUSTOMER_PHONE,CUSTOMER_NAME,SP.NAME,SP.PRICE FROM SHOPORDER S JOIN ORDERDETAIL OT  ON (OT.ORDERNO = S.ORDERNO) JOIN SHOPPINGMALL SP  ON SP.ITEMNO = OT.ITEMNO  WHERE OT.ORDERNO=?"; 
 	private static final String GET_ALL_BUY_PRICE_BY_ORDERNO = "SELECT OT.ORDERNO,PD.PROMOTIONNO,OT.ITEMNO,ORDERCOUNT,MEM_NO,ORDER_DATE,CUSTOMER_ADDRESS,CUSTOMER_PHONE,CUSTOMER_NAME,SP.NAME,SP.PRICE,PD.PRICE AS NEWPRICE FROM SHOPORDER S JOIN ORDERDETAIL OT  ON (OT.ORDERNO = S.ORDERNO)  JOIN SHOPPINGMALL SP  ON SP.ITEMNO = OT.ITEMNO JOIN PROMOTIONDETAIL PD ON SP.ITEMNO=PD.ITEMNO WHERE OT.ORDERNO=? AND PD.PROMOTIONNO=?";
 	private static final String GET_ALL_BUY_PRICE_BY_ORDERNO2 = "SELECT OT.ORDERNO,PD.PROMOTIONNO,OT.ITEMNO,ORDERCOUNT,MEM_NO,ORDER_DATE,CUSTOMER_ADDRESS,CUSTOMER_PHONE,CUSTOMER_NAME,SP.NAME,SP.PRICE,PD.PRICE AS NEWPRICE FROM SHOPORDER S JOIN ORDERDETAIL OT  ON (OT.ORDERNO = S.ORDERNO)  JOIN SHOPPINGMALL SP  ON SP.ITEMNO = OT.ITEMNO JOIN PROMOTIONDETAIL PD ON SP.ITEMNO=PD.ITEMNO WHERE OT.ORDERNO=?";
 	private static final String GET_POINT_BYMEMNO = "SELECT POINT FROM MEMBER WHERE MEM_NO=?";
 	private static final String UPDATE_MEMBER_POINT = "UPDATE MEMBER  SET POINT=? WHERE MEM_NO=?";
-	private static final String GET_ALL = "SELECT ORDERNO ,MEM_NO,ORDER_DATE,CUSTOMER_NAME,ORDER_STATUS FROM SHOPORDER ORDER BY ORDERNO";
+	private static final String GET_ALL = "SELECT ORDERNO ,MEM_NO,ORDER_DATE,CUSTOMER_NAME,ORDER_STATUS FROM SHOPORDER ORDER BY ORDERNO DESC";
 	private static final String GET_ALL_ORDER_BY_DATE = "SELECT ORDERNO ,MEM_NO,ORDER_DATE,CUSTOMER_NAME FROM SHOPORDER ORDER BY ORDER_DATE DESC";
 	private static final String GET_ALL_ORDER_BY_ORDERNO = "SELECT ORDERNO ,MEM_NO,ORDER_DATE,CUSTOMER_NAME FROM SHOPORDER ORDER BY ORDERNO";
 	private static final String DELETE_ORDERDETAIL = "DELETE FROM ORDERDETAIL where ORDERNO =?";
@@ -46,80 +49,7 @@ public class ShopOrderDAO implements ShopOrderDAO_interface {
 			e.printStackTrace();
 		}
 	}
-	//********************************************************
-	private static final String GETMEMNO = "SELECT * FROM SHOPORDER WHERE MEM_NO=?";
-	private static final String GETORDERNO = "SELECT * FROM ORDERDETAIL WHERE ORDERNO=?";
-	
-	public List<ShopOrderVO> getMemNo(String memNo){
-		List<ShopOrderVO> list = new ArrayList<ShopOrderVO>();
-		Connection con = null;
-		PreparedStatement pstmt = null;
-		ResultSet rs = null;
 
-		try {
-			con = ds.getConnection();
-			pstmt = con.prepareStatement(GETMEMNO);
-			
-			pstmt.setString(1, memNo);
-			rs = pstmt.executeQuery();
-			while (rs.next()) {
-				ShopOrderVO shoporderVO = new ShopOrderVO();
-				shoporderVO.setOrderno(rs.getString("orderno"));
-				shoporderVO.setCustomer_address(rs.getString("customer_address"));
-				shoporderVO.setCustomer_name(rs.getString("customer_name"));
-				shoporderVO.setCustomer_phone(rs.getString("customer_phone"));
-				shoporderVO.setMemberno(rs.getString("MEM_NO"));
-				shoporderVO.setOrder_date(rs.getDate("order_date"));
-				list.add(shoporderVO);
-			}
-
-		} catch (SQLException e) {
-			System.out.println(e);
-
-		}finally {
-			
-			if (con != null) {
-				try {
-					con.close();
-				} catch (SQLException e) {
-					e.printStackTrace();
-				}
-			}
-		}
-		return list;
-	}
-	public List<OrderDetailVO> getOrderNo(String orderNo){
-		return null;
-	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 	@Override
 	public List<ShopOrderVO> getAllByOrderNo(String orderno) {
 		List<ShopOrderVO> list = new ArrayList<ShopOrderVO>();
@@ -140,7 +70,7 @@ public class ShopOrderDAO implements ShopOrderDAO_interface {
 			}
 
 		} catch (SQLException e) {
-			System.out.println("GET_ONE_BY_ORDERNO���~ :" + e);
+			System.out.println("GET_ONE_BY_ORDERNO錯誤 :" + e);
 
 		}finally {
 			if (pstmt != null) {
@@ -163,7 +93,7 @@ public class ShopOrderDAO implements ShopOrderDAO_interface {
 	}
 
 	@Override
-	// ���o�ӷ|�����ʶR���ӫ~
+	// 取得該會員所購買的商品
 	public List<ShopOrderVO> getAllByMenNO(String menno) {
 		List<ShopOrderVO> list = new ArrayList<ShopOrderVO>();
 		ShopOrderVO shoporderVO = null;
@@ -191,7 +121,7 @@ public class ShopOrderDAO implements ShopOrderDAO_interface {
 			}
 
 		} catch (SQLException e) {
-			System.out.println("GET_ALL_NO���~ :" + e);
+			System.out.println("GET_ALL_NO錯誤 :" + e);
 
 		}finally {
 			if (pstmt != null) {
@@ -240,7 +170,7 @@ public class ShopOrderDAO implements ShopOrderDAO_interface {
 				list.add(shoporderVO);
 			}
 		} catch (SQLException e) {
-			System.out.println("GET_ONE_BY_ORDERNO���~ :" + e);
+			System.out.println("GET_ONE_BY_ORDERNO錯誤 :" + e);
 		}
 		return list;
 	}
@@ -266,7 +196,7 @@ public class ShopOrderDAO implements ShopOrderDAO_interface {
 				list.add(shoporderVO);
 			}
 		} catch (SQLException e) {
-			System.out.println("GET_ONE_BY_ORDERNO���~ :" + e);
+			System.out.println("GET_ONE_BY_ORDERNO錯誤 :" + e);
 		}finally {
 			if (pstmt != null) {
 				try {
@@ -298,9 +228,9 @@ public class ShopOrderDAO implements ShopOrderDAO_interface {
 		
 		try {
 			con = ds.getConnection();
-			// �j�q��ʸ�Ʈw�A���঳���~�C
+			// 大量更動資料庫，不能有錯誤。
 			con.setAutoCommit(false);
-			// �A�P�ɷs�W�q����Ӥ��e
+			// 再同時新增訂單明細內容
 			for (int i = 0; i < shoporderVO.size(); i++) {
 				if(shoporderVO.get(i).getOrdercount()!=0) {
 				pstmt = con.prepareStatement("UPDATE ORDERDETAIL SET ORDERCOUNT=? WHERE ITEMNO=? AND ORDERNO=?");
@@ -326,13 +256,13 @@ public class ShopOrderDAO implements ShopOrderDAO_interface {
 		} catch (SQLException e) {
 			try {
 				con.rollback();
-				System.out.println("updateShopOrder.java�s�W�q����~,����rollback :" + e);
+				System.out.println("updateShopOrder.java新增訂單錯誤,執行rollback :" + e);
 			} catch (SQLException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
 			e.printStackTrace();
-			System.out.println("ShopOrderDAO���~");
+			System.out.println("ShopOrderDAO錯誤");
 		} finally {
 			if (pstmt != null) {
 				try {
@@ -374,7 +304,7 @@ public class ShopOrderDAO implements ShopOrderDAO_interface {
 				do {
 					for (int i = 1; i <= columnCount; i++) {
 						key = rs.getString(i);
-						System.out.println("�ۼW�D��� = " + key + "(自增主鍵)");
+						System.out.println("自增主鍵值 = " + key + "(剛新增成功的員工編號)");
 					}
 				} while (rs.next());
 			} else {
@@ -386,7 +316,7 @@ public class ShopOrderDAO implements ShopOrderDAO_interface {
 			pstmt.clearParameters();
 			pstmt = con.prepareStatement(ADD_ORDERDETAIL);
 			System.out.println("DB5");
-			// �����o�ۼW�D��Ӥ@������
+			// 須取得自增主鍵來一次完成
 			pstmt.setString(1, key);
 			System.out.println("DB6");
 			pstmt.setInt(2, shoporderVO.getItemno());
@@ -397,7 +327,7 @@ public class ShopOrderDAO implements ShopOrderDAO_interface {
 
 		} catch (SQLException e) {
 			e.printStackTrace();
-			System.out.println("addShopOrder���~");
+			System.out.println("addShopOrder錯誤");
 		} finally {
 			if (pstmt != null) {
 				try {
@@ -426,20 +356,20 @@ public class ShopOrderDAO implements ShopOrderDAO_interface {
 		try {
 			String[] cols = { "ORDERNO" };
 			con = ds.getConnection();
-			// ���ʪ������F��s�W�i�h���o�����A�ҥH����AUTOCOMMIT
+			// 把購物車的東西新增進去不得有錯，所以關閉AUTOCOMMIT
 			con.setAutoCommit(false);
-			// �x�s�I
+			// 儲存點
 			savePoint = con.setSavepoint();
 			pstmt = con.prepareStatement(ADD_SHOPORDER, cols);
-			// �U���o�@�q�u�n�s�W�@���N�i�H�A�q�|����ƨ��o�D�e�����
+			// 下面這一段只要新增一次就可以，從會員資料取得非前面表單
 			pstmt.setString(1, "MEM0001");
-			pstmt.setString(2, "�a�}");
-			pstmt.setString(3, "�q��");
-			pstmt.setString(4, "�m�W");
+			pstmt.setString(2, "地址");
+			pstmt.setString(3, "電話");
+			pstmt.setString(4, "姓名");
 			pstmt.executeUpdate();
 			System.out.println("DB01");
 
-			// ���o�������ۼW�D���
+			// 取得對應的自增主鍵值
 			ResultSet rs = pstmt.getGeneratedKeys();
 			System.out.println("DB02");
 			ResultSetMetaData rsmd = rs.getMetaData();
@@ -450,7 +380,7 @@ public class ShopOrderDAO implements ShopOrderDAO_interface {
 				do {
 					for (int i = 1; i <= columnCount; i++) {
 						key = rs.getString(i);
-						System.out.println("�ۼW�D��� = " + key + "(自增主鍵)");
+						System.out.println("自增主鍵值 = " + key + "(剛新增成功的訂單編號)");
 					}
 				} while (rs.next());
 			} else {
@@ -458,28 +388,28 @@ public class ShopOrderDAO implements ShopOrderDAO_interface {
 			}
 			rs.close();
 			pstmt.clearParameters();
-			// �A�P�ɷs�W�q����Ӥ��e
+			// 再同時新增訂單明細內容
 			for (int i = 0; i < shoporderVO.size(); i++) {
 				pstmt = con.prepareStatement(ADD_ORDERDETAIL);
-				// �����o�ۼW�D��Ӥ@������
+				// 須取得自增主鍵來一次完成
 				pstmt.setString(1, key);
 				pstmt.setInt(2, shoporderVO.get(i).getItemno());
 				pstmt.setInt(3, shoporderVO.get(i).getOrdercount());
 				pstmt.executeUpdate();
-				System.out.println("��" + i + " ���s�W");
+				System.out.println("第" + i + " 次新增");
 			}
 			con.commit();
 			con.setAutoCommit(true);
 		} catch (SQLException e) {
 			try {
 				con.rollback();
-				System.out.println("ShopOrderDAO.java�s�W�q����~,����rollback :" + e);
+				System.out.println("ShopOrderDAO.java新增訂單錯誤,執行rollback :" + e);
 			} catch (SQLException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
 			e.printStackTrace();
-			System.out.println("ShopOrderDAO���~");
+			System.out.println("ShopOrderDAO錯誤");
 		} finally {
 			if (pstmt != null) {
 				try {
@@ -514,7 +444,7 @@ public class ShopOrderDAO implements ShopOrderDAO_interface {
 			pstmt.setString(1, Orderno);
 			pstmt.executeUpdate();
 			pstmt.execute();
-			System.out.println("DAO�q��R������");
+			System.out.println("DAO訂單刪除完畢");
 
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -653,7 +583,7 @@ public class ShopOrderDAO implements ShopOrderDAO_interface {
 				shoporderVO.setCustomer_name(rs.getString("NAME"));
 				shoporderVO.setShopname(rs.getString("CUSTOMER_NAME"));
 				shoporderVO.setPrice(rs.getInt("PRICE"));
-				// System.out.println("���쪺BEAN���e :[ ORDERNO :"+shoporderVO.getOrderno()+"
+				// System.out.println("拿到的BEAN內容 :[ ORDERNO :"+shoporderVO.getOrderno()+"
 				// ,ITEMNO :"+shoporderVO.getOrdercount() +" ,ORDERCOUNT
 				// :"+shoporderVO.getOrdercount());
 				// System.out.println(" ,MEM_NO :"+shoporderVO.getMemberno()+" ,ORDER_DATE
@@ -666,7 +596,7 @@ public class ShopOrderDAO implements ShopOrderDAO_interface {
 				list.add(shoporderVO);
 			}
 		} catch (SQLException e) {
-			System.out.println("GET_PROMOTIONPRICE_BY_ORDERNO���~ :" + e);
+			System.out.println("GET_PROMOTIONPRICE_BY_ORDERNO錯誤 :" + e);
 		}finally {
 			if (pstmt != null) {
 				try {
@@ -681,6 +611,13 @@ public class ShopOrderDAO implements ShopOrderDAO_interface {
 					con.close();
 				} catch (SQLException e) {
 					e.printStackTrace();
+				}
+			}
+			if (rs != null) {
+				try {
+					rs.close();
+				} catch (SQLException se) {
+					se.printStackTrace(System.err);
 				}
 			}
 		}
@@ -711,6 +648,7 @@ public class ShopOrderDAO implements ShopOrderDAO_interface {
 			pstmt.setDate(1, ORDERDATE);
 			pstmt.setDate(2, ORDERDATE);
 			rs = pstmt.executeQuery();
+			
 			while (rs.next()) {
 				PROMOTIONNO = rs.getInt("PROMOTIONNO");
 			}
@@ -722,6 +660,7 @@ public class ShopOrderDAO implements ShopOrderDAO_interface {
 				pstmt = con.prepareStatement(GET_ALL_BUY_PRICE_BY_ORDERNO);
 				pstmt.setString(1, orderno);
 				pstmt.setInt(2, PROMOTIONNO);
+				
 				rs = pstmt.executeQuery();
 				while (rs.next()) {
 					shoporderVO = new ShopOrderVO();
@@ -734,7 +673,7 @@ public class ShopOrderDAO implements ShopOrderDAO_interface {
 					shoporderVO.setCustomer_phone(rs.getString("CUSTOMER_PHONE"));
 					shoporderVO.setCustomer_name(rs.getString("NAME"));
 					shoporderVO.setPrice(rs.getInt("NEWPRICE"));
-					System.out.println("���쪺BEAN���e :[ ORDERNO :" + shoporderVO.getOrderno() + " ,ITEMNO :"
+					System.out.println("拿到的BEAN內容 :[ ORDERNO :" + shoporderVO.getOrderno() + " ,ITEMNO :"
 							+ shoporderVO.getOrdercount() + " ,ORDERCOUNT :" + shoporderVO.getOrdercount());
 					System.out.println(" ,MEM_NO :" + shoporderVO.getMemberno() + " ,ORDER_DATE :"
 							+ shoporderVO.getOrder_date() + " ,CUSTOMER_ADDRESS :" + shoporderVO.getCustomer_address());
@@ -758,7 +697,7 @@ public class ShopOrderDAO implements ShopOrderDAO_interface {
 					shoporderVO.setCustomer_phone(rs.getString("CUSTOMER_PHONE"));
 					shoporderVO.setCustomer_name(rs.getString("NAME"));
 					shoporderVO.setPrice(rs.getInt("PRICE"));
-					System.out.println("���쪺BEAN���e :[ ORDERNO :" + shoporderVO.getOrderno() + " ,ITEMNO :"
+					System.out.println("拿到的BEAN內容 :[ ORDERNO :" + shoporderVO.getOrderno() + " ,ITEMNO :"
 							+ shoporderVO.getOrdercount() + " ,ORDERCOUNT :" + shoporderVO.getOrdercount());
 					System.out.println(" ,MEM_NO :" + shoporderVO.getMemberno() + " ,ORDER_DATE :"
 							+ shoporderVO.getOrder_date() + " ,CUSTOMER_ADDRESS :" + shoporderVO.getCustomer_address());
@@ -769,7 +708,7 @@ public class ShopOrderDAO implements ShopOrderDAO_interface {
 				}
 			}
 		} catch (SQLException e) {
-			System.out.println("GET_ONE_BY_ORDERNO2���~ :" + e);
+			System.out.println("GET_ONE_BY_ORDERNO2錯誤 :" + e);
 		}finally {
 			if (pstmt != null) {
 				try {
@@ -786,7 +725,119 @@ public class ShopOrderDAO implements ShopOrderDAO_interface {
 					e.printStackTrace();
 				}
 			}
+			if (rs != null) {
+				try {
+					rs.close();
+				} catch (SQLException se) {
+					se.printStackTrace(System.err);
+				}
+			}
 		}
 		return list;
+	}
+
+	@Override
+	public void changeOrderToOK(String orderid) {
+		Connection con = null;
+		PreparedStatement pstmt = null;
+
+		try {
+			con = ds.getConnection();
+			pstmt = con.prepareStatement(CHANGE_ORDER_TO_OK);
+			pstmt.setString(1, orderid);
+			pstmt.executeUpdate();
+
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			if (pstmt != null) {
+				try {
+					pstmt.close();
+				} catch (SQLException e) {
+
+					e.printStackTrace();
+				}
+			}
+			if (con != null) {
+				try {
+					con.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+			
+		}
+	}
+
+	@Override
+	public void changeOrderToCancel(String orderid) {
+		Connection con = null;
+		PreparedStatement pstmt = null;
+
+		try {
+			con = ds.getConnection();
+			pstmt = con.prepareStatement(CHANGE_ORDER_TO_CANCEL);
+			pstmt.setString(1, orderid);
+			pstmt.executeUpdate();
+
+
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			if (pstmt != null) {
+				try {
+					pstmt.close();
+				} catch (SQLException e) {
+
+					e.printStackTrace();
+				}
+			}
+			if (con != null) {
+				try {
+					con.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+	}
+
+	@Override
+	public void addPointForMember(Integer point, String memno) {
+
+		Connection con = null;
+		PreparedStatement pstmt = null;
+
+		try {
+			con = ds.getConnection();
+			pstmt = con.prepareStatement(ADD_POINT_TO_MEMBER);
+
+			pstmt.setInt(1, point);
+			pstmt.setString(2, memno);
+			pstmt.executeUpdate();
+
+
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			if (pstmt != null) {
+				try {
+					pstmt.close();
+				} catch (SQLException e) {
+
+					e.printStackTrace();
+				}
+			}
+			if (con != null) {
+				try {
+					con.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+		}
 	}
 }
