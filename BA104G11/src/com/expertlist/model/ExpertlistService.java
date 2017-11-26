@@ -30,7 +30,7 @@ public class ExpertlistService {
 		expertlistVO.setExpSpec(expSpec);
 		dao.insert(expertlistVO);
 
-		return expertlistVO;
+		return expertlistVO; 
 	}
 
 	
