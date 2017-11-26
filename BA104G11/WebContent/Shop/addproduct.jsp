@@ -62,7 +62,7 @@ td, h3 {
 			<th><div class="div1" id="yy3" align="center">
 					<img id="ss3" src="" />
 				</div></th>
-		</table>
+		</table> 
 		<table align="center">
 			<tr>
 				<td>商品圖片</td>
