@@ -11,6 +11,12 @@ public class ExpertlistService {
 	public ExpertlistService() {
 		dao = new ExpertlistJNDIDAO();
 	}
+	public ExpertlistVO addEXPERTLIST(ExpertlistVO expertlistVO) {
+
+		dao.insert(expertlistVO);
+
+		return expertlistVO;
+	}
 
 	public ExpertlistVO addEXPERTLIST(
 			String expNo, 

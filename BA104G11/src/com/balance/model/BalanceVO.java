@@ -8,7 +8,7 @@ public class BalanceVO implements Serializable{
 	private String topupNo;
 	private String memNo;
 	private Integer topupValue;
-	private Date topupTime;
+	private String topupTime;
 	private String status;
 	private String topupWay;
 	
@@ -24,16 +24,16 @@ public class BalanceVO implements Serializable{
 	public void setMemNo(String memNo) {
 		this.memNo = memNo;
 	}
-	public Integer getTopuValue() {
+	public Integer getTopupValue() {
 		return topupValue;
 	}
 	public void setTopupValue(Integer topupValue) {
 		this.topupValue = topupValue;
 	}
-	public Date getTopupTime() {
+	public String getTopupTime() {
 		return topupTime;
 	}
-	public void setTopupTime(Date topupTime) {
+	public void setTopupTime(String topupTime) {
 		this.topupTime = topupTime;
 	}
 	public String getStatus() {

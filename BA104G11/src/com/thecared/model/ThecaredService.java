@@ -2,6 +2,7 @@ package com.thecared.model;
 
 
 import java.util.List;
+import java.sql.*;
 
 
 public class ThecaredService {
@@ -9,69 +10,79 @@ public class ThecaredService {
 	private ThecaredDAO_interface dao;
 
 	public ThecaredService() {
-		dao = new ThecaredDAO();
+		dao = new ThecaredJNDIDAO();
 	}
-
+	public ThecaredVO addTHECARED(ThecaredVO thecaredVO){
+		dao.insert(thecaredVO);
+		return thecaredVO;
+	}
 	public ThecaredVO addTHECARED(
-			String mem_no, 
-			String cared_no, 
-			String cared_gender,
+			String memNo, 
+			String caredNo,
+			String caredName,
+			String caredGender,
 			String kinship,
-			Integer cared_height,
-			Integer cared_weight,
-			String cared_address,
-			String cared_phone,
-			String con_status,
-			String bio_status,
-			java.sql.Date modify_time) {
+			Integer caredHeight,
+			Integer caredWeight,
+			String caredAddress,
+			String caredPhone,
+			String conStatus,
+			String bioStatus,
+			Timestamp modifyTime) {
 
 		ThecaredVO thecaredVO = new ThecaredVO();
 		
-		thecaredVO.setMemNo(mem_no);
-		thecaredVO.setCaredNo(cared_no);
-		thecaredVO.setCaredGender(cared_gender);
+		thecaredVO.setMemNo(memNo);
+		thecaredVO.setCaredNo(caredNo);
+		thecaredVO.setCaredName(caredName);
+		thecaredVO.setCaredGender(caredGender);
 		thecaredVO.setKinship(kinship);
-		thecaredVO.setCaredHeight(cared_height);
-		thecaredVO.setCaredWeight(cared_weight);
-		thecaredVO.setCaredAddress(cared_address);
-		thecaredVO.setCaredPhone(cared_phone);
-		thecaredVO.setConStatus(con_status);
-		thecaredVO.setBioStatus(bio_status);
-		thecaredVO.setModifyTime(modify_time);
+		thecaredVO.setCaredHeight(caredHeight);
+		thecaredVO.setCaredWeight(caredWeight);
+		thecaredVO.setCaredAddress(caredAddress);
+		thecaredVO.setCaredPhone(caredPhone);
+		thecaredVO.setConStatus(conStatus);
+		thecaredVO.setBioStatus(bioStatus);
+		thecaredVO.setModifyTime(modifyTime);
 		
 		dao.insert(thecaredVO);
 
 		return thecaredVO;
 	}
 
-	
+	public ThecaredVO updateTHECARED(ThecaredVO thecaredVO){
+		dao.update(thecaredVO);
+		return thecaredVO;
+	}
 	public ThecaredVO updateTHECARED(
-			String cared_name,
-			Integer cared_weight,
-			String cared_address,
-			String cared_phone,
-			String con_status,
-			String bio_status
+			String caredName,
+			Integer caredWeight,
+			String caredAddress,
+			String caredPhone,
+			String conStatus,
+			String bioStatus,
+			String caredNo
 			) {
 
 		ThecaredVO thecaredVO = new ThecaredVO();
-		thecaredVO.setCaredName(cared_name);
-		thecaredVO.setCaredWeight(cared_weight);
-		thecaredVO.setCaredAddress(cared_address);
-		thecaredVO.setCaredPhone(cared_phone);
-		thecaredVO.setConStatus(con_status);
-		thecaredVO.setBioStatus(bio_status);
+		thecaredVO.setCaredName(caredName);
+		thecaredVO.setCaredWeight(caredWeight);
+		thecaredVO.setCaredAddress(caredAddress);
+		thecaredVO.setCaredPhone(caredPhone);
+		thecaredVO.setConStatus(conStatus);
+		thecaredVO.setBioStatus(bioStatus);
+		thecaredVO.setCaredNo(caredNo);
 		dao.update(thecaredVO);
 
 		return thecaredVO;
 	}
 
-	public void deleteTHECARED(String cared_no) {
-		dao.delete(cared_no);
+	public void deleteTHECARED(String caredNo) {
+		dao.delete(caredNo);
 	}
 
-	public ThecaredVO getOneTHECARED(String cared_no) {
-		return dao.findByPrimaryKey(cared_no);
+	public ThecaredVO getOneTHECARED(String caredNo) {
+		return dao.findByPrimaryKey(caredNo);
 	}
 	
 	public List<ThecaredVO> getAllByMemNo(String MemNo) {

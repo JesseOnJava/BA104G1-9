@@ -32,21 +32,21 @@ public class ShopOrderServlet extends HttpServlet{
 		
 		req.setCharacterEncoding("UTF-8");
 		String action = req.getParameter("action");
-		if ("addshoporder".equals(action)) {// �Ӧ�ListAllPropro.jsp���ШD
-			System.out.println("�i�JShopOrderSevlet");
+		if ("addshoporder".equals(action)) {// 來自ListAllPropro.jsp的請求
+			System.out.println("進入ShopOrderSevlet");
 			List<String> errorMsgs = new LinkedList<String>();
 			req.setAttribute("errorMsgs", errorMsgs);
 			try {
-				/*************************** 1.�����ШD�Ѽ� - ��J�榡�����~�B�z **********************/
+				/*************************** 1.接收請求參數 - 輸入格式的錯誤處理 **********************/
 
 				String str = req.getParameter("ADDRESS");
 				if (str == null || (str.trim()).length() == 0) {
-					errorMsgs.add("�п�J�a�}");
+					errorMsgs.add("請輸入地址");
 				}
 				if (!errorMsgs.isEmpty()) {
 					RequestDispatcher failureView = req.getRequestDispatcher("/MasterOrder/addshoporder.jsp");
 					failureView.forward(req, res);
-					return;// �{�����_
+					return;// 程式中斷
 				}
 				ShopOrderVO shopOrderVO=new ShopOrderVO();
 				shopOrderVO.setCustomer_address(req.getParameter("ADDRESS"));
@@ -56,31 +56,31 @@ public class ShopOrderServlet extends HttpServlet{
 				shopOrderVO.setItemno(new Integer(req.getParameter("ITEMNO")));
 				shopOrderVO.setOrdercount(new Integer(req.getParameter("ORDERCOUNT")));
 
-				/*************************** 2.�}�l�s�W��� *****************************************/
+				/*************************** 2.開始新增資料 *****************************************/
 				ShopOrderService shopOrderSvc = new ShopOrderService();
 				ShopOrderVO shopordervo =shopOrderSvc.addShopOrder(shopOrderVO);
 //				if (proVO == null) {
-//					errorMsgs.add("�d�L���");
+//					errorMsgs.add("查無資料");
 //				}
 				if (!errorMsgs.isEmpty()) {
 					RequestDispatcher failureView = req
 							.getRequestDispatcher("/MasterOrder/addshoporder.jsp");
 					failureView.forward(req, res);
-					return;//�{�����_
+					return;//程式中斷
 				}
-				/***************************3.�d�ߧ���,�ǳ����(Send the Success view)*************/
+				/***************************3.查詢完成,準備轉交(Send the Success view)*************/
 				req.setAttribute("shopordervo", shopordervo); 
 				String url = "/MasterOrder/ListAllProOrder.jsp";
-				RequestDispatcher successView = req.getRequestDispatcher(url); // ���\��� listOneEmp.jsp
+				RequestDispatcher successView = req.getRequestDispatcher(url); // 成功轉交 listOneEmp.jsp
 				successView.forward(req, res);
 			} catch (Exception e) {
-				errorMsgs.add("�L�k���o���:" + e.getMessage());
+				errorMsgs.add("無法取得資料:" + e.getMessage());
 				RequestDispatcher failureView = req
 						.getRequestDispatcher("/MasterOrder/addshoporder.jsp");
 				failureView.forward(req, res);
 			}
 		}
-		if ("CONFIRM".equals(action)) {// �Ӧ�CHECK.JSP���ШD
+		if ("CONFIRM".equals(action)) {// 來自CHECK.JSP的請求
 			
 			
 			HttpSession session = req.getSession();
@@ -90,7 +90,7 @@ public class ShopOrderServlet extends HttpServlet{
 			for(int i=0;i<buylist.size();i++){
 				CartVO cartVO = buylist.get(i);
 				cartVO.setQUANTITY(new Integer(req.getParameter("quantity"+i)));
-				System.out.println("�ҧ��ܪ��ƶq :"+req.getParameter("quantity"+i));
+				System.out.println("所改變的數量 :"+req.getParameter("quantity"+i));
 			}
 			
 			List<ShopOrderVO> list = new ArrayList<ShopOrderVO>();
@@ -100,13 +100,13 @@ public class ShopOrderServlet extends HttpServlet{
 			String MEMNO=req.getParameter("MEMNO");
 			Point=shopOrSvc.returnPoint(MEMNO);
 			ShopOrderVO shopOrderVO = null;
-			//�o��n���d�ߤ@���o��|����POINT���S���C���`���B�b����U���ʰ�
+			//這邊要先查詢一次這位會員的POINT有沒有低於總金額在執行下面動做
 			if(Point>=amount) {
-				System.out.println("�l�B����");
+				System.out.println("餘額足夠");
 			for (int i = 0; i < buylist.size(); i++) {
 				CartVO cartVO = buylist.get(i);
 				shopOrderVO = new ShopOrderVO();
-//				System.out.println("�� " + i + "�����XBEAN���ȧ@����");
+//				System.out.println("第 " + i + "次取出BEAN的值作測試");
 //				System.out.println("cartVO.getNAME()" + cartVO.getNAME());
 				shopOrderVO.setItemno(cartVO.getITEMNO());
 				shopOrderVO.setMemberno(MEMNO);
@@ -114,38 +114,40 @@ public class ShopOrderServlet extends HttpServlet{
 //				System.out.println("cartVO.getITEMNO()" + cartVO.getITEMNO());
 //				System.out.println("cartVO.getQUANTITY()" + cartVO.getQUANTITY());
 				shopOrderVO.setOrdercount(cartVO.getQUANTITY());
-				// �Ĥ@�����ɭ��ٻݭn�]�m�Τ�q��a�}�A�����i�H�q�|�쨺�伴�o������갵
+				// 第一次的時候還需要設置用戶訂單地址，但那可以從會原那邊撈這邊先不實做
 //				System.out.println("shopOrderVO.getOrdercount():" + shopOrderVO.getOrdercount());
 //				System.out.println("cartVO.getDES()" + cartVO.getDES().substring(0, 5));
 //				System.out.println("cartVO.getPRICE()" + cartVO.getPRICE());
-				//��ت����ثe��LIST�����갵�A�ǹL�h��LIST<ShopOrderVO>
+				//兩種版本目前用LIST版本實做，傳過去為LIST<ShopOrderVO>
 				list.add(shopOrderVO);
 				// shopOrSvc.addShopOrder(shopOrderVO);
 				}
-			//���B�����q�榨��
+			//金額足夠訂單成立
 			shopOrSvc.addShopCartOrder(list);
+			
+			
 			}else{
-				System.out.println("�l�B�����q�楼����,FORWARD�X�h�F�C");
+				System.out.println("餘額不足訂單未成立,FORWARD出去了。");
 				//String url = "/MasterOrder/listallOrder.jsp";
 				String url = "/MasterOrder/listallOrderbeautiful.jsp";
-				RequestDispatcher successView = req.getRequestDispatcher(url); // ���\���
+				RequestDispatcher successView = req.getRequestDispatcher(url); // 成功轉交
 																				// ListAllProOrder.jsp
 				successView.forward(req, res);
-				//�����n�_�F�{���~���|�~��]�A�q�z�ʡC
+				//必須要斷了程式才不會繼續跑，通透性。
 				return;
 			}
 
 			Integer NowPoint=shopOrSvc.returnAfterShoppingPoint(amount, MEMNO);
 			
-			System.out.println("���O�e�I�� :"+Point+",���O���I��"+NowPoint);
+			System.out.println("消費前點數 :"+Point+",消費後點數"+NowPoint);
 			//String url = "/MasterOrder/listallOrder.jsp";
-			String url = "/MasterOrder/listallOrderbeautiful.jsp";
-			RequestDispatcher successView = req.getRequestDispatcher(url); // ���\���
+			String url = "/MasterOrder/OrderDone.jsp";
+			RequestDispatcher successView = req.getRequestDispatcher(url); // 成功轉交
 																			// ListAllProOrder.jsp
 			successView.forward(req, res);
 
 		} 
-		if ("DELETE".equals(action)) {// �Ӧ�CHECK.JSP���ШD
+		if ("DELETE".equals(action)) {// 來自CHECK.JSP的請求
 
 			try {
 				String ORDERID = (String) req.getParameter("ORDERID");
@@ -155,45 +157,45 @@ public class ShopOrderServlet extends HttpServlet{
 				shopOrderSvc.delete(ORDERID, MEMBERNO);
 
 				String url = "/MasterOrder/listallOrderbeautiful.jsp";
-				RequestDispatcher successView = req.getRequestDispatcher(url); // ���\���
+				RequestDispatcher successView = req.getRequestDispatcher(url); // 成功轉交
 																				// ListAllProOrder.jsp
 				successView.forward(req, res);
 
 			} catch (Exception e) {
-				System.out.println("ShopOrderServlet.java DELETE���� :" + e);
+				System.out.println("ShopOrderServlet.java DELETE失敗 :" + e);
 			}
 		}
 		
-		if ("UPDATE_ORDERID".equals(action) || "LOOKORDERID".equals(action)) {// �Ӧ�CHECK.JSP���ШD
+		if ("UPDATE_ORDERID".equals(action) || "LOOKORDERID".equals(action)) {// 來自CHECK.JSP的請求
 
-			System.out.println("�i�JShopOrderServlet.java.UPdate_orderid�޿�B��");
+			System.out.println("進入ShopOrderServlet.java.UPdate_orderid邏輯運算");
 			String orderid = req.getParameter("ORDERID");
 			String memberno = req.getParameter("MEMBERNO");
 			Integer total=0;
 			List<ShopOrderVO> FinishShopOrderVO = null;
 			ShopOrderService shopOrderSvc = new ShopOrderService();
-			// liatinpromotion�q�椤���S�����ӫ~������(�h�@��VO�ݩ�newprice)
+			// liatinpromotion訂單中有特價的商品為哪些(多一個VO屬性newprice)
 			List<ShopOrderVO> ListAllOrderShop = shopOrderSvc.getPriceByOrderNoIfHave(orderid);
-			System.out.println("�j�M�����ӫ~�ɪ�ListAllOrderShop.size() :"+ListAllOrderShop.size());
+			System.out.println("搜尋全部商品時的ListAllOrderShop.size() :"+ListAllOrderShop.size());
 			System.out.println("-----------------------------------------------");
-			// ListAllPro�O�����q�ʰӫ~������
+			// ListAllPro是全部訂購商品的明細
 			List<ShopOrderVO> ListAllPro = shopOrderSvc.getPriceByOrderNo(orderid);
-			System.out.println("�j�M�����ӫ~�ɪ�ListAllPro.size() :"+ListAllPro.size());
-			// ���j����O�_���P�P����A�������л\��ListAllPro
+			System.out.println("搜尋全部商品時的ListAllPro.size() :"+ListAllPro.size());
+			// 雙迴圈比對是否有促銷價格，有的話覆蓋到ListAllPro
 			for (int i = 0; i < ListAllOrderShop.size(); i++) {
 				ShopOrderVO ListShopVO = ListAllOrderShop.get(i);
 				for (int j = 0; j < ListAllPro.size(); j++) {
 					ShopOrderVO ListShopProVO = ListAllPro.get(j);
 					if (ListShopVO.getItemno() == ListShopProVO.getItemno()) {
-						System.out.println("�쥻ListShopProVO.getPrice() :" + ListShopProVO.getPrice());
-						System.out.println("�쥻ListShopVO.getPrice() :" + ListShopVO.getPrice());
+						System.out.println("原本ListShopProVO.getPrice() :" + ListShopProVO.getPrice());
+						System.out.println("原本ListShopVO.getPrice() :" + ListShopVO.getPrice());
 						ListShopVO.setPrice(ListShopProVO.getPrice());
 						System.out.println( "ListShopVO.setPrice(ListShopProVO.getPrice()):" + ListShopProVO.getPrice());
-						System.out.println("錯誤處理123");
+						System.out.println("兩屬性值相同表是改變成功。");
 					}
 				}
 			}
-			//��X�����q�檺�`���B
+			//算出此筆訂單的總金額
 			for (int i = 0; i < ListAllOrderShop.size(); i++) {
 				total+=ListAllOrderShop.get(i).getPrice()*ListAllOrderShop.get(i).getOrdercount();
 				System.out.println("ListAllPro.size() :" + ListAllOrderShop.size());
@@ -202,7 +204,7 @@ public class ShopOrderServlet extends HttpServlet{
 				System.out.println("ListAllPro.get(i).getItemno() :"+ListAllOrderShop.get(i).getCustomer_name());
 				System.out.println("ListAllPro.get(i).getItemno() :"+ListAllOrderShop.get(i).getPrice());
 			}
-			System.out.println("�`���B :"+total);
+			System.out.println("總金額 :"+total);
 			try {
 				req.setAttribute("total", total);
 				req.setAttribute("OrderList", ListAllOrderShop);
@@ -210,48 +212,112 @@ public class ShopOrderServlet extends HttpServlet{
 //				session.setAttribute("OrderList", ListAllOrderShop);
 				String url = null;
 				if("UPDATE_ORDERID".equals(action)) {
-					 url = "/MasterOrder/Update_one_order.jsp";
+					 url = "/back/production/BA104G1_back_OrderMasterFORUPDATE.jsp";
 				}else if("LOOKORDERID".equals(action)){
-					url = "/MasterOrder/ShowOneOrderDetail.jsp";
+					url = "/back/production/BA104G1_back_OrderMasterForShowOne.jsp";
 				}
 				
-				RequestDispatcher successView = req.getRequestDispatcher(url); // ���\���
+				RequestDispatcher successView = req.getRequestDispatcher(url); // 成功轉交
 				successView.forward(req, res);
 
 			} catch (Exception e) {
-				System.out.println("ShopOrderServlet.java DELETE���� :" + e);
+				System.out.println("ShopOrderServlet.java DELETE失敗 :" + e);
 			}
 		}
-		if ("CONFIRM_UPDATE_ORDERID".equals(action)) {// �Ӧ�CHECK.JSP���ШD
+		if ("CONFIRM_UPDATE_ORDERID".equals(action)) {// 來自CHECK.JSP的請求
+			List<String> errorMsgs = new LinkedList<String>();
+			req.setAttribute("errorMsgs", errorMsgs);
 			Integer amount=new Integer(req.getParameter("amount"));
 			Integer newTotal=0;
 			String Orderno=null;
-			
+			System.out.println("amount :"+amount);
 			HttpSession session = req.getSession();
 			List<ShopOrderVO> OrderList = (List<ShopOrderVO>) session.getAttribute("OrderList");
 			for(int i=0;i<OrderList.size();i++){
 				ShopOrderVO ShopOrderVO = OrderList.get(i);
 				ShopOrderVO.setOrdercount(new Integer(req.getParameter("quantity"+i)));
 				newTotal+=ShopOrderVO.getOrdercount()*ShopOrderVO.getPrice();
-				System.out.println("�s������ :"+newTotal);
+				System.out.println("新的價格 :"+newTotal);
 				Orderno=ShopOrderVO.getOrderno();
 			}
+			
 			Integer finalTotal=amount-newTotal;
+			System.out.println("finalTotal :"+finalTotal);
 			ShopOrderService shopOrSvc = new ShopOrderService();
 			Integer Point=shopOrSvc.returnPoint(OrderList.get(0).getMemberno());
-			if(Point>finalTotal) {
+			
+
+			if(Point>=-(finalTotal)) {
+			req.setAttribute("total", newTotal);
+			req.setAttribute("OrderList", OrderList);
 			shopOrSvc.updateShopOrder(OrderList,finalTotal);
+			String url = "/back/production/BA104G1_back_OrderMasterFORUPDATE.jsp";
+			RequestDispatcher successView = req.getRequestDispatcher(url); // 成功轉交
+			successView.forward(req, res);
+			
 			}else {
-				System.out.println("�l�B�����ʧ@����");
+				req.setAttribute("total", amount);
+				req.setAttribute("OrderList", OrderList);
+				System.out.println("餘額不足動作失敗");
+				errorMsgs.add("<div style='font-size:50px;text-align: center;' class='alert alert-danger alert-dismissible' role='alert'>"
+							+ "<button type='button' class='close' data-dismiss='alert' aria-label='Close'><span style='font-size:80px; aria-hidden='true'>"+
+							"&times;</span></button>客戶餘額不足動作失敗!</div>");
+				if (!errorMsgs.isEmpty()) {
+					RequestDispatcher failureView = req.getRequestDispatcher("/back/production/BA104G1_back_OrderMasterFORUPDATE.jsp");
+					failureView.forward(req, res);
+					return;// 程式中斷
+				}
+				
 			}
 			
-//			System.out.println("���O�e�I�� :"+Point+",���O���I��"+NowPoint);
+//			System.out.println("消費前點數 :"+Point+",消費後點數"+NowPoint);
 //			String url = "/MasterOrder/listallOrder.jsp";
-//			RequestDispatcher successView = req.getRequestDispatcher(url); // ���\���
+//			RequestDispatcher successView = req.getRequestDispatcher(url); // 成功轉交
 //																			// ListAllProOrder.jsp
 //			successView.forward(req, res);
 
 		} 
+		
+		
+		if ("CONFIRNORDER".equals(action)) {// listallOrderbeautiful.jsp的請求
+
+			try {
+				String ORDERID = (String) req.getParameter("ORDERID");
+
+
+				ShopOrderService shopOrderSvc = new ShopOrderService();
+				shopOrderSvc.changeOrderToOK(ORDERID);
+
+				String url = "/back/production/BA104G1_back_ShopMaster.jsp";
+				RequestDispatcher successView = req.getRequestDispatcher(url); // 成功轉交
+																				// ListAllProOrder.jsp
+				successView.forward(req, res);
+
+			} catch (Exception e) {
+				System.out.println("ShopOrderServlet.java CONFIRNORDER失敗 :" + e);
+			}
+		}
+		
+		if ("CANCELORDER".equals(action)) {// 來自listallOrderbeautiful.jsp的請求
+
+			try {
+				String ORDERID = (String) req.getParameter("ORDERID");
+
+				
+				
+				
+				ShopOrderService shopOrderSvc = new ShopOrderService();
+				shopOrderSvc.changeOrderToCancel(ORDERID);
+
+				String url = "/back/production/BA104G1_back_ShopMaster.jsp";
+				RequestDispatcher successView = req.getRequestDispatcher(url); // 成功轉交
+																				// ListAllProOrder.jsp
+				successView.forward(req, res);
+
+			} catch (Exception e) {
+				System.out.println("ShopOrderServlet.java CANCELORDER失敗 :" + e);
+			}
+		}
 	}
 	
 }

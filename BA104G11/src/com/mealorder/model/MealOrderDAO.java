@@ -20,7 +20,7 @@ public class MealOrderDAO implements MealOrderDAO_interface {
 	static {
 		try {
 			Context ctx = new InitialContext();
-			ds = (DataSource) ctx.lookup("java:comp/env/jdbc/TestDB3");
+			ds = (DataSource) ctx.lookup("java:comp/env/jdbc/BA104G1DB");
 		} catch (NamingException e) {
 			e.printStackTrace();
 		}
@@ -316,6 +316,7 @@ public class MealOrderDAO implements MealOrderDAO_interface {
 		}
 		return list;
 	}
+	
 
 	@Override
 	public List<MealOrderVO> getByMember(String memNo) {

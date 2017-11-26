@@ -155,7 +155,109 @@
     <servlet-name>AndroidEmpServiceDetailController</servlet-name>
     <url-pattern>/android/EmpServiceDetailController</url-pattern>
   </servlet-mapping>
-  
+<!-- 送餐開始 -->
+<servlet>
+    <servlet-name>DishServlet</servlet-name>
+    <servlet-class>com.dish.controller.DishServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>DishServlet</servlet-name>
+    <url-pattern>/dish.do</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <servlet-name>SetMealServlet</servlet-name>
+    <servlet-class>com.setmeal.controller.SetMealServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>SetMealServlet</servlet-name>
+    <url-pattern>/setMeal.do</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <servlet-name>MealOrderServlet</servlet-name>
+    <servlet-class>com.mealorder.controller.MealOrderServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>MealOrderServlet</servlet-name>
+    <url-pattern>/MealOrder.do</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <servlet-name>MenuServlet</servlet-name>
+    <servlet-class>com.menu.controller.MenuServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>MenuServlet</servlet-name>
+    <url-pattern>/Menu.do</url-pattern>
+  </servlet-mapping>
+
+
+
+<!-- 送餐結束 -->
+
+<!-- 商城開始 -->
+  <servlet>
+    <servlet-name>DBPicReader</servlet-name>
+    <servlet-class>com.shop.tool.DBPicReader</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>DBPicReader</servlet-name>
+    <url-pattern>/DBPicReader</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <servlet-name>DBPicReader2</servlet-name>
+    <servlet-class>com.shop.tool.DBPicReader2</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>DBPicReader2</servlet-name>
+    <url-pattern>/DBPicReader2</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <servlet-name>DBPicReader3</servlet-name>
+    <servlet-class>com.shop.tool.DBPicReader3</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>DBPicReader3</servlet-name>
+    <url-pattern>/DBPicReader3</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <servlet-name>ShopServlet</servlet-name>
+    <servlet-class>com.detail.controller.ShopServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>ShopServlet</servlet-name>
+    <url-pattern>/shop.do</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <servlet-name>ShopOrderServlet</servlet-name>
+    <servlet-class>com.detail.controller.ShopOrderServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>ShopOrderServlet</servlet-name>
+    <url-pattern>/order.do</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <servlet-name>CartServlet</servlet-name>
+    <servlet-class>com.detail.controller.CartServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>CartServlet</servlet-name>
+    <url-pattern>/cart.do</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <servlet-name>ProServlet</servlet-name>
+    <servlet-class>com.detail.controller.ProServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>ProServlet</servlet-name>
+    <url-pattern>/pro.do</url-pattern>
+  </servlet-mapping>
+
+
+  <error-page>
+    <error-code>404</error-code>
+    <location>/404/404.html</location>
+  </error-page>
+
+<!-- 商城結束 -->
   
   
   <servlet>
@@ -198,4 +300,7 @@
     <dispatcher>ERROR</dispatcher>
     <dispatcher>ASYNC</dispatcher>
   </filter-mapping>
+  
+
+  
 </web-app>

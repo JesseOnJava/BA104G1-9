@@ -17,9 +17,13 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.servlet.http.Part;
 
+import com.branches.model.BranchesService;
+import com.branches.model.BranchesVO;
 import com.employee.model.*;
 import com.employee_photo.model.EmpPhotosService;
 import com.employee_photo.model.EmpPhotosVO;
+import com.expertlist.model.ExpertlistService;
+import com.expertlist.model.ExpertlistVO;
 import com.google.gson.Gson;
 import com.member.model.MemberService;
 import com.member.model.MemberVO;
@@ -405,6 +409,98 @@ System.out.println("come in");
 			RequestDispatcher successView = req.getRequestDispatcher("/back/employee/listOneEmployee.jsp");
 			successView.forward(req, res);
 		}
+		// =======================================================================================================================================			
+				if("expertlist_insert".equals(action)){
+					String expNo = req.getParameter("expNo");
+					String expName = req.getParameter("expName");
+					String expSpec = req.getParameter("expSpec");
+					String expPrice = req.getParameter("expPrice");
+					System.out.println(action);
+					ExpertlistVO expertlistVO= new ExpertlistVO();
+
+					expertlistVO.setExpNo(expNo);
+					expertlistVO.setExpName(expName);
+					expertlistVO.setExpSpec(expSpec);
+					expertlistVO.setExpPrice(Integer.valueOf(expPrice));
+					
+					ExpertlistService expertlistSvc = new ExpertlistService();
+					expertlistVO =expertlistSvc.addEXPERTLIST(expertlistVO);
+					RequestDispatcher successView = req.getRequestDispatcher("/back/employee/listAllExpertlist.jsp");
+																		//	  /back/employee/listAllExpertlist.jsp
+					successView.forward(req, res);
+				}
+		// =======================================================================================================================================			
+				if("expertlist_update".equals(action)){
+					 System.out.println("執行:"+action);
+
+					String expNo = req.getParameter("expNo");
+					String expName = req.getParameter("expName");
+					String expSpec = req.getParameter("expSpec");
+					Integer expPrice =Integer.valueOf(req.getParameter("expPrice"));
+
+					ExpertlistVO expertlistVO= new ExpertlistVO();
+					expertlistVO.setExpName(expName);
+					expertlistVO.setExpNo(expNo);
+					expertlistVO.setExpPrice(expPrice);
+					expertlistVO.setExpSpec(expSpec);
+					
+					ExpertlistService expertlistSvc = new ExpertlistService();
+					expertlistVO=expertlistSvc.updateEXPLIST(expertlistVO);
+					System.out.println("後台成功修改會員狀態");
+					RequestDispatcher successView = req.getRequestDispatcher("/back/employee/listAllExpertlist.jsp");
+					successView.forward(req, res);
+				}
+		// =======================================================================================================================================			
+				if("expertlist_query".equals(action)){
+					
+				}
+
+		// =======================================================================================================================================			
+				if("branches_insert".equals(action)){
+					String empBranches = req.getParameter("empBranches");
+					String brcLat = req.getParameter("brcLat");
+					String brcLon = req.getParameter("brcLon");
+					String brcName = req.getParameter("brcName");
+					
+					BranchesVO branchesVO= new BranchesVO();
+
+					branchesVO.setEmpBranches(empBranches);
+					branchesVO.setBrcLat(Double.valueOf(brcLat));
+					branchesVO.setBrcLon(Double.valueOf(brcLon));
+					branchesVO.setBrcName(brcName);
+					System.out.println("empBranches:"+empBranches);
+					BranchesService branchesSvc = new BranchesService();
+					branchesVO =branchesSvc.addBranches(branchesVO);
+					RequestDispatcher successView = req.getRequestDispatcher("/back/employee/listAllBranches.jsp");
+					successView.forward(req, res);
+					
+
+				}
+		// =======================================================================================================================================			
+				if("branches_update".equals(action)){
+					 System.out.println("執行:"+action);
+
+					String empBranches = req.getParameter("empBranches");
+					Double brcLat = Double.valueOf(req.getParameter("brcLat"));
+					Double brcLon = Double.valueOf(req.getParameter("brcLon"));
+					String brcName = req.getParameter("brcName");
+
+					BranchesVO branchesVO= new BranchesVO();
+					branchesVO.setEmpBranches(empBranches);
+					branchesVO.setBrcLat(brcLat);
+					branchesVO.setBrcLon(brcLon);
+					branchesVO.setBrcName(brcName);
+					
+					BranchesService branchesSvc = new BranchesService();
+					branchesVO=branchesSvc.updateBRANCHES(branchesVO);
+					
+					System.out.println("後台成功修改據點狀態");
+					RequestDispatcher successView = req.getRequestDispatcher("/back/employee/listAllBranches.jsp");
+					successView.forward(req, res);
+				}		
+				if("branches_query".equals(action)){
+					
+				}
 		
 	}
 

@@ -345,6 +345,53 @@ public class ExpertlistJNDIDAO implements ExpertlistDAO_interface {
 //			System.out.println();
 //		}
 	}
+
+	@Override
+	public void update(String expName, String expSpec, Integer expPrice, String expNo) {
+		Connection con = null;
+		PreparedStatement pstmt = null;
+
+		try {
+			con = ds.getConnection();
+//			Class.forName(driver);
+//			con = DriverManager.getConnection(url, userid, passwd);
+			pstmt = con.prepareStatement(UPDATE);
+
+			pstmt.setString(1, expName);
+			pstmt.setString(2, expSpec);
+			pstmt.setInt(3, expPrice);
+			pstmt.setString(4, expNo);
+			
+			
+			pstmt.executeUpdate();
+
+			// Handle any driver errors
+//		} catch (ClassNotFoundException e) {
+//			throw new RuntimeException("Couldn't load database driver. "
+//					+ e.getMessage());
+			// Handle any SQL errors
+		} catch (SQLException se) {
+			throw new RuntimeException("A database error occured. "
+					+ se.getMessage());
+			// Clean up JDBC resources
+		} finally {
+			if (pstmt != null) {
+				try {
+					pstmt.close();
+				} catch (SQLException se) {
+					se.printStackTrace(System.err);
+				}
+			}
+			if (con != null) {
+				try {
+					con.close();
+				} catch (Exception e) {
+					e.printStackTrace(System.err);
+				}
+			}
+		}
+		
+	}
 }
 	
 	

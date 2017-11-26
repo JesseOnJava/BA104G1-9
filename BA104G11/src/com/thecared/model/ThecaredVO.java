@@ -2,6 +2,8 @@ package com.thecared.model;
 
 import java.sql.Date;
 
+import java.sql.Timestamp;
+
 public class ThecaredVO {
 
 	private String caredNo;
@@ -16,7 +18,7 @@ public class ThecaredVO {
 	private String conStatus;
 	private String bioStatus;
 	private String caredNote;
-	private Date modifyTime;
+	private Timestamp modifyTime;
 	
 	public ThecaredVO(){
 		super();
@@ -95,10 +97,10 @@ public class ThecaredVO {
 	public void setCaredNote(String caredNote) {
 		this.caredNote = caredNote;
 	}
-	public Date getModifyTime() {
+	public Timestamp getModifyTime() {
 		return modifyTime;
 	}
-	public void setModifyTime(Date modifyTime) {
+	public void setModifyTime(Timestamp modifyTime) {
 		this.modifyTime = modifyTime;
 	}
 }

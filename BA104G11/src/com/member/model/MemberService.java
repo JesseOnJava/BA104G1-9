@@ -9,7 +9,7 @@ public class MemberService {
 	private MemberDAO_interface dao;
 	
 	public MemberService(){
-		dao = new MemberDAO();
+		dao = new MemberJNDIDAO();
 	}
 	
 	public MemberVO addMember(String memName,String memPhone,String memGender,String memEmail,
@@ -55,6 +55,12 @@ public class MemberService {
 		MemberVO memVO = memberVO;
 		dao.update(memVO);
 		return memVO;
+	}
+	public void updateStatus(String memSratus){
+		MemberVO memVO = new MemberVO();
+		memVO.setMemSratus(memSratus);
+		
+		dao.update(memVO);
 	}
 	
 	

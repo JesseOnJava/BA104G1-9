@@ -16,6 +16,7 @@ import javax.sql.DataSource;
 
 public class ShopJNDIDAO implements ShopDAO_interface {
 	private static final String INSERT_STMT = "INSERT INTO ShoppingMall(ITEMNO, STOCK, PRICE, STATE, CLASSNO, NAME, DES ,PICTURE1,PICTURE2,PICTURE3)  VALUES (?,?,?,?,?,?,?,?,?,?)";
+	private static final String DELETE_PRO_SHOP = "DELETE FROM PROMOTIONDETAIL WHERE ITEMNO=? AND PROMOTIONNO=?";
 	private static final String GET_ALL_STMT = "SELECT ITEMNO, STOCK, PRICE, STATE, CLASSNO, NAME, DES ,PICTURE1,PICTURE2,PICTURE3 FROM ShoppingMall WHERE STATE=1 order by ITEMNO";
 	private static final String GET_ALL_BACK = "SELECT ITEMNO, STOCK, PRICE, STATE, CLASSNO, NAME, DES ,PICTURE1,PICTURE2,PICTURE3 FROM ShoppingMall order by ITEMNO";
 	private static final String GET_ONE_STMT = "SELECT ITEMNO, STOCK, PRICE, STATE, CLASSNO, NAME, DES ,PICTURE1,PICTURE2,PICTURE3 FROM ShoppingMall where ITEMNO =?";
@@ -23,14 +24,14 @@ public class ShopJNDIDAO implements ShopDAO_interface {
 	private static final String DELETE = "DELETE FROM ShoppingMall where ITEMNO = ?";
 	private static final String DELETE2 = "DELETE FROM PROMOTIONDETAIL where ITEMNO = ?";
 	private static final String CHANGESTATE="UPDATE SHOPPINGMALL  SET STATE =? WHERE ITEMNO=?";
-	// ™`∑Ntable√π§Œ¨Oß_¶≥Ωƒ¨
+	// Ê≥®ÊÑètableÁæÖÂèäÊòØÂê¶ÊúâË°ùÁ™Å
 	private static final String UPDATE = "UPDATE ShoppingMall set  STOCK=?, PRICE=?, STATE=?, CLASSNO=?,NAME=?,DES=?,PICTURE1=?,PICTURE2=?,PICTURE3=? where ITEMNO = ?";
 	private static final String UPDATE2 = "UPDATE ShoppingMall set  STOCK=?, PRICE=?,NAME=?,DES=? where ITEMNO = ?";
 	private static DataSource ds = null;
 	static {
 		try {
 			Context ctx = new InitialContext();
-			ds = (DataSource) ctx.lookup("java:comp/env/jdbc/TestDB");
+			ds = (DataSource) ctx.lookup("java:comp/env/jdbc/BA104G1DB");
 		} catch (NamingException e) {
 			e.printStackTrace();
 		}
@@ -58,7 +59,7 @@ public class ShopJNDIDAO implements ShopDAO_interface {
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			System.out.println("∑sºWø˘ª~");
+			System.out.println("Êñ∞Â¢ûÈåØË™§");
 		} finally {
 			if (pstmt != null) {
 				try {
@@ -101,7 +102,7 @@ public class ShopJNDIDAO implements ShopDAO_interface {
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			System.out.println("≠◊ßÔø˘ª~");
+			System.out.println("‰øÆÊîπÈåØË™§");
 		} finally {
 			if (pstmt != null) {
 				try {
@@ -139,7 +140,7 @@ public class ShopJNDIDAO implements ShopDAO_interface {
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			System.out.println("≠◊ßÔø˘ª~");
+			System.out.println("‰øÆÊîπÈåØË™§");
 		} finally {
 			if (pstmt != null) {
 				try {
@@ -179,7 +180,7 @@ public class ShopJNDIDAO implements ShopDAO_interface {
 
 
 		} catch (SQLException se) {
-			System.out.println("ßR∞£ø˘ª~");
+			System.out.println("Âà™Èô§ÈåØË™§");
 			// Clean up JDBC resources
 		} finally {
 		
@@ -229,13 +230,13 @@ public class ShopJNDIDAO implements ShopDAO_interface {
 				shopVO.setPicture1(rs.getBytes("PICTURE1"));
 				shopVO.setPicture2(rs.getBytes("PICTURE2"));
 				shopVO.setPicture3(rs.getBytes("PICTURE3"));
-				// shopVO §]∫Ÿ¨∞ Domain objects
+				// shopVO ‰πüÁ®±ÁÇ∫ Domain objects
 				
 			}
 
 			// Handle any driver errors
 		} catch (SQLException se) {
-			System.out.println("≥Ê∂µ¨d¥M•¢±—");
+			System.out.println("ÂñÆÈ†ÖÊü•Â∞ãÂ§±Êïó");
 			// Clean up JDBC resources
 		} finally {
 			if (rs != null) {
@@ -290,13 +291,13 @@ public class ShopJNDIDAO implements ShopDAO_interface {
 				shopVO.setPicture1(rs.getBytes("PICTURE1"));
 				shopVO.setPicture2(rs.getBytes("PICTURE2"));
 				shopVO.setPicture3(rs.getBytes("PICTURE3"));
-				// shopVO §]∫Ÿ¨∞ Domain objects
+				// shopVO ‰πüÁ®±ÁÇ∫ Domain objects
 				
 			}
 
 			// Handle any driver errors
 		} catch (SQLException se) {
-			System.out.println("≥Ê∂µ¨d¥M•¢±—");
+			System.out.println("ÂñÆÈ†ÖÊü•Â∞ãÂ§±Êïó");
 			// Clean up JDBC resources
 		} finally {
 			if (rs != null) {
@@ -351,10 +352,10 @@ public class ShopJNDIDAO implements ShopDAO_interface {
 				shopVO.setPicture1(rs.getBytes("PICTURE1"));
 				shopVO.setPicture2(rs.getBytes("PICTURE2"));
 				shopVO.setPicture3(rs.getBytes("PICTURE3"));
-				// shopVO §]∫Ÿ¨∞ Domain objects
+				// shopVO ‰πüÁ®±ÁÇ∫ Domain objects
 	
 				list.add(shopVO); // Store the row in the list
-				//System.out.println("getAll()¨d∏ﬂ¶®•\JNDA");
+				//System.out.println("getAll()Êü•Ë©¢ÊàêÂäüJNDA");
 			}
 
 			// Handle any driver errors
@@ -398,13 +399,13 @@ public class ShopJNDIDAO implements ShopDAO_interface {
 			pstmt = con.prepareStatement(CHANGESTATE);
 			pstmt.setInt(1, state);
 			pstmt.setInt(2, pk);
-			System.out.println("ChangeState∂}©l");
+			System.out.println("ChangeStateÈñãÂßã");
 			pstmt.executeUpdate();
-			System.out.println("ChangeStateßπ≤¶");
+			System.out.println("ChangeStateÂÆåÁï¢");
 			pstmt.executeUpdate();
-			System.out.println("ChangeStateßπ≤¶");
+			System.out.println("ChangeStateÂÆåÁï¢");
 		} catch (SQLException se) {
-			System.out.println("ChangeStateø˘ª~:"+se);
+			System.out.println("ChangeStateÈåØË™§:"+se);
 			// Clean up JDBC resources
 		} finally {
 		
@@ -456,10 +457,10 @@ public class ShopJNDIDAO implements ShopDAO_interface {
 					shopVO.setPicture1(rs.getBytes("PICTURE1"));
 					shopVO.setPicture2(rs.getBytes("PICTURE2"));
 					shopVO.setPicture3(rs.getBytes("PICTURE3"));
-					// shopVO §]∫Ÿ¨∞ Domain objects
+					// shopVO ‰πüÁ®±ÁÇ∫ Domain objects
 		
 					list.add(shopVO); // Store the row in the list
-					//System.out.println("getAll()¨d∏ﬂ¶®•\JNDA");
+					//System.out.println("getAll()Êü•Ë©¢ÊàêÂäüJNDA");
 				}
 
 				// Handle any driver errors
@@ -491,4 +492,110 @@ public class ShopJNDIDAO implements ShopDAO_interface {
 			}
 			return list;
 		}
+
+	@Override
+	public void deleteProShop(Integer itemno, Integer promotiomno) {
+
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+
+		try {
+
+			con = ds.getConnection();
+			pstmt = con.prepareStatement(DELETE_PRO_SHOP);
+			pstmt.setInt(1, itemno);
+			pstmt.setInt(2, promotiomno);
+			pstmt.executeUpdate();
+			// Handle any driver errors
+		} catch (SQLException se) {
+			throw new RuntimeException("DELETE_PRO_SHOP " + se.getMessage());
+			// Clean up JDBC resources
+		} finally {
+			if (rs != null) {
+				try {
+					rs.close();
+				} catch (SQLException se) {
+					se.printStackTrace(System.err);
+				}
+			}
+			if (pstmt != null) {
+				try {
+					pstmt.close();
+				} catch (SQLException se) {
+					se.printStackTrace(System.err);
+				}
+			}
+			if (con != null) {
+				try {
+					con.close();
+				} catch (Exception e) {
+					e.printStackTrace(System.err);
+				}
+			}
+		}
+	
+	}
+
+	@Override
+	public List<ShopVO> findByPrimaryKeyByString2(String pkName) {
+		List<ShopVO> list = new ArrayList<ShopVO>();
+		ShopVO shopVO = null;
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+
+		try {
+			//con = ds.getConnection();		pstmt = con.prepareStatement("SELECT ITEMNO, STOCK, PRICE, STATE, CLASSNO, NAME, DES ,PICTURE1,PICTURE2,PICTURE3 FROM ShoppingMall where NAME ='"+pk+"'");
+			con = ds.getConnection();
+			pstmt = con.prepareStatement("SELECT ITEMNO, STOCK, PRICE, STATE, CLASSNO, NAME, DES ,PICTURE1,PICTURE2,PICTURE3 FROM ShoppingMall where NAME LIKE '%"+pkName+"%'");
+
+			rs = pstmt.executeQuery();
+	
+			while (rs.next()) {
+				shopVO=new ShopVO();
+				shopVO.setITEMNO(rs.getInt("ITEMNO"));
+				shopVO.setSTOCK(rs.getInt("STOCK"));
+				shopVO.setPRICE(rs.getInt("PRICE"));
+				shopVO.setSTATE(rs.getInt("STATE"));
+				shopVO.setCLASSNO(rs.getInt("CLASSNO"));
+				shopVO.setNAME(rs.getString("NAME"));
+				shopVO.setDES(rs.getString("DES"));
+				shopVO.setPicture1(rs.getBytes("PICTURE1"));
+				shopVO.setPicture2(rs.getBytes("PICTURE2"));
+				shopVO.setPicture3(rs.getBytes("PICTURE3"));
+				// shopVO ‰πüÁ®±ÁÇ∫ Domain objects
+				list.add(shopVO);
+			}
+
+			// Handle any driver errors
+		} catch (SQLException se) {
+			System.out.println("ÂñÆÈ†ÖÊü•Â∞ãÂ§±Êïó");
+			// Clean up JDBC resources
+		} finally {
+			if (rs != null) {
+				try {
+					rs.close();
+				} catch (SQLException se) {
+					se.printStackTrace(System.err);
+				}
+			}
+			if (pstmt != null) {
+				try {
+					pstmt.close();
+				} catch (SQLException se) {
+					se.printStackTrace(System.err);
+				}
+			}
+			if (con != null) {
+				try {
+					con.close();
+				} catch (Exception e) {
+					e.printStackTrace(System.err);
+				}
+			}
+		}
+		return list;
+	}
+	
 }

@@ -3,38 +3,37 @@ package com.shoporder.model;
 import java.util.List;
 
 public interface ShopOrderDAO_interface {
-	
-	//*************************************************
-	public List<ShopOrderVO> getMemNo(String memNo);
-	public List<OrderDetailVO> getOrderNo(String orderNo);
-	//*************************************************
-	
-	
-	//���o�q��s���̪��Ҧ��ӫ~
+
+	//取得訂單編號裡的所有商品
 	public List<ShopOrderVO> getAllByOrderNo(String orderno);
-	//���o�q�ʸӰӫ~�s�����Ҧ��H����
+	//取得訂購該商品編號的所有人明細
 	public List<ShopOrderVO> getOneByItemNo(Integer pk);
-	//���o�ӭq��s�����Ҧ��ӫ~
+	//取得該訂單編號的所有商品
 	public List<ShopOrderVO> getPriceByOrderNo(String orderno);
-	//���o�ӭq��s�����P�P���ӫ~
+	//取得該訂單編號有促銷的商品
 	public List<ShopOrderVO> getPriceByOrderNoIfHave(String orderno);
-	//���o�ӷ|�����ʶR���ӫ~
+	//取得該會員所購買的商品
 	public List<ShopOrderVO> getAllByMenNO(String menno);
-	//���o�Ҧ����q��&�������|��
+	//取得所有的訂單&對應的會員
 	public List<ShopOrderVO> getAllOrder();
-	//�s�W�ӫ~�Ω���
+	//新增商品及明細
 	public void addShopOrder(ShopOrderVO shoporderVO);
-	//�ʪ����ӫ~�妸�s�W
+	//購物車商品批次新增
 	public void addShopCartOrder(List<ShopOrderVO> shoporderVO);
-	//��s�q��
+	//更新訂單
 	public List<ShopOrderVO> updateShopOrder(List<ShopOrderVO> shoporderVO,Integer finalTotal);
-	//��ITEMNO&ORDERID�R��
+	//用ITEMNO&ORDERID刪除
 	public void delete(String orderno,String memno);
-	//�^���|�����x���I��
+	//回報會員的儲值點數
 	public Integer returnPoint(String memno);
-	//�����|���I��
+	//扣除會員點數
 	public Integer returnAfterShoppingPoint(Integer total,String memno);
-	//�R���q�����ٷ|���I��  //�^�ǳѾl�I��
+	//刪除訂單後返還會員點數  //回傳剩餘點數
 	public Integer returnPointback(String Orderno);
-	
+	//更改訂單狀態為2,已完成
+	public void changeOrderToOK(String orderid);
+	//更改訂單狀態為3,已取消
+	public void changeOrderToCancel(String orderid);
+	//增加某位會員點數
+	public void addPointForMember(Integer point,String memno);
 }

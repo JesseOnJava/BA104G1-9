@@ -16,6 +16,7 @@ public class ShopVO implements java.io.Serializable {
 	private byte[] picture2;
 	private byte[] picture3;
 	private Integer quantity;
+	private String key;
 
 	@Override
 	public int hashCode() {
@@ -27,6 +28,14 @@ public class ShopVO implements java.io.Serializable {
 		result = prime * result + ((NAME == null) ? 0 : NAME.hashCode());
 		result = prime * result + PRICE;
 		return result;
+	}
+
+	public String getKey() {
+		return key;
+	}
+
+	public void setKey(String key) {
+		this.key = key;
 	}
 
 	@Override

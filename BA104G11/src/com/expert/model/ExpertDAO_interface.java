@@ -9,6 +9,6 @@ public interface ExpertDAO_interface {
     public void delete(String exp_own);
     public ExpertVO findByPrimaryKey(String expOwn);
     public List<ExpertVO> getAll();
-    public List<ExpertVO> getAllByEMPNO(String expNo);
+	List<ExpertVO> getAllByEMPNO(String empNo);
     
 }

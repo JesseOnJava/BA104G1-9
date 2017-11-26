@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -28,25 +29,25 @@ public class MenuServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
 		req.setCharacterEncoding("UTF-8");
 		String action = req.getParameter("action");
+		if ("getOneForInsert".equals(action)) {
+			Integer smNo = new Integer(req.getParameter("smNo"));
+			String smName=req.getParameter("smName");
+			req.setAttribute("smNo", smNo);
+			req.setAttribute("smName", smName);
+
+			String url = "back/setMeal/menu3.jsp";
+			RequestDispatcher successView = req.getRequestDispatcher(url);
+			successView.forward(req, res);
+
+		}
 
 		if ("insertMenu".equals(action)) {
+			System.out.println("insertMenu");
 			String jsonStr = req.getParameter("test");
 			Integer smNo = new Integer(req.getParameter("smNo"));
+			System.out.println(smNo);
 			System.out.println(jsonStr);
 			List<MenuVO> list = new ArrayList<>();
-			
-			
-			MenuService menuSvc = new MenuService();
-			menuSvc.getAll(smNo);
-			System.out.println(new JSONArray(menuSvc.getAll(smNo)).toString());
-			
-			
-			
-			
-			
-			
-			
-			
 			try {
 				JSONArray jsonArray = new JSONArray(jsonStr);
 				for (int i = 0; i < jsonArray.length(); i++) {
@@ -62,11 +63,18 @@ public class MenuServlet extends HttpServlet {
 					list.add(menuVO);
 				}
 
+				MenuService menuSvc = new MenuService();
+				menuSvc.delete(smNo);
+				for (int i = 0; i < list.size(); i++) {
+					menuSvc.addMenu(list.get(i));
+				}
 				
-				//menuSvc.delete(smNo);
-//				for (int i = 0; i < list.size(); i++) {
-//					menuSvc.addMenu(list.get(i));
-//				}
+				
+				String url = "back/setMeal/listAllSetMeal.jsp";
+				RequestDispatcher successView = req.getRequestDispatcher(url);
+				successView.forward(req, res);
+				
+				
 			} catch (JSONException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

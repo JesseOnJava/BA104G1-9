@@ -9,25 +9,28 @@ public interface ProDAO_interface {
 	public void insert(ProVO proVO);
 	public void update(ProVO proVO);	
 	public void delete(Integer proVO);
-	//§A¦n¡A§Ú¬O¬d¸ß©Ò¦³¥¿¦b¶i¦æªº«P¾P°Ó«~
+	//ä½ å¥½ï¼Œæˆ‘æ˜¯æŸ¥è©¢æ‰€æœ‰æ­£åœ¨é€²è¡Œçš„ä¿ƒéŠ·å•†å“
 	public List<ProVO> getAllProNow();	
-	//§A¦n¡A§Ú¬Omainforpro±M¥Îªº
+	//ä½ å¥½ï¼Œæˆ‘æ˜¯mainforproå°ˆç”¨çš„
 	public List<ProVO> activity();
-	//§A¦n¡A§Ú¬Oupdate±M¥Îªº
+	//ä½ å¥½ï¼Œæˆ‘æ˜¯updateå°ˆç”¨çš„
 	public ProVO findByPrimaryKey(Integer proVO);
-	//§A¦n¡A§Ú¬O¥Î°Ó«~¦WºÙ¥h¬d¸ßªº
+	//ä½ å¥½ï¼Œæˆ‘æ˜¯ç”¨å•†å“åç¨±å»æŸ¥è©¢çš„
 	public ProVO getOneEmpForStringName(String proVO);
-	//§A¦n¡A§Ú¬O¥Î±M®×¦WºÙ¥h¬d¸ßªº(©Ò¥H·|¶Ç¦^«Ü¦h­Ó)
+	//ä½ å¥½ï¼Œæˆ‘æ˜¯ç”¨å°ˆæ¡ˆåç¨±å»æŸ¥è©¢çš„(æ‰€ä»¥æœƒå‚³å›å¾ˆå¤šå€‹)
 	public List<ProVO> findByPrimaryKeyByString(String pk);
-	//§A¦n¡A§Ú¬O¥Î±M®×½s¸¹¥h¬d¸ßªº
+	//ä½ å¥½ï¼Œæˆ‘æ˜¯ç”¨å°ˆæ¡ˆç·¨è™Ÿå»æŸ¥è©¢çš„
 	public ProVO getOneOnItemNO(int itemno);
-	//§A¦n¡A§Ú¬O¬d¸ß©Ò¦³ªº«P¾P±M®×
+	//ä½ å¥½ï¼Œæˆ‘æ˜¯æŸ¥è©¢æ‰€æœ‰çš„ä¿ƒéŠ·å°ˆæ¡ˆ
 	public List<ProVO> getAllPro();
-	//§A¦n¡A§Ú¬O¬d¸ß©Ò¦³«P¾P°Ó«~
+	//ä½ å¥½ï¼Œæˆ‘æ˜¯æŸ¥è©¢æ‰€æœ‰ä¿ƒéŠ·å•†å“
 	public List<ProVO> getAllProShop();
-	//§A¦n¡A§Ú¬O¬d¸ß³æ¤@«P¾P°Ó«~
+	//ä½ å¥½ï¼Œæˆ‘æ˜¯æŸ¥è©¢å–®ä¸€ä¿ƒéŠ·å•†å“
 	public ProVO getOneProShop(Integer itemno);
-	
+	//ä½ å¥½ï¼ŒæŸ¥è©¢ç›®å‰æ™‚é–“æ­£åœ¨åŸ·è¡Œçš„ä¿ƒéŠ·å°ˆæ¡ˆ
+	public ProVO getProProjectNow();
+	//ä½ å¥½ï¼Œæˆ‘æ˜¯æŠŠå•†å“è®Šæˆä¿ƒéŠ·å•†å“çš„æ–¹æ³•
+	public void putShopInPromotion(Integer promotionno,Integer itemno,Integer price);
 	
 	
 }

@@ -2,7 +2,10 @@ package com.mealorder.controller;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -41,7 +44,7 @@ public class MealOrderServlet extends HttpServlet {
 			
 			req.setAttribute("list", list);
 			
-			String url = "/back/MealOrder/listAllMealOrder2.jsp";
+			String url = "/back/mealOrder/listAllMealOrder.jsp";
 			RequestDispatcher successView = req.getRequestDispatcher(url);
 			successView.forward(req, res);
 			
@@ -66,7 +69,7 @@ public class MealOrderServlet extends HttpServlet {
 			
             
             
-        	String url = "/back/MealOrder/listAllMealOrder2.jsp";
+        	String url = "/back/mealOrder/listAllMealOrder.jsp";
 			RequestDispatcher successView = req.getRequestDispatcher(url);
 			successView.forward(req, res);
 			
@@ -87,69 +90,123 @@ public class MealOrderServlet extends HttpServlet {
 			SetMealVO setMealVO = setMealSvc.getOneSetMeal(smNo);
 			Integer smPrice = setMealVO.getSmPrice();
 			req.setAttribute("smPrice", smPrice);
-			//
-			String deliveryDate = req.getParameter("deliveryDate");
-			String[] deliveryDates = deliveryDate.split(", ");
-
-			Integer days = deliveryDates.length;
-			req.setAttribute("days", days);
-
-			Integer orderQty = new Integer(req.getParameter("orderQty"));
-
-			String mealTime = req.getParameter("mealTime");
-
+            
 			Integer breakfast = 0;
-			if (mealTime.contains("早")) {
-				breakfast = days * orderQty;
-			} else {
-				breakfast = 0;
-			}
-
-			req.setAttribute("breakfast", breakfast);
-
-			Integer lunch = 0;
-			if (mealTime.contains("中")) {
-				lunch = days * orderQty;
-			} else {
-				lunch = 0;
-			}
-
-			req.setAttribute("lunch", lunch);
-
-			Integer dinner = 0;
-			if (mealTime.contains("晚")) {
-				dinner = days * orderQty;
-			} else {
-				dinner = 0;
-			}
-
-			req.setAttribute("dinner", dinner);
-
-			Integer totalMeals = breakfast + lunch + dinner;
+			Integer lunch=0;
+			Integer dinner=0;
+			Set<String> set=new HashSet<>();
+			
+			String[] dates=req.getParameterValues("Checkday[]");
+			System.out.println(Arrays.toString(dates));
+			List<String> datesList=Arrays.asList(dates);
+			req.setAttribute("datesList", datesList);
+			
+			
+			
+            for(int i=0;i<dates.length;i++){
+            	if(dates[i].contains("早")){
+            		breakfast++;
+            	}
+            	if(dates[i].contains("中")){
+            		lunch++;
+            	}
+            	if(dates[i].contains("晚")){
+            		dinner++;
+            	}
+            	String day=new String();
+            	day=dates[i].substring(0,10);
+            	set.add(day);
+            	System.out.println(day);
+            	System.out.println(dates[i]);
+            }
+			
+            System.out.println("breakfast"+breakfast);
+            System.out.println("lunch"+lunch);
+            System.out.println("dinner"+dinner);
+            
+			
+			
+//			String deliveryDate = req.getParameter("deliveryDate");
+//			String[] deliveryDates = deliveryDate.split(", ");
+//
+			Integer days = set.size();
+			System.out.println(days);
+			req.setAttribute("days", days);
+//
+			Integer orderQty = new Integer(req.getParameter("orderQty"));
+//
+//			String mealTime = req.getParameter("mealTime");
+//
+//			Integer breakfast = 0;
+//			if (mealTime.contains("早")) {
+//				breakfast = days * orderQty;
+//			} else {
+//				breakfast = 0;
+//			}
+            Integer totalBreakfast=breakfast*orderQty;
+			req.setAttribute("totalBreakfast", totalBreakfast);
+//
+//			Integer lunch = 0;
+//			if (mealTime.contains("中")) {
+//				lunch = days * orderQty;
+//			} else {
+//				lunch = 0;
+//			}
+            Integer totalLunch=lunch*orderQty;
+			req.setAttribute("totalLunch",totalLunch);
+//
+//			Integer dinner = 0;
+//			if (mealTime.contains("晚")) {
+//				dinner = days * orderQty;
+//			} else {
+//				dinner = 0;
+//			}
+            Integer totalDinner=dinner*orderQty;
+			req.setAttribute("totalDinner", totalDinner);
+//
+			Integer totalMeals = totalBreakfast + totalLunch + totalDinner;
 			req.setAttribute("totalMeals", totalMeals);
-
+//
 			Integer totalPrice = smPrice * totalMeals;
 			req.setAttribute("totalPrice", totalPrice);
-
-			String url = "/front/MealOrder/FileInAForm2.jsp";
+//
+			String url = "/front/mealService/FileInAForm.jsp";
 			RequestDispatcher successView = req.getRequestDispatcher(url);
 			successView.forward(req, res);
 
 		}
 
 		if ("insert".equals(action)) {
+			System.out.println("進來訂單新增");
 
 			HttpSession session = req.getSession();
 			MemberVO memberVO = (MemberVO) session.getAttribute("memberVO");
 
 			Integer smNo = new Integer(req.getParameter("smNo"));
-
-			String deliveryDate = req.getParameter("deliveryDate");
-			String[] deliveryDates = deliveryDate.split(", ");
-
-			String mealTime = req.getParameter("mealTime").trim();
+            System.out.println(smNo);
+			//String deliveryDate = req.getParameter("deliveryDate");
+			//System.out.println(deliveryDate);
+			//String[] deliveryDates = deliveryDate.split(", ");
+			//System.out.println(deliveryDates);
+            
+		    String str=req.getParameter("dates");
+		    String str2=str.substring(1,(str.length())-1);
+		    
+		    String[] dates=str2.split(",");
+		    for(String date:dates){
+		    	System.out.println(date.trim());
+		    }
+		     
+		   
+		    
+		    
+			
+			//String mealTime = req.getParameter("mealTime").trim();
+			//System.out.println(mealTime);
 			Integer orderQty = new Integer(req.getParameter("orderQty").trim());
+			System.out.println(orderQty);
 			String memNo = memberVO.getMemNo();
+			System.out.println(memNo);
 			String rcptName = req.getParameter("rcptName").trim();
 			String rcptAdd = req.getParameter("rcptAdd").trim();
 			String rcptPhone = req.getParameter("rcptPhone").trim();
@@ -163,14 +220,16 @@ public class MealOrderServlet extends HttpServlet {
 				MealOrderVO mealOrderVO = new MealOrderVO();
 				mealOrderVO.setMemNo(memNo);
 				mealOrderVO.setRcptName(rcptName);
+				//System.out.println(rcptName);
 				mealOrderVO.setRcptAdd(rcptAdd);
+				//System.out.println(rcptAdd);
 				mealOrderVO.setRcptPhone(rcptPhone);
-
-				List<MealOrderDetailVO> list = new ArrayList();
-				for (int i = 0; i < deliveryDates.length; i++) {
+                //System.out.println(rcptPhone);
+				List<MealOrderDetailVO> list = new ArrayList<>();
+				for (int i = 0; i < dates.length; i++) {
 					MealOrderDetailVO mealOrderDetailVO = new MealOrderDetailVO();
-					mealOrderDetailVO.setDeliveryDate(java.sql.Date.valueOf(deliveryDates[i]));
-					mealOrderDetailVO.setMealTime(mealTime);
+					mealOrderDetailVO.setDeliveryDate(java.sql.Date.valueOf(dates[i].trim().substring(0,10)));
+					mealOrderDetailVO.setMealTime(dates[i].trim().substring(11, 13));
 					mealOrderDetailVO.setSmNo(smNo);
 					mealOrderDetailVO.setOrderQty(orderQty);
 					list.add(mealOrderDetailVO);
@@ -184,7 +243,7 @@ public class MealOrderServlet extends HttpServlet {
 
 			}
 
-			String url = "/front/MealOrder/OrderSucess.jsp";
+			String url = "/front/mealService/OrderSuccess.jsp";
 			RequestDispatcher successView = req.getRequestDispatcher(url);
 			successView.forward(req, res);
 

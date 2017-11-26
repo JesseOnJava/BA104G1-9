@@ -15,26 +15,28 @@ import javax.sql.DataSource;
 import com.shop.model.ShopVO;
 
 public class ProDAO implements ProDAO_interface{
+	private static final String PUT_SHOP_TO_PROMOTION="INSERT INTO PROMOTIONDETAIL (PROMOTIONNO,ITEMNO,PRICE) VALUES(?,?,?)";
 	private static final String FIND_ALL_PRO="SELECT * FROM PROMOTION ORDER BY PROMOTIONNO";
 	private static final String GET_ONE_PRO_SHOP="SELECT P.PROMOTIONNO,P.ITEMNO,P.PRICE,PT.NAME,BEGINDATE,ENDDATE,SP.NAME AS SHOPNAME,SP.DES,SP.PRICE AS OLDPRICE,SP.STOCK FROM PROMOTIONDETAIL P JOIN PROMOTION PT ON (P.PROMOTIONNO = PT.PROMOTIONNO) JOIN SHOPPINGMALL SP  ON SP.ITEMNO = P.ITEMNO where to_char(BEGINDATE,'yyyymmdd')<=to_char(sysdate,'yyyymmdd') and to_char(ENDDATE,'yyyymmdd')>=to_char(sysdate,'yyyymmdd') and P.ITEMNO=?";
 	private static final String INSERT_STMT = "INSERT INTO PROMOTION (PROMOTIONNO,NAME,BEGINDATE,ENDDATE) VALUES(FORPROMOTION.NEXTVAL,?,?,?)";
 	private static final String INSERT_STMT2 = "UPDATE PROMOTION set NAME=? WHERE PROMOTIONNO=?";
 	private static final String GET_ALL_PRO_SHOP =
 "SELECT P.PROMOTIONNO,P.ITEMNO,P.PRICE,PT.NAME,BEGINDATE,ENDDATE,SP.NAME AS SHOPNAME,SP.DES,STATE,SP.PRICE AS OLDPRICE FROM PROMOTIONDETAIL P JOIN PROMOTION PT ON (P.PROMOTIONNO = PT.PROMOTIONNO) JOIN SHOPPINGMALL SP  ON SP.ITEMNO = P.ITEMNO WHERE STATE=1 ORDER BY PT.NAME";
-	private static final String GET_ALL_STMT_BY_NOW ="SELECT P.PROMOTIONNO,P.ITEMNO,P.PRICE,PT.NAME,BEGINDATE,ENDDATE,SP.NAME AS SHOPNAME,SP.DES,SP.PRICE AS OLDPRICE,SP.STOCK FROM PROMOTIONDETAIL P JOIN PROMOTION PT ON (P.PROMOTIONNO = PT.PROMOTIONNO) JOIN SHOPPINGMALL SP  ON SP.ITEMNO = P.ITEMNO where to_char(BEGINDATE,'yyyymmdd')<=to_char(sysdate,'yyyymmdd') and to_char(ENDDATE,'yyyymmdd')>=to_char(sysdate,'yyyymmdd')";
+	private static final String GET_ALL_STMT_BY_NOW ="SELECT P.PROMOTIONNO,P.ITEMNO,P.PRICE,PT.NAME,BEGINDATE,ENDDATE,SP.NAME AS SHOPNAME,SP.DES,SP.PRICE AS OLDPRICE,SP.STOCK FROM PROMOTIONDETAIL P JOIN PROMOTION PT ON (P.PROMOTIONNO = PT.PROMOTIONNO) JOIN SHOPPINGMALL SP  ON SP.ITEMNO = P.ITEMNO where SP.STATE=1 and to_char(BEGINDATE,'yyyymmdd')<=to_char(sysdate,'yyyymmdd') and to_char(ENDDATE,'yyyymmdd')>=to_char(sysdate,'yyyymmdd')";
 			private static final String GET_ONE_STMT =
 "SELECT P.PROMOTIONNO, ITEMNO, PRICE,NAME,BEGINDATE,ENDDATE FROM PROMOTIONDETAIL P JOIN PROMOTION PT ON P.PROMOTIONNO = PT.PROMOTIONNO WHERE ITEMNO=?";
 	private static final String activity="SELECT NAME FROM PROMOTION";
 	private static final String DELETE = "DELETE  FROM PROMOTIONDETAIL where ITEMNO =?";
 	private static final String UPDATE = "UPDATE PROMOTIONDETAIL set  PROMOTIONNO=?,  PRICE=?  where ITEMNO =?";
 	private static final String UPDATE_TO_POR = "UPDATE PROMOTION set  NAME=?,BEGINDATE=?,ENDDATE=?  where PROMOTIONNO =?";
+	private static final String GET_PRO_PROJECT_NOW = "SELECT PROMOTIONNO,NAME,BEGINDATE,ENDDATE FROM PROMOTION where to_char(BEGINDATE,'yyyymmdd')<=to_char(sysdate,'yyyymmdd') and to_char(ENDDATE,'yyyymmdd')>=to_char(sysdate,'yyyymmdd')";
 	
 	private static DataSource ds = null;
 	
 	static {
 		try {
 			Context ctx = new InitialContext();
-			ds = (DataSource) ctx.lookup("java:comp/env/jdbc/TestDB");
+			ds = (DataSource) ctx.lookup("java:comp/env/jdbc/BA104G1DB");
 		} catch (NamingException e) {
 			e.printStackTrace();
 		}
@@ -61,7 +63,7 @@ public class ProDAO implements ProDAO_interface{
 
 			// Handle any driver errors
 		} catch (SQLException se) {
-			System.out.println("•˛≈È´PæP∞”´~¶W∫Ÿ¨d∏ﬂ•¢±—");
+			System.out.println("ÂÖ®È´î‰øÉÈä∑ÂïÜÂìÅÂêçÁ®±Êü•Ë©¢Â§±Êïó");
 			// Clean up JDBC resources
 		} finally {
 			if (rs != null) {
@@ -106,7 +108,7 @@ public class ProDAO implements ProDAO_interface{
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			System.out.println("ProDAO∑sºW´PæP±MÆ◊ø˘ª~");
+			System.out.println("ProDAOÊñ∞Â¢û‰øÉÈä∑Â∞àÊ°àÈåØË™§");
 		} finally {
 			if (pstmt != null) {
 				try {
@@ -132,7 +134,7 @@ public class ProDAO implements ProDAO_interface{
 		PreparedStatement pstmt = null;
 		
 		try {
-			//®Ï•ÿ´e¨∞§Ó¡Ÿ®S¶≥∂«§È¥¡∂i•h≠n∞O±oπÍ∞µ
+			//Âà∞ÁõÆÂâçÁÇ∫Ê≠¢ÈÇÑÊ≤íÊúâÂÇ≥Êó•ÊúüÈÄ≤ÂéªË¶ÅË®òÂæóÂØ¶ÂÅö
 			con = ds.getConnection();
 			
 			pstmt = con.prepareStatement(UPDATE);
@@ -157,7 +159,7 @@ public class ProDAO implements ProDAO_interface{
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			System.out.println("ProDAO.update≠◊ßÔø˘ª~");
+			System.out.println("ProDAO.update‰øÆÊîπÈåØË™§");
 		} finally {
 			if (pstmt != null) {
 				try {
@@ -188,7 +190,7 @@ public class ProDAO implements ProDAO_interface{
 
 			pstmt.setInt(1, proVO);
 		} catch (SQLException se) {
-			System.out.println("ßR∞£ø˘ª~");
+			System.out.println("Âà™Èô§ÈåØË™§");
 			// Clean up JDBC resources
 		} finally {
 			if (pstmt != null) {
@@ -230,12 +232,12 @@ public class ProDAO implements ProDAO_interface{
 				proVO.setNAME(rs.getString("NAME"));
 		//		proVO.setACTIVITYNAME(rs.getString("NAME"));
 				
-				// proVO §]∫Ÿ¨∞ Domain objects
+				// proVO ‰πüÁ®±ÁÇ∫ Domain objects
 			}
 
 			// Handle any driver errors
 		} catch (SQLException se) {
-			System.out.println("≥Ê∂µ¨d¥M•¢±—");
+			System.out.println("ÂñÆÈ†ÖÊü•Â∞ãÂ§±Êïó");
 			// Clean up JDBC resources
 		} finally {
 			if (rs != null) {
@@ -288,13 +290,13 @@ public class ProDAO implements ProDAO_interface{
 				proVO.setBEGINDATE(rs.getDate("BEGINDATE"));
 				proVO.setENDDATE(rs.getDate("ENDDATE"));
 
-				// empVo §]∫Ÿ¨∞ Domain objects
+				// empVo ‰πüÁ®±ÁÇ∫ Domain objects
 				list.add(proVO);
 			}
 
 			// Handle any driver errors
 		} catch (SQLException se) {
-			System.out.println("≥Ê∂µ¨d¥M•¢±—");
+			System.out.println("ÂñÆÈ†ÖÊü•Â∞ãÂ§±Êïó");
 			// Clean up JDBC resources
 		} finally {
 			if (rs != null) {
@@ -347,12 +349,12 @@ public class ProDAO implements ProDAO_interface{
 				proVO.setSHOPNAME(rs.getString("SHOPNAME"));
 		//		proVO.setACTIVITYNAME(rs.getString("NAME"));
 				
-				// proVO §]∫Ÿ¨∞ Domain objects
+				// proVO ‰πüÁ®±ÁÇ∫ Domain objects
 			}
 
 			// Handle any driver errors
 		} catch (SQLException se) {
-			System.out.println("≥Ê∂µ¨d¥M•¢±—");
+			System.out.println("ÂñÆÈ†ÖÊü•Â∞ãÂ§±Êïó");
 			// Clean up JDBC resources
 		} finally {
 			if (rs != null) {
@@ -401,12 +403,12 @@ public class ProDAO implements ProDAO_interface{
 				proVO.setNAME(rs.getString("NAME"));
 		//		proVO.setACTIVITYNAME(rs.getString("NAME"));
 				
-				// proVO §]∫Ÿ¨∞ Domain objects
+				// proVO ‰πüÁ®±ÁÇ∫ Domain objects
 			}
 
 			// Handle any driver errors
 		} catch (SQLException se) {
-			System.out.println("≥Ê∂µ¨d¥M•¢±—");
+			System.out.println("ÂñÆÈ†ÖÊü•Â∞ãÂ§±Êïó");
 			// Clean up JDBC resources
 		} finally {
 			if (rs != null) {
@@ -434,7 +436,7 @@ public class ProDAO implements ProDAO_interface{
 		return proVO;
 	}
 
-	//¶π§Ë™k®˙±o©“¶≥´PæP§§™∫∞”´~
+	//Ê≠§ÊñπÊ≥ïÂèñÂæóÊâÄÊúâ‰øÉÈä∑‰∏≠ÁöÑÂïÜÂìÅ
 	@Override
 	public List<ProVO> getAllProNow() {
 		List<ProVO> list = new ArrayList<ProVO>();
@@ -460,13 +462,13 @@ public class ProDAO implements ProDAO_interface{
 				proVO.setDES(rs.getString("DES"));
 				proVO.setOLDPRICE(rs.getInt("OLDPRICE"));
 				proVO.setQuantity(rs.getInt("STOCK"));
-				// proVO §]∫Ÿ¨∞ Domain objects
+				// proVO ‰πüÁ®±ÁÇ∫ Domain objects
 				list.add(proVO);
 			}
 	
 			// Handle any driver errors
 		} catch (SQLException se) {
-			System.out.println("•˛≈È¨d¥M•¢±— :"+se);
+			System.out.println("ÂÖ®È´îÊü•Â∞ãÂ§±Êïó :"+se);
 			// Clean up JDBC resources
 		} finally {
 			if (rs != null) {
@@ -494,7 +496,7 @@ public class ProDAO implements ProDAO_interface{
 		return list;
 	}
 
-	//¶π§Ë™k®˙±o©“¶≥™∫´PæP¨°∞ 
+	//Ê≠§ÊñπÊ≥ïÂèñÂæóÊâÄÊúâÁöÑ‰øÉÈä∑Ê¥ªÂãï
 	@Override
 	public List<ProVO> getAllPro() {
 		List<ProVO> list = new ArrayList<ProVO>();
@@ -514,13 +516,13 @@ public class ProDAO implements ProDAO_interface{
 				proVO.setBEGINDATE(rs.getDate("BEGINDATE"));
 				proVO.setENDDATE(rs.getDate("ENDDATE"));
 				proVO.setNAME(rs.getString("NAME"));
-				// proVO §]∫Ÿ¨∞ Domain objects
+				// proVO ‰πüÁ®±ÁÇ∫ Domain objects
 				list.add(proVO);
 			}
 
 			// Handle any driver errors
 		} catch (SQLException se) {
-			System.out.println("¨d∏ﬂ•˛≈È´PæP¨°∞ •¢±—-ProDAO-GetAllPro"+se);
+			System.out.println("Êü•Ë©¢ÂÖ®È´î‰øÉÈä∑Ê¥ªÂãïÂ§±Êïó-ProDAO-GetAllPro"+se);
 			// Clean up JDBC resources
 		} finally {
 			if (rs != null) {
@@ -572,13 +574,13 @@ public class ProDAO implements ProDAO_interface{
 				proVO.setSHOPNAME(rs.getString("SHOPNAME"));
 				proVO.setDES(rs.getString("DES"));
 				proVO.setOLDPRICE(rs.getInt("OLDPRICE"));
-				// proVO §]∫Ÿ¨∞ Domain objects
+				// proVO ‰πüÁ®±ÁÇ∫ Domain objects
 				list.add(proVO);
 			}
 	
 			// Handle any driver errors
 		} catch (SQLException se) {
-			System.out.println("•˛≈È¨d¥M•¢±— :"+se);
+			System.out.println("ÂÖ®È´îÊü•Â∞ãÂ§±Êïó :"+se);
 			// Clean up JDBC resources
 		} finally {
 			if (rs != null) {
@@ -617,7 +619,7 @@ public class ProDAO implements ProDAO_interface{
 			pstmt = con.prepareStatement(GET_ONE_PRO_SHOP);
 			pstmt.setInt(1,itemno);
 			rs = pstmt.executeQuery();
-			System.out.println("∂i®”getOneProShop");
+			System.out.println("ÈÄ≤‰æÜgetOneProShop");
 			while (rs.next()) {
 				proVO=new ProVO();
 				proVO.setITEMNO(rs.getInt("ITEMNO"));
@@ -630,12 +632,12 @@ public class ProDAO implements ProDAO_interface{
 				proVO.setSHOPNAME(rs.getString("SHOPNAME"));
 				proVO.setDES(rs.getString("DES"));
 				proVO.setOLDPRICE(rs.getInt("OLDPRICE"));
-				// proVO §]∫Ÿ¨∞ Domain objects
+				// proVO ‰πüÁ®±ÁÇ∫ Domain objects
 			}
 	
 			// Handle any driver errors
 		} catch (SQLException se) {
-			System.out.println("•˛≈È¨d¥M•¢±— :"+se);
+			System.out.println("ÂÖ®È´îÊü•Â∞ãÂ§±Êïó :"+se);
 			// Clean up JDBC resources
 		} finally {
 			if (rs != null) {
@@ -662,5 +664,98 @@ public class ProDAO implements ProDAO_interface{
 		}
 		System.out.println("proVO.getITEMNO() :"+proVO.getITEMNO());
 		return proVO;
+	}
+
+	@Override
+	public ProVO getProProjectNow() {
+		ProVO proVO = null;
+		
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		try {
+			con = ds.getConnection();
+			pstmt = con.prepareStatement(GET_PRO_PROJECT_NOW);
+			rs = pstmt.executeQuery();
+			System.out.println("ÈÄ≤‰æÜGET_PRO_PROJECT_NOW");
+			while (rs.next()) {
+				proVO=new ProVO();
+				proVO.setPROMOTIOMNO(rs.getInt("PROMOTIONNO"));
+				proVO.setACTIVITYNAME(rs.getString("NAME"));
+				proVO.setBEGINDATE(rs.getDate("BEGINDATE"));
+				proVO.setENDDATE(rs.getDate("ENDDATE"));
+				// proVO ‰πüÁ®±ÁÇ∫ Domain objects
+			}
+	
+			// Handle any driver errors
+		} catch (SQLException se) {
+			System.out.println("ÂÖ®È´îÊü•Â∞ãÂ§±Êïó :"+se);
+			// Clean up JDBC resources
+		} finally {
+			if (rs != null) {
+				try {
+					rs.close();
+				} catch (SQLException se) {
+					se.printStackTrace(System.err);
+				}
+			}
+			if (pstmt != null) {
+				try {
+					pstmt.close();
+				} catch (SQLException se) {
+					se.printStackTrace(System.err);
+				}
+			}
+			if (con != null) {
+				try {
+					con.close();
+				} catch (Exception e) {
+					e.printStackTrace(System.err);
+				}
+			}
+		}
+		return proVO;
+	}
+
+	@Override
+	public void putShopInPromotion(Integer promotionno, Integer itemno, Integer price) {
+
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		try {
+			con = ds.getConnection();
+			pstmt = con.prepareStatement(PUT_SHOP_TO_PROMOTION);
+			pstmt.setInt(1, promotionno);
+			pstmt.setInt(2, itemno);
+			pstmt.setInt(3, price);
+			pstmt.executeUpdate();
+			// Handle any driver errors
+		} catch (SQLException se) {
+			System.out.println("PUT_SHOP_TO_PROMOTION:"+se);
+			// Clean up JDBC resources
+		} finally {
+			if (rs != null) {
+				try {
+					rs.close();
+				} catch (SQLException se) {
+					se.printStackTrace(System.err);
+				}
+			}
+			if (pstmt != null) {
+				try {
+					pstmt.close();
+				} catch (SQLException se) {
+					se.printStackTrace(System.err);
+				}
+			}
+			if (con != null) {
+				try {
+					con.close();
+				} catch (Exception e) {
+					e.printStackTrace(System.err);
+				}
+			}
+		}
 	}
 }
