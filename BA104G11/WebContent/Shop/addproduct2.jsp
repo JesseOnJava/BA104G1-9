@@ -46,7 +46,7 @@ td, h3 {
 	<h3 align="center">商城商品新增&修改</h3>
 
 
-	<form id="submit" action="/MyShopping/addshop.do" method=post
+	<form id="submit" action="<%=request.getContextPath()%>/addshop.do" method=post
 		enctype="multipart/form-data">
 		<table>
 			<th>
