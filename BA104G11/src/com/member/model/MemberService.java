@@ -9,7 +9,7 @@ public class MemberService {
 	private MemberDAO_interface dao;
 	
 	public MemberService(){
-		dao = new MemberDAO2();
+		dao = new MemberJNDIDAO();
 	}
 	
 	public MemberVO addMember(String memName,String memPhone,String memGender,String memEmail,

@@ -9,7 +9,7 @@ public class BalanceService {
 	private BalanceDAO_interface dao;
 
 	public BalanceService() {
-		dao = new BalanceJDBCDAO();
+		dao = new BalanceJNDIDAO();
 	}
 	private String topupNo;
 	private String memNo;

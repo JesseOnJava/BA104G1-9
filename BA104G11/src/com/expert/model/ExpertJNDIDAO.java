@@ -1,25 +1,25 @@
 package com.expert.model;
 
 import java.util.*;
-
-import javax.naming.Context;
-import javax.naming.InitialContext;
-import javax.naming.NamingException;
-import javax.sql.DataSource;
-
 import java.sql.*;
 import java.sql.Date;
+import javax.sql.DataSource;
+import javax.naming.Context;
+import javax.naming.NamingException;
+public class ExpertJNDIDAO implements ExpertDAO_interface {
+//	String driver = "oracle.jdbc.driver.OracleDriver";
+//	String userid = "BA104G1DB";
+//	String passwd = "BA104G1DB";
+	
+//  ************** AWS Ollie**************
+//	String url = "jdbc:oracle:thin:@13.229.86.22:1521:XE";
+//  ************** AWS Aerin**************
+//	String url = "jdbc:oracle:thin:@13.124.90.221:1521:XE";	
+//  ************** BA104 **************
+//	String url = "jdbc:oracle:thin:@10.120.25.6:1521:XE";
+//	************* Localhost **********
+//	String url = "jdbc:oracle:thin:@localhost:1521:XE";
 
-public class ExpertDAO implements ExpertDAO_interface {
-	private static DataSource ds = null;
-	static {
-		try {
-			Context ctx = new InitialContext();
-			ds = (DataSource) ctx.lookup("java:comp/env/jdbc/ba104a1");
-		} catch (NamingException e) {
-			e.printStackTrace();
-		}
-	}
 
 	//---------------前端------------------
 	//設定：可增
@@ -45,8 +45,17 @@ public class ExpertDAO implements ExpertDAO_interface {
 	//設定：不改 
 	//設定：可查
 	private static final String GET_ALL_STMT =  
-		" SELECT EXP_OWN, EMP_NO, EXP_NO FROM EXPERT WHERE EXP_OWN =?";
-
+		" SELECT EXP_OWN, EMP_NO, EXP_NO FROM EXPERT ";
+	private static DataSource ds = null;
+	static {
+		try {
+			Context ctx = new javax.naming.InitialContext();
+			ds = (DataSource) ctx.lookup("java:comp/env/jdbc/BA104G1DB");
+		} catch (NamingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 	@Override
 	public void insert(ExpertVO expertVO) {
 
@@ -54,8 +63,10 @@ public class ExpertDAO implements ExpertDAO_interface {
 		PreparedStatement pstmt = null;
 
 		try {
-					
-			con = ds.getConnection();
+
+			con = ds.getConnection();	
+//			Class.forName(driver);
+//			con = DriverManager.getConnection(url, userid, passwd);
 			pstmt = con.prepareStatement(INSERT_STMT);
 		
 			pstmt.setString(1, expertVO.getEmpNo());
@@ -63,7 +74,11 @@ public class ExpertDAO implements ExpertDAO_interface {
 		
 			pstmt.executeUpdate();
 
-
+			// Handle any driver errors
+//		} catch (ClassNotFoundException e) {
+//			throw new RuntimeException("Couldn't load database driver. "
+//					+ e.getMessage());
+			// Handle any SQL errors
 		} catch (SQLException se) {
 			throw new RuntimeException("A database error occured. "
 					+ se.getMessage());
@@ -94,8 +109,10 @@ public class ExpertDAO implements ExpertDAO_interface {
 		PreparedStatement pstmt = null;
 
 		try {
-				
+
 			con = ds.getConnection();
+//			Class.forName(driver);
+//			con = DriverManager.getConnection(url, userid, passwd);
 			pstmt = con.prepareStatement(UPDATE);
 
 			pstmt.setString(1, expertVO.getEmpNo());
@@ -105,7 +122,11 @@ public class ExpertDAO implements ExpertDAO_interface {
 			
 			pstmt.executeUpdate();
 
-
+			// Handle any driver errors
+//		} catch (ClassNotFoundException e) {
+//			throw new RuntimeException("Couldn't load database driver. "
+//					+ e.getMessage());
+			// Handle any SQL errors
 		} catch (SQLException se) {
 			throw new RuntimeException("A database error occured. "
 					+ se.getMessage());
@@ -138,13 +159,19 @@ public class ExpertDAO implements ExpertDAO_interface {
 		try {
 
 			con = ds.getConnection();
+//			Class.forName(driver);
+//			con = DriverManager.getConnection(url, userid, passwd);
 			pstmt = con.prepareStatement(DELETE);
 
 			pstmt.setString(1, expNo);
 
 			pstmt.executeUpdate();
 
-
+			// Handle any driver errors
+//		} catch (ClassNotFoundException e) {
+//			throw new RuntimeException("Couldn't load database driver. "
+//					+ e.getMessage());
+			// Handle any SQL errors
 		} catch (SQLException se) {
 			throw new RuntimeException("A database error occured. "
 					+ se.getMessage());
@@ -179,6 +206,8 @@ public class ExpertDAO implements ExpertDAO_interface {
 		try {
 
 			con = ds.getConnection();
+//			Class.forName(driver);
+//			con = DriverManager.getConnection(url, userid, passwd);
 			pstmt = con.prepareStatement(GET_ONE_STMT);
 			pstmt.setString(1, expOwn);
 			rs = pstmt.executeQuery();
@@ -191,6 +220,11 @@ public class ExpertDAO implements ExpertDAO_interface {
 							
 			}
 
+			// Handle any driver errors
+//		} catch (ClassNotFoundException e) {
+//			throw new RuntimeException("Couldn't load database driver. "
+//					+ e.getMessage());
+			// Handle any SQL errors
 		} catch (SQLException se) {
 			throw new RuntimeException("A database error occured. "
 					+ se.getMessage());
@@ -233,6 +267,8 @@ public class ExpertDAO implements ExpertDAO_interface {
 		try {
 
 			con = ds.getConnection();
+//			Class.forName(driver);
+//			con = DriverManager.getConnection(url, userid, passwd);
 			pstmt = con.prepareStatement(GET_ALL_STMT);
 			rs = pstmt.executeQuery();
 			
@@ -246,7 +282,11 @@ public class ExpertDAO implements ExpertDAO_interface {
 				list.add(expertVO); // Store the row in the list
 			}
 
-
+			// Handle any driver errors
+//		} catch (ClassNotFoundException e) {
+//			throw new RuntimeException("Couldn't load database driver. "
+//					+ e.getMessage());
+			// Handle any SQL errors
 		} catch (SQLException se) {
 			throw new RuntimeException("A database error occured. "
 					+ se.getMessage());
@@ -279,25 +319,25 @@ public class ExpertDAO implements ExpertDAO_interface {
 
 	public static void main(String[] args) {
 
-		ExpertDAO dao = new ExpertDAO();
+		ExpertJNDIDAO dao = new ExpertJNDIDAO();
 
-		// 新增
-		ExpertVO expertVO1 = new ExpertVO();
-		expertVO1.setExpOwn("EXP1001");
-		expertVO1.setEmpNo("EMP0001");
-	    expertVO1.setExpNo("101");
-		dao.insert(expertVO1);
-System.out.println("新增ＯＫ");
-
-		// 修改
-
-		ExpertVO expertVO2 = new ExpertVO();
-		expertVO2.setEmpNo("EMP0001");
-		expertVO2.setExpNo("102");
-		expertVO2.setExpOwn("EXP1001");
-		dao.update(expertVO2);
-		
-System.out.println("修改ＯＫ");
+//		// 新增
+//		ExpertVO expertVO1 = new ExpertVO();
+//		expertVO1.setExpOwn("EXP1001");
+//		expertVO1.setEmpNo("EMP0001");
+//	    expertVO1.setExpNo("101");
+//		dao.insert(expertVO1);
+//System.out.println("新增ＯＫ");
+//
+//		// 修改
+//
+//		ExpertVO expertVO2 = new ExpertVO();
+//		expertVO2.setEmpNo("EMP0001");
+//		expertVO2.setExpNo("102");
+//		expertVO2.setExpOwn("EXP1001");
+//		dao.update(expertVO2);
+//		
+//System.out.println("修改ＯＫ");
 
 
 //		// 刪除

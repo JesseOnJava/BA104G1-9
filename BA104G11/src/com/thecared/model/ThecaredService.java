@@ -10,7 +10,7 @@ public class ThecaredService {
 	private ThecaredDAO_interface dao;
 
 	public ThecaredService() {
-		dao = new ThecaredDAO2();
+		dao = new ThecaredJNDIDAO();
 	}
 	public ThecaredVO addTHECARED(ThecaredVO thecaredVO){
 		dao.insert(thecaredVO);

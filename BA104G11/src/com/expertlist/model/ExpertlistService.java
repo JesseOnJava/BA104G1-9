@@ -9,7 +9,7 @@ public class ExpertlistService {
 	private ExpertlistDAO_interface dao;
 
 	public ExpertlistService() {
-		dao = new ExpertlistJDBCDAO();
+		dao = new ExpertlistJNDIDAO();
 	}
 	public ExpertlistVO addEXPERTLIST(ExpertlistVO expertlistVO) {
 

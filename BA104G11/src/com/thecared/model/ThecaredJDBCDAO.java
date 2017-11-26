@@ -5,7 +5,7 @@ import java.util.*;
 import java.sql.*;
 import java.sql.Date;
 
-public class ThecaredDAO2 implements ThecaredDAO_interface {
+public class ThecaredJDBCDAO implements ThecaredDAO_interface {
 	String driver = "oracle.jdbc.driver.OracleDriver";
 	String url = "jdbc:oracle:thin:@13.124.90.221:1521:XE";
 	String userid = "BA104G1DB";
@@ -419,7 +419,7 @@ public class ThecaredDAO2 implements ThecaredDAO_interface {
 
 	public static void main(String[] args) {
 
-		ThecaredDAO2 dao = new ThecaredDAO2();
+		ThecaredJDBCDAO dao = new ThecaredJDBCDAO();
 
 		 //新增
 		ThecaredVO thecaredVO1 = new ThecaredVO();

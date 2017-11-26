@@ -14,7 +14,7 @@ import javax.sql.DataSource;
 
 import com.member.model.MemberVO;
 
-public class MemberDAO implements MemberDAO_interface{
+public class MemberJDBCDAO implements MemberDAO_interface{
 	
 	private static DataSource ds = null;
 	
@@ -30,58 +30,26 @@ public class MemberDAO implements MemberDAO_interface{
 	private static final String GET="SELECT * FROM MEMBER WHERE MEM_SRATUS = ? ";
 	private static final String UPDATE_POINT = "UPDATE MEMBER SET POINT=? WHERE MEM_NO=?";
 	
-	static {
-		try {
-			Context ctx = new javax.naming.InitialContext();
-			ds = (DataSource) ctx.lookup("java:comp/env/jdbc/BA104G1DB");
-		} catch ( NamingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
+	
+	
+	String driver = "oracle.jdbc.driver.OracleDriver";
+	String url = "jdbc:oracle:thin:@localhost:1521:XE";
+	String userid = "BA104G1DB";
+	String passwd = "BA104G1DB";
+//	static {
+//		try {
+//			Context ctx = new javax.naming.InitialContext();
+//			ds = (DataSource) ctx.lookup("java:comp/env/jdbc/BA104G1DB");
+//		} catch ( NamingException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+//	}
 
 	public static void main(String[] args) {
-		MemberDAO dao = new MemberDAO();
-
-		
-//		memberVO.setMemNo("MEM0005");
-//		memberVO.setMemName("������");
-//		memberVO.setMemPhone("99999999");
-//		memberVO.setMemGender("�k");
-//		memberVO.setMemEmail("zodiac@gmail.com");
-//		memberVO.setAddress("��饫���c�Ϥ�����300��");
-//		memberVO.setPoint(15000);
-//		memberVO.setMemId("zodiac3012");
-//		memberVO.setMemPwd("aaaaaa");
-//		memberVO.setMemSratus("������");
-//		memberVO.setChkIp("140.112.130.9.2");
-//		memberVO.setMemLoginTime(new Timestamp(System.currentTimeMillis()));
-		
-		/*�s�W�|�����*/
-//		memberDAO.insert(memberVO);
-		
-		/*��s�|�����*/
-//		memberDAO.update(memberVO);
-		
-		/*�d�߳浧�|�����*/
-
-		
-		MemberVO memberVO3 = dao.findByMemId("mem01");
-		System.out.print(memberVO3.getMemId() + ",");
-		System.out.print(memberVO3.getMemName() + ",");
-		System.out.print(memberVO3.getMemPhone() );
-		System.out.println("---------------------");
-		
-		/*�d�ߥ����|�����*/
-//		List<MemberVO> memberList  = memberDAO.getAll();
-//		for(MemberVO memVO:memberList){
-//			System.out.println(memVO.getMemId());
-//			System.out.println();
-//		}
-		
-		/*�R���浧�|�����*/
-//		memberDAO.delete("MEM0005");
-		
+		MemberJDBCDAO dao = new MemberJDBCDAO();
+		MemberVO memberVO3 = dao.findByPrimaryKey("MEM0002");
+		System.out.print(memberVO3.getMemNo());
 	}
 
 	@Override
@@ -90,7 +58,10 @@ public class MemberDAO implements MemberDAO_interface{
 		PreparedStatement pstmt = null;
 
 		try {
-			con = ds.getConnection();
+
+			Class.forName(driver);
+			con = DriverManager.getConnection(url,userid,passwd);
+		//	con = ds.getConnection();
 			pstmt = con.prepareStatement(INSERT_STMT);
 			
 			pstmt.setString(1, memberVO.getMemName());
@@ -111,6 +82,9 @@ public class MemberDAO implements MemberDAO_interface{
 		} catch (SQLException e) {
 			e.printStackTrace();
 
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		} finally {
 			if (con != null) {
 				try {
@@ -129,7 +103,10 @@ public class MemberDAO implements MemberDAO_interface{
 		PreparedStatement pstmt = null;
 		
 		try {
-			con = ds.getConnection();
+
+			Class.forName(driver);
+			con = DriverManager.getConnection(url,userid,passwd);
+			//con = ds.getConnection();
 			pstmt=con.prepareStatement(UPDATE);
 			
 			pstmt.setString(1, memberVO.getMemName());
@@ -149,6 +126,9 @@ public class MemberDAO implements MemberDAO_interface{
 			System.out.println("memVO update success");
 			
 		} catch (SQLException e) {
+			e.printStackTrace();
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}finally{
 			if(con!=null){
@@ -170,7 +150,9 @@ public class MemberDAO implements MemberDAO_interface{
 		MemberVO memberVO = null;
 		
 		try {
-			con = ds.getConnection();
+
+			Class.forName(driver);
+			con = DriverManager.getConnection(url,userid,passwd);
 			pstmt = con.prepareStatement(GET_ONE_STMT);
 			pstmt.setString(1,memNo);
 			rs = pstmt.executeQuery();
@@ -189,6 +171,9 @@ public class MemberDAO implements MemberDAO_interface{
 				memberVO.setChkIp(rs.getString("CHK_IP"));
 				memberVO.setMemLoginTime(rs.getTimestamp("MEM_LOGINTIME"));
 			}
+		} catch (ClassNotFoundException e) {
+			throw new RuntimeException("Couldn't load database driver. "
+					+ e.getMessage());
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}finally{
@@ -211,7 +196,9 @@ public class MemberDAO implements MemberDAO_interface{
 		List<MemberVO> memberList = new ArrayList();
 		
 		try {
-			con = ds.getConnection();
+			Class.forName(driver);
+			con = DriverManager.getConnection(url, userid, passwd);
+		//	con = ds.getConnection();
 			pstmt = con.prepareStatement(GET_ALL_STMT);
 			rs = pstmt.executeQuery();
 			while(rs.next()){
@@ -231,6 +218,9 @@ public class MemberDAO implements MemberDAO_interface{
 				memberList.add(memberVO);
 			}
 			return memberList;
+		} catch (ClassNotFoundException e) {
+			throw new RuntimeException("Couldn't load database driver. "
+					+ e.getMessage());
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}finally{
@@ -252,7 +242,9 @@ public class MemberDAO implements MemberDAO_interface{
 		PreparedStatement pstmt = null;
 		
 		try {
-			con = ds.getConnection();
+			Class.forName(driver);
+			con = DriverManager.getConnection(url, userid, passwd);
+		//	con = ds.getConnection();
 			pstmt = con.prepareStatement(DELETE);
 			pstmt.setString(1, memNo);
 			int i = pstmt.executeUpdate();
@@ -260,6 +252,9 @@ public class MemberDAO implements MemberDAO_interface{
 			System.out.println("delete"+i+" shot");
 			
 		} catch (SQLException e) {
+			e.printStackTrace();
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}finally{
 			if(con!=null){
@@ -281,7 +276,8 @@ public class MemberDAO implements MemberDAO_interface{
 		MemberVO memberVO = null;
 		
 		try {
-			con = ds.getConnection();
+			Class.forName(driver);
+			con = DriverManager.getConnection(url, userid, passwd);
 			pstmt = con.prepareStatement(GET_ONE_BYMEMID);
 			pstmt.setString(1,memId);
 			rs = pstmt.executeQuery();
@@ -302,6 +298,9 @@ public class MemberDAO implements MemberDAO_interface{
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}finally{
 			if(con!=null){
 				try {
@@ -321,7 +320,9 @@ public class MemberDAO implements MemberDAO_interface{
 		ResultSet rs = null;
 		 List<MemberVO> memList = null;
 		try {
-			con = ds.getConnection();
+			Class.forName(driver);
+			con = DriverManager.getConnection(url, userid, passwd);
+	//		con = ds.getConnection();
 			pstmt = con.prepareStatement(GET);
 			pstmt.setString(1, status);
 			rs = pstmt.executeQuery();
@@ -346,6 +347,9 @@ public class MemberDAO implements MemberDAO_interface{
 			return memList;
 		} catch (SQLException e) {
 			e.printStackTrace();
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}finally{
 			if(con!=null){
 				try {
@@ -365,7 +369,9 @@ public class MemberDAO implements MemberDAO_interface{
 		MemberVO memberVO = null;
 
 		try {
-			con = ds.getConnection();
+			Class.forName(driver);
+			con = DriverManager.getConnection(url, userid, passwd);
+		//	con = ds.getConnection();
 			pstmt = con.prepareStatement(UPDATE_POINT);
 
 			pstmt.setString(1, memSratus);
@@ -374,6 +380,9 @@ public class MemberDAO implements MemberDAO_interface{
 		} catch (SQLException se) {
 			throw new RuntimeException("A database error occured. " + se.getMessage());
 			// Clean up JDBC resources
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		} finally {
 			if (pstmt != null) {
 				try {
@@ -398,7 +407,9 @@ public class MemberDAO implements MemberDAO_interface{
 		PreparedStatement pstmt = null;
 
 		try {
-			con = ds.getConnection();
+			Class.forName(driver);
+			con = DriverManager.getConnection(url, userid, passwd);
+		//	con = ds.getConnection();
 			pstmt = con.prepareStatement(UPDATE_POINT);
 
 			pstmt.setInt(1, point);
@@ -408,6 +419,9 @@ public class MemberDAO implements MemberDAO_interface{
 		} catch (SQLException se) {
 			throw new RuntimeException("A database error occured. " + se.getMessage());
 			// Clean up JDBC resources
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		} finally {
 			if (pstmt != null) {
 				try {

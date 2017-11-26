@@ -1,13 +1,12 @@
 package com.expertlist.model;
 
 import java.util.*;
-
+import javax.sql.DataSource;
 import javax.naming.Context;
 import javax.naming.NamingException;
-import javax.sql.DataSource;
 import java.sql.*;
 
-public class ExpertlistJDBCDAO implements ExpertlistDAO_interface {
+public class ExpertlistJNDIDAO implements ExpertlistDAO_interface {
 //	String driver = "oracle.jdbc.driver.OracleDriver";
 //	String userid = "BA104G1DB";
 //	String passwd = "BA104G1DB";
@@ -71,7 +70,7 @@ public class ExpertlistJDBCDAO implements ExpertlistDAO_interface {
 		PreparedStatement pstmt = null;
 
 		try {
-			con = ds.getConnection();		
+			con = ds.getConnection();
 //			Class.forName(driver);
 //			con = DriverManager.getConnection(url, userid, passwd);
 			pstmt = con.prepareStatement(INSERT_STMT);
@@ -370,7 +369,7 @@ public class ExpertlistJDBCDAO implements ExpertlistDAO_interface {
 
 	public static void main(String[] args) {
 
-		ExpertlistJDBCDAO dao = new ExpertlistJDBCDAO();
+		ExpertlistJNDIDAO dao = new ExpertlistJNDIDAO();
 
 		// 新增
 //		ExpertlistVO expertlistVO1 = new ExpertlistVO();

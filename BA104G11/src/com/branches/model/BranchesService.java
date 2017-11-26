@@ -9,7 +9,7 @@ public class BranchesService {
 	private BranchesDAO_interface dao;
 
 	public BranchesService() {
-		dao = new BranchesJDBCDAO();
+		dao = new BranchesJNDIDAO();
 	}
 	public BranchesVO addBranches( BranchesVO branchesVO) {
 
