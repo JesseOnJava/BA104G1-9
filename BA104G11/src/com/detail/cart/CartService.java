@@ -8,14 +8,14 @@ public class CartService {
 	public CartService() {
 		dao=new CartDAO();
 	}
-	//¤@¯ë°Ó«~¬d¸ß
+	//ä¸€èˆ¬å•†å“æŸ¥è©¢
 	public CartVO findshop(Integer number,Integer quantity) {
 		return dao.findshop(number,quantity);
 	}
-	//«P¾P¬¡°Ê°Ó«~¬d¸ß
+	//ä¿ƒéŠ·æ´»å‹•å•†å“æŸ¥è©¢
 	public CartVO findshopbypro(Integer number,Integer quantity) {
-		System.out.println("¶i¤JCartService.findshopbypro");
-		System.out.println("¶Ç¤J°Ñ¼Ænumber quantity"+number+","+quantity);
+		System.out.println("é€²å…¥CartService.findshopbypro");
+		System.out.println("å‚³å…¥åƒæ•¸number quantity"+number+","+quantity);
 		return dao.findshopbypro(number,quantity);
 	}
 }
