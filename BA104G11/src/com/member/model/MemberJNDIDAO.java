@@ -36,15 +36,15 @@ public class MemberJNDIDAO implements MemberDAO_interface{
 //	String url = "jdbc:oracle:thin:@localhost:1521:XE";
 //	String userid = "BA104G1DB";
 //	String passwd = "BA104G1DB";
-//	static {
-//		try {
-//			Context ctx = new javax.naming.InitialContext();
-//			ds = (DataSource) ctx.lookup("java:comp/env/jdbc/BA104G1DB");
-//		} catch ( NamingException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
-//	}
+	static {
+		try {
+			Context ctx = new javax.naming.InitialContext();
+			ds = (DataSource) ctx.lookup("java:comp/env/jdbc/BA104G1DB");
+		} catch ( NamingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 
 	public static void main(String[] args) {
 		MemberJNDIDAO dao = new MemberJNDIDAO();
