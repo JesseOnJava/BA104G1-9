@@ -22,7 +22,7 @@ public class EmpPhotosDAO implements EmpPhotosDAO_interface {
 	static {
 		try {
 			Context ctx = new InitialContext();
-			ds = (DataSource) ctx.lookup("java:comp/env/jdbc/Project");
+			ds = (DataSource) ctx.lookup("java:comp/env/jdbc/BA104G1DB");
 		} catch (NamingException e) {
 			e.printStackTrace();
 		}

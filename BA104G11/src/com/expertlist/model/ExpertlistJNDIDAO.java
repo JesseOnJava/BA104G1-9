@@ -1,14 +1,25 @@
 package com.expertlist.model;
 
 import java.util.*;
+
+import javax.naming.Context;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
+import javax.sql.DataSource;
+
 import java.sql.*;
 import java.sql.Date;
 
-public class ExpertlistJDNIDAO implements ExpertlistDAO_interface {
-	String driver = "oracle.jdbc.driver.OracleDriver";
-	String url = "jdbc:oracle:thin:@localhost:1521:XE";
-	String userid = "BA104G1BD";
-	String passwd = "BA104G1BD";
+public class ExpertlistJNDIDAO implements ExpertlistDAO_interface {
+	private static  DataSource ds = null;
+	static {
+		try {
+			Context ctx = new InitialContext();
+			ds = (DataSource) ctx.lookup("java:comp/env/jdbc/BA104G1DB");
+		} catch (NamingException e) {
+			e.printStackTrace();
+		}
+	}
 	
 	
 	//---------------前端------------------
@@ -31,10 +42,7 @@ public class ExpertlistJDNIDAO implements ExpertlistDAO_interface {
 	//設定：可查
 	private static final String GET_ONE_STMT = 
 				
-		" SELECT EXP_NO,"
-		+ " EXP_NAME,"
-		+ " EXP_SPEC,"
-		+ " FROM EXPERT_LIST"
+		" SELECT * FROM EXPERT_LIST"
 		+ " WHERE EXP_NO =?";
 	
 	//---------------後端-------------------
@@ -56,8 +64,8 @@ public class ExpertlistJDNIDAO implements ExpertlistDAO_interface {
 
 		try {
 					
-			Class.forName(driver);
-			con = DriverManager.getConnection(url, userid, passwd);
+			
+			con = ds.getConnection();
 			pstmt = con.prepareStatement(INSERT_STMT);
 		
 			pstmt.setString(1, expertlistVO.getExpNo());
@@ -67,10 +75,6 @@ public class ExpertlistJDNIDAO implements ExpertlistDAO_interface {
 			pstmt.executeUpdate();
 
 			// Handle any driver errors
-		} catch (ClassNotFoundException e) {
-			throw new RuntimeException("Couldn't load database driver. "
-					+ e.getMessage());
-			// Handle any SQL errors
 		} catch (SQLException se) {
 			throw new RuntimeException("A database error occured. "
 					+ se.getMessage());
@@ -102,8 +106,8 @@ public class ExpertlistJDNIDAO implements ExpertlistDAO_interface {
 
 		try {
 				
-			Class.forName(driver);
-			con = DriverManager.getConnection(url, userid, passwd);
+			
+			con = ds.getConnection();
 			pstmt = con.prepareStatement(UPDATE);
 
 			pstmt.setString(1, expertlistVO.getExpName());
@@ -114,10 +118,6 @@ public class ExpertlistJDNIDAO implements ExpertlistDAO_interface {
 			pstmt.executeUpdate();
 
 			// Handle any driver errors
-		} catch (ClassNotFoundException e) {
-			throw new RuntimeException("Couldn't load database driver. "
-					+ e.getMessage());
-			// Handle any SQL errors
 		} catch (SQLException se) {
 			throw new RuntimeException("A database error occured. "
 					+ se.getMessage());
@@ -149,8 +149,8 @@ public class ExpertlistJDNIDAO implements ExpertlistDAO_interface {
 
 		try {
 
-			Class.forName(driver);
-			con = DriverManager.getConnection(url, userid, passwd);
+			
+			con = ds.getConnection();
 			pstmt = con.prepareStatement(DELETE);
 
 			pstmt.setString(1, expNo);
@@ -158,10 +158,6 @@ public class ExpertlistJDNIDAO implements ExpertlistDAO_interface {
 			pstmt.executeUpdate();
 
 			// Handle any driver errors
-		} catch (ClassNotFoundException e) {
-			throw new RuntimeException("Couldn't load database driver. "
-					+ e.getMessage());
-			// Handle any SQL errors
 		} catch (SQLException se) {
 			throw new RuntimeException("A database error occured. "
 					+ se.getMessage());
@@ -195,8 +191,8 @@ public class ExpertlistJDNIDAO implements ExpertlistDAO_interface {
 
 		try {
 
-			Class.forName(driver);
-			con = DriverManager.getConnection(url, userid, passwd);
+			
+			con = ds.getConnection();
 			pstmt = con.prepareStatement(GET_ONE_STMT);
 			pstmt.setString(1, expNo);
 			
@@ -207,13 +203,10 @@ public class ExpertlistJDNIDAO implements ExpertlistDAO_interface {
 				expertlistVO.setExpNo(rs.getString("exp_no"));
 				expertlistVO.setExpName(rs.getString("exp_name"));
 				expertlistVO.setExpSpec(rs.getString("exp_spec"));
+				expertlistVO.setExpPrice(rs.getInt("exp_price"));
 			}
 
 			// Handle any driver errors
-		} catch (ClassNotFoundException e) {
-			throw new RuntimeException("Couldn't load database driver. "
-					+ e.getMessage());
-			// Handle any SQL errors
 		} catch (SQLException se) {
 			throw new RuntimeException("A database error occured. "
 					+ se.getMessage());
@@ -255,8 +248,8 @@ public class ExpertlistJDNIDAO implements ExpertlistDAO_interface {
 
 		try {
 
-			Class.forName(driver);
-			con = DriverManager.getConnection(url, userid, passwd);
+			
+			con = ds.getConnection();
 			pstmt = con.prepareStatement(GET_ALL_STMT);
 			rs = pstmt.executeQuery();
 			
@@ -271,10 +264,6 @@ public class ExpertlistJDNIDAO implements ExpertlistDAO_interface {
 			}
 
 			// Handle any driver errors
-		} catch (ClassNotFoundException e) {
-			throw new RuntimeException("Couldn't load database driver. "
-					+ e.getMessage());
-			// Handle any SQL errors
 		} catch (SQLException se) {
 			throw new RuntimeException("A database error occured. "
 					+ se.getMessage());
@@ -307,34 +296,34 @@ public class ExpertlistJDNIDAO implements ExpertlistDAO_interface {
 
 	public static void main(String[] args) {
 
-		ExpertlistJDNIDAO dao = new ExpertlistJDNIDAO();
+		ExpertlistJDBCDAO dao = new ExpertlistJDBCDAO();
 
 		// 新增
-		ExpertlistVO expertlistVO1 = new ExpertlistVO();
-
-		expertlistVO1.setExpNo("301");
-	    expertlistVO1.setExpName("物理治療師");
-		expertlistVO1.setExpSpec("萎縮肌肉復健");
-		
-		dao.insert(expertlistVO1);
-System.out.println("新增ＯＫ");
+//		ExpertlistVO expertlistVO1 = new ExpertlistVO();
+//
+//		expertlistVO1.setExpNo("301");
+//	    expertlistVO1.setExpName("物理治療師");
+//		expertlistVO1.setExpSpec("萎縮肌肉復健");
+//		
+//		dao.insert(expertlistVO1);
+//System.out.println("新增ＯＫ");
 
 		// 修改
-
-		ExpertlistVO expertlistVO2 = new ExpertlistVO();
-
-		expertlistVO2.setExpName("物理治療員");
-		expertlistVO2.setExpSpec("老人居家復健及諮詢");
-		expertlistVO2.setExpNo("301");
-		dao.update(expertlistVO2);
-		
-System.out.println("修改ＯＫ");
-
-
-		// 刪除
-
-		dao.delete("301");
-System.out.println("刪除ＯＫ");
+//
+//		ExpertlistVO expertlistVO2 = new ExpertlistVO();
+//
+//		expertlistVO2.setExpName("物理治療員");
+//		expertlistVO2.setExpSpec("老人居家復健及諮詢");
+//		expertlistVO2.setExpNo("301");
+//		dao.update(expertlistVO2);
+//		
+//System.out.println("修改ＯＫ");
+//
+//
+//		// 刪除
+//
+//		dao.delete("301");
+//System.out.println("刪除ＯＫ");
 
 
 		// 查詢
@@ -347,14 +336,14 @@ System.out.println("刪除ＯＫ");
 
 		
 		// 查詢
-		List<ExpertlistVO> list = dao.getAll();
-		for (ExpertlistVO aEmp : list) {
-
-			System.out.print(expertlistVO3.getExpNo() + ",");
-			System.out.print(expertlistVO3.getExpName() + ",");	
-			System.out.print(expertlistVO3.getExpSpec() );
-			System.out.println();
-		}
+//		List<ExpertlistVO> list = dao.getAll();
+//		for (ExpertlistVO aEmp : list) {
+//
+//			System.out.print(expertlistVO3.getExpNo() + ",");
+//			System.out.print(expertlistVO3.getExpName() + ",");	
+//			System.out.print(expertlistVO3.getExpSpec() );
+//			System.out.println();
+//		}
 	}
 }
 	

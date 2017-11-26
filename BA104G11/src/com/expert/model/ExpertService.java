@@ -9,7 +9,7 @@ public class ExpertService {
 	private ExpertDAO_interface dao;
 
 	public ExpertService() {
-		dao = new ExpertJDBCDAO();
+		dao = new ExpertJNDIDAO();
 	}
 
 	public ExpertVO addEXPERT(

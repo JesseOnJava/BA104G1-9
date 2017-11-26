@@ -396,7 +396,7 @@ request.setCharacterEncoding("UTF-8");
 	                              <label class="control-label" for="cared-fianl">服務對象</label>	                              
 									<select size="1" class="form-control" name="caredNo"  id="caredNo-final" aria-describedby="helpBlock2">
 										<option value="" selected>請選擇</option>
-										<c:forEach var="crdVO" items="${crdSvc.getAllByMemNo(memVO.getMem_no())}" > 
+										<c:forEach var="crdVO" items="${crdSvc.getAllByMemNo(memVO.getMemNo())}" > 
 											<option value="${crdVO.caredNo}">${crdVO.caredName}
 										</c:forEach>   
 									</select>    
@@ -426,7 +426,7 @@ request.setCharacterEncoding("UTF-8");
 	                              <span id='empName-final'>${employeeService.getOneEMPLOYEE(param.empNo).getEmpName()}(${not empty param.empNo})</span>
 	                              
 	                              <input type="hidden" class="form-control" id="empNo-final" name="empNo" value="${param.empNo}" aria-describedby="helpBlock2">
-	                              <input type="hidden" class="form-control" name="memNo" value="${memVO.mem_no}" aria-describedby="helpBlock2">
+	                              <input type="hidden" class="form-control" name="memNo" value="${memVO.memNo}" aria-describedby="helpBlock2">
 	                              <input type="hidden" class="form-control" name="action" value="add_hc_order" aria-describedby="helpBlock2">
 	                              <input type="hidden" class="form-control" name="forwardURL" value="<%=request.getServletPath()%>" aria-describedby="helpBlock2">
 		                         </div>	                        

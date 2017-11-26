@@ -10,6 +10,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
+import javax.naming.Context;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
+import javax.sql.DataSource;
+
 import jdbc.util.CompositeQuery.jdbcUtil_CompositeQuery_workShift;
 
 
@@ -17,10 +22,15 @@ import jdbc.util.CompositeQuery.jdbcUtil_CompositeQuery_workShift;
 
 
 public class HcWorkShiftsJDBCDAO implements HcWorkShiftsDAO_interface {
-	String driver = "oracle.jdbc.driver.OracleDriver";
-	String url = "jdbc:oracle:thin:@localhost:1521:XE";
-	String userid = "BA104G1DB";
-	String passwd = "BA104G1DB";
+	private static DataSource ds = null;
+	static {
+		try {
+			Context ctx = new InitialContext();
+			ds = (DataSource) ctx.lookup("java:comp/env/jdbc/BA104G1DB");
+		} catch (NamingException e) {
+			e.printStackTrace();
+		}
+	}
 	
 	private static final String INSERT_STMT = 
 		"INSERT INTO Hc_WorkShifts (MONTH_OF_YEAR,EMP_NO,WORK_SHIFT_STATUS,TOTAL_WORK_SHIFTS) "
@@ -56,8 +66,8 @@ public class HcWorkShiftsJDBCDAO implements HcWorkShiftsDAO_interface {
 		PreparedStatement pstmt = null;
 		
 		try {
-			Class.forName(driver);
-			con = DriverManager.getConnection(url,userid,passwd);
+			
+			con = ds.getConnection();
 			pstmt = con.prepareStatement(INSERT_STMT);
 			pstmt.setString(1, hcWorkShifts.getMonthOfYear());
 			pstmt.setString(2, hcWorkShifts.getEmpNo());
@@ -67,10 +77,6 @@ public class HcWorkShiftsJDBCDAO implements HcWorkShiftsDAO_interface {
 			int i =pstmt.executeUpdate();
 			System.out.println("�s�W"+i+"��");
 			
-		} catch (ClassNotFoundException e) {
-			throw new RuntimeException("Couldn't load database driver. "
-					+ e.getMessage());
-			// Handle any SQL errors
 		} catch (SQLException se) {
 			throw new RuntimeException("A database error occured. "
 					+ se.getMessage());
@@ -100,8 +106,8 @@ public class HcWorkShiftsJDBCDAO implements HcWorkShiftsDAO_interface {
 
 		try {
 
-			Class.forName(driver);
-			con = DriverManager.getConnection(url, userid, passwd);
+			
+			con = ds.getConnection();
 			pstmt = con.prepareStatement(UPDATE);
 						
 			pstmt.setString(1, hcWorkShifts.getWorkShiftStatus());
@@ -112,10 +118,6 @@ public class HcWorkShiftsJDBCDAO implements HcWorkShiftsDAO_interface {
 			System.out.println("修改"+i+"修改");
 
 			// Handle any driver errors
-		} catch (ClassNotFoundException e) {
-			throw new RuntimeException("Couldn't load database driver. "
-					+ e.getMessage());
-			// Handle any SQL errors
 		} catch (SQLException se) {
 			throw new RuntimeException("A database error occured. "
 					+ se.getMessage());
@@ -149,8 +151,8 @@ public class HcWorkShiftsJDBCDAO implements HcWorkShiftsDAO_interface {
 
 		try {
 
-			Class.forName(driver);
-			con = DriverManager.getConnection(url, userid, passwd);
+			
+			con = ds.getConnection();
 			pstmt = con.prepareStatement(GET_ONE_STMT);
 			System.out.println("monthOfYear:" + monthOfYear);
 			System.out.println("empNo:" + empNo);
@@ -176,10 +178,6 @@ public class HcWorkShiftsJDBCDAO implements HcWorkShiftsDAO_interface {
 			}
 
 			// Handle any driver errors
-		} catch (ClassNotFoundException e) {
-			throw new RuntimeException("Couldn't load database driver. "
-					+ e.getMessage());
-			// Handle any SQL errors
 		} catch (SQLException se) {
 			System.out.println(1);
 			throw new RuntimeException("A database error occured. "
@@ -223,8 +221,8 @@ public class HcWorkShiftsJDBCDAO implements HcWorkShiftsDAO_interface {
 
 		try {
 
-			Class.forName(driver);
-			con = DriverManager.getConnection(url, userid, passwd);
+			
+			con = ds.getConnection();
 			pstmt = con.prepareStatement(GET_ALL_STMT);
 			rs = pstmt.executeQuery();
 
@@ -238,10 +236,6 @@ public class HcWorkShiftsJDBCDAO implements HcWorkShiftsDAO_interface {
 			}
 
 			// Handle any driver errors
-		} catch (ClassNotFoundException e) {
-			throw new RuntimeException("Couldn't load database driver. "
-					+ e.getMessage());
-			// Handle any SQL errors
 		} catch (SQLException se) {
 			throw new RuntimeException("A database error occured. "
 					+ se.getMessage());
@@ -284,8 +278,8 @@ public class HcWorkShiftsJDBCDAO implements HcWorkShiftsDAO_interface {
 
 		try {
 
-			Class.forName(driver);
-			con = DriverManager.getConnection(url, userid, passwd);
+			
+			con = ds.getConnection();
 			String SQL = "select * from HC_WORKSHIFTS W JOIN EMPLOYEE E ON"
 					+ " W.EMP_NO = E.EMP_NO AND EMP_DEP='長照' AND EMP_BRANCHES='10' "
 					+ "AND EMP_STATUS='ON' "
@@ -307,10 +301,6 @@ public class HcWorkShiftsJDBCDAO implements HcWorkShiftsDAO_interface {
 			}
 
 			// Handle any driver errors
-		} catch (ClassNotFoundException e) {
-			throw new RuntimeException("Couldn't load database driver. "
-					+ e.getMessage());
-			// Handle any SQL errors
 		} catch (SQLException se) {
 			throw new RuntimeException("A database error occured. "
 					+ se.getMessage());
@@ -354,8 +344,8 @@ public class HcWorkShiftsJDBCDAO implements HcWorkShiftsDAO_interface {
 			System.out.println("wdao"+yearOfMonth);
 			System.out.println("wdao"+shiftNumber);
 
-			Class.forName(driver);
-			con = DriverManager.getConnection(url, userid, passwd);
+			
+			con = ds.getConnection();
 			pstmt = con.prepareStatement(GET_ONE_BY_DATE);
 			pstmt.setString(1, yearOfMonth);
 			pstmt.setString(2, shiftNumber);
@@ -372,10 +362,6 @@ public class HcWorkShiftsJDBCDAO implements HcWorkShiftsDAO_interface {
 			}
 
 			// Handle any driver errors
-		} catch (ClassNotFoundException e) {
-			throw new RuntimeException("Couldn't load database driver. "
-					+ e.getMessage());
-			// Handle any SQL errors
 		} catch (SQLException se) {
 			throw new RuntimeException("A database error occured. "
 					+ se.getMessage());
@@ -419,8 +405,8 @@ public class HcWorkShiftsJDBCDAO implements HcWorkShiftsDAO_interface {
 			System.out.println(yearOfMonth);
 			System.out.println(shiftNumber);
 
-			Class.forName(driver);
-			con = DriverManager.getConnection(url, userid, passwd);
+			
+			con = ds.getConnection();
 			pstmt = con.prepareStatement(GET_ONE_BY_DATE);
 			pstmt.setString(1, yearOfMonth);
 			pstmt.setString(2, shiftNumber);
@@ -435,10 +421,6 @@ public class HcWorkShiftsJDBCDAO implements HcWorkShiftsDAO_interface {
 
 
 			// Handle any driver errors
-		} catch (ClassNotFoundException e) {
-			throw new RuntimeException("Couldn't load database driver. "
-					+ e.getMessage());
-			// Handle any SQL errors
 		} catch (SQLException se) {
 			throw new RuntimeException("A database error occured. "
 					+ se.getMessage());

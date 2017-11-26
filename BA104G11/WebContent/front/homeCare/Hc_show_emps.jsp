@@ -12,7 +12,7 @@
 <% response.setDateHeader("Expires",0); %>
 <!-- 放入假的會員 -->
 <% MemberService memSvc = new MemberService();
-   MemberVO memVO = (MemberVO)memSvc.getOneMEMBER("MEM0002");
+   MemberVO memVO = (MemberVO)memSvc.findByPrimaryKey("MEM0002");
    session.setAttribute("memVO",memVO);
 %>
 
@@ -249,11 +249,11 @@ a.thumbnail{
                         	<input type="text"  class="form-control" id="empNo" name="empNo" aria-describedby="helpBlock2" readonly>
                         </div>
 					<form METHOD = "post" action="<%=request.getContextPath()%>/front/homeCare/Hc_order.jsp" id="login-form">
+                        <input type="submit" id="btn-login" class="btn btn-custom btn-lg btn-block" value="確定">
                         <input type="text" name="servDate" value="${param.servDate}">
                         <input type="text" name="servTime" value="${param.servTime}">
                         <input type="text" name="caredNo" value="${param.caredNo}">
                         <input type="text" name="empNo" value="${param.empNo}">
-                        <input type="submit" id="btn-login" class="btn btn-custom btn-lg btn-block" value="確定">
                     </form>
                     
                     <hr>
@@ -440,7 +440,7 @@ a.thumbnail{
 							<div class="col-xs-12 col-sm-4 empblock" >
                                 <a href="javascript:produceEmp${s.index}()" class="thumbnail emplist" id="emp-btn${s.index}" aria-describedby="helpBlock2">
                                 <div class="panel">
-                                	        <div class="panel-heading" style="background-color:teal;color:#e6bd36;"><strong>${employeeService.getOneEMPLOYEE(hcWorkShiftsVO.getEmpNo()).getEmpName()}</strong></div>
+                                	        <div class="panel-heading" style="background-color:teal;color:#e6bd36;"><strong>${employeeService.findByPrimaryKey(hcWorkShiftsVO.getEmpNo()).getEmpName()}</strong></div>
 									        <div class="panel-body" style="background-color:#fff;color:#333; box-shadow:0 -12px 13px teal inset;">
 									        
 									        <div class="boximg">
