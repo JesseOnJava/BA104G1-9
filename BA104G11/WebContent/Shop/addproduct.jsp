@@ -41,7 +41,7 @@ input {
 td, h3 {
 	zoom: 2;
 	font-size: 15px;
-	color: blue;
+	color: blue; 
 }
 </style>
 <body background="images/leaf.jpg" style="font-weight: bold;">

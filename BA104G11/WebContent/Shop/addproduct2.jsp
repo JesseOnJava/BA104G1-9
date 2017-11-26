@@ -47,7 +47,7 @@ td, h3 {
 
 
 	<form id="submit" action="<%=request.getContextPath()%>/addshop.do" method=post
-		enctype="multipart/form-data">
+		enctype="multipart/form-data"> 
 		<table>
 			<th>
 				<div class="div1" id="yy1" align="center">
