@@ -179,7 +179,7 @@
 					</c:if>
 					<!-- 登入 / 註冊 ================================================== -->
 
-					
+				
 					<c:choose>
 						<c:when test="${memberVO==null}">
 							<li><a href="<%=request.getContextPath()%>/front/Login.jsp">登入
