@@ -392,7 +392,7 @@
       <div class="row">
         <div class="col-xs-12 col-sm-12">
        
-          <img src="/MyShopping/front/image/share/014.png" height="70%" width="100%">
+          <img src="<%=request.getContextPath()%>/front/image/share/014.png" height="70%" width="100%">
         </div>
       </div>
     </div>
@@ -593,7 +593,7 @@ color: #ffe200;
 
 <div id="MyBlog">
 	 <button type="button" class="btn btn-warning btn-lg" data-toggle="modal" data-target="#myModalforShopCart">
-	 <img src="<%=request.getContextPath()%>/images/cart.png" style="width: 50px;height: 50px;">
+	 <img src="<%=request.getContextPath()%>/img/cart.png" style="width: 50px;height: 50px;">
 	 </button>
 
 </div>
