@@ -173,13 +173,23 @@
           <li><a href="#" style="padding: 12px 15px;">我的最愛</a></li>
         </ul>
       </li>
-  <!-- 會員專區 ================================================== -->
+					<!-- 會員專區 ================================================== -->
+					<c:if test="${memberVO!=null}">
+						<li>${memberVO.memName}你好</li>
+					</c:if>
+					<!-- 登入 / 註冊 ================================================== -->
 
-
-  <!-- 登入 / 註冊 ================================================== -->
-      <li><a href="#">登入 / 註冊 </a></li>
-  <!-- 登入 / 註冊 ================================================== -->
-
+					
+					<c:choose>
+						<c:when test="${memberVO==null}">
+							<li><a href="<%=request.getContextPath()%>/front/Login.jsp">登入
+									/ 註冊</a></li>
+						</c:when>
+						<c:when test="${memberVO!=null}">
+							<li><a
+								href="<%=request.getContextPath()%>/member/member.do?action=logout">登出</a></li>
+						</c:when>
+					</c:choose>
       </ul>
     		  
     </div>
