@@ -59,4 +59,8 @@ public class ExpertlistService {
 	public List<ExpertlistVO> getAll() {
 		return dao.getAll();
 	}
+	public ExpertlistVO updateEXPLIST(ExpertlistVO expertlistVO) {
+		dao.update(expertlistVO);
+		return null;
+	}
 }

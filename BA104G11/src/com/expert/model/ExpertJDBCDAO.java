@@ -37,6 +37,9 @@ public class ExpertJDBCDAO implements ExpertDAO_interface {
 	private static final String GET_ONE_STMT = 			
 		" SELECT EXP_OWN, EMP_NO,EXP_NO FROM EXPERT WHERE EXP_OWN =? ";
 	
+	private static final String GET_ALL_BY_EMP_NO = 			
+			" SELECT * FROM EXPERT WHERE EMP_NO =? ";
+	
 	//---------------後端-------------------
 	//設定：不增
 	//設定：不刪 
@@ -347,6 +350,69 @@ public class ExpertJDBCDAO implements ExpertDAO_interface {
 			System.out.print(aEmp.getExpNo() );
 			System.out.println();
 		}
+	}
+
+	@Override
+	public List<ExpertVO> getAllByEMPNO(String empNo) {
+		List<ExpertVO> list = new ArrayList<ExpertVO>();
+		ExpertVO expertVO = null;
+
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+
+		try {
+
+			
+			Class.forName(driver);
+			con = DriverManager.getConnection(url, userid, passwd);
+			pstmt = con.prepareStatement(GET_ALL_BY_EMP_NO);
+			pstmt.setString(1, empNo);
+			rs = pstmt.executeQuery();
+			
+			while (rs.next()) {
+				
+				expertVO = new ExpertVO();
+				expertVO.setExpOwn(rs.getString("exp_own"));
+				expertVO.setEmpNo(rs.getString("emp_no"));
+				expertVO.setExpNo(rs.getString("exp_no"));
+				
+				list.add(expertVO); // Store the row in the list
+			}
+
+			// Handle any driver errors
+		} catch (SQLException se) {
+			throw new RuntimeException("A database error occured. "
+					+ se.getMessage());
+			// Clean up JDBC resources
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+
+		} finally {
+			if (rs != null) {
+				try {
+					rs.close();
+				} catch (SQLException se) {
+					se.printStackTrace(System.err);
+				}
+			}
+			if (pstmt != null) {
+				try {
+					pstmt.close();
+				} catch (SQLException se) {
+					se.printStackTrace(System.err);
+				}
+			}
+			if (con != null) {
+				try {
+					con.close();
+				} catch (Exception e) {
+					e.printStackTrace(System.err);
+				}
+			}
+		}
+		return list;
 	}
 }
 	
